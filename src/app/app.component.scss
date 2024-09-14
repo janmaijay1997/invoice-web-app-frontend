@@ -1,0 +1,165 @@
+// /* sidebar.component.css */
+// body {
+//   font-family: Arial, sans-serif;
+//   margin: 0;
+//   padding: 0;
+// }
+
+// .sidebar-header {
+//   background-color: #444;
+//   // padding: 20px;
+//   color: white;
+//   text-align: center;
+//   font-size: 24px;
+//   display: flex;
+//   justify-content: space-between;
+//   height: 52px;
+//   align-items: center;
+// }
+
+// .sidebar {
+//   width: 250px;
+//   height: 100%;
+//   background-color: #333;
+//   position: fixed;
+//   left: -250px;
+
+//   top: 51px !important;
+//   transition: left 0.3s;
+// }
+
+// .sidebar.active {
+//   left: 0;
+//   top: 51px !important;
+// }
+
+// .sidebar ul {
+//   list-style-type: none;
+//   padding: 0;
+//   margin-top: 60px;
+//   /* Adjusted to account for header height */
+// }
+
+// .sidebar ul li {
+//   padding: 15px;
+//   color: white;
+// }
+
+// .submenu {
+//   display: none;
+//   background-color: #444;
+// }
+
+// .submenu.active {
+//   display: block;
+// }
+
+// .toggle-btn {
+//   cursor: pointer;
+//   padding: 10px;
+//   background-color: #007BFF;
+//   color: white;
+//   border: none;
+//   left: 200px;
+
+//   margin: 10px;
+//   position: absolute;
+//   top: 0px;
+// }
+
+// @media (max-width: 768px) {
+//   .sidebar {
+//     width: 100%;
+//   }
+// }
+
+/* sidebar.component.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-header {
+  background-color: #444;
+  // padding: 20px;
+  color: white;
+  text-align: center;
+  font-size: 24px;
+  display: flex;
+  justify-content: space-between;
+  height: 52px;
+  align-items: center;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  position: fixed;
+  left: -250px;
+  top: 51px !important;
+  transition: left 0.3s ease;
+}
+
+.sidebar.active {
+  left: 0;
+  top: 51px !important;
+
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 0px;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  color: white;
+  cursor: pointer;
+}
+
+.submenu {
+  display: none;
+  background-color: #444;
+}
+
+.submenu.active {
+  display: block;
+}
+
+.toggle-btn {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  margin: 10px;
+  left: 200px;
+
+
+  margin: 10px;
+  position: absolute;
+  top: 0px;
+}
+
+.mainPortion {
+  padding: 20px;
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+}
+
+.mainPortion.sidebar-open {
+  margin-left: 250px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .mainPortion.sidebar-open {
+    margin-left: 100%;
+  }
+}
