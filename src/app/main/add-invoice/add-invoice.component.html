@@ -1,0 +1,36 @@
+<app-header></app-header>
+
+<app-sidebar></app-sidebar>
+<div class="mainPortion" [class.sidebar-open]="sidebarActive">
+    <div class="dashboardMain">
+        <!-- create-invoice.component.html -->
+        <div class="invoice-container">
+            <h2>Create Invoice</h2>
+            <form>
+                <label for="client">Client Name</label>
+                <input type="text" id="client" placeholder="Enter client name">
+
+                <label for="invoiceDate">Invoice Date</label>
+                <input type="date" id="invoiceDate">
+
+                <label for="item">Add Item</label>
+                <div class="item-list">
+                    <select id="item">
+                        <option value="service1">Service 1</option>
+                        <option value="service2">Service 2</option>
+                    </select>
+                    <input type="number" placeholder="Quantity">
+                    <input type="number" placeholder="Price">
+                </div>
+
+                <div class="subtotal">
+                    <label>Subtotal:</label>
+                    <span>0</span>
+                </div>
+
+                <button type="submit">Submit Invoice</button>
+            </form>
+        </div>
+
+    </div>
+</div>
