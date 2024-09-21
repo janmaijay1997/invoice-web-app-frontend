@@ -35,9 +35,11 @@
             ],
             "styles": [
               "src/styles.scss",  
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
@@ -104,9 +106,11 @@
             ],
             "styles": [
               "src/styles.scss",  
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeng/resources/themes/saga-blue/theme.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           }
         }
       }
