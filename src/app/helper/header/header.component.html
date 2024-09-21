@@ -1,0 +1,10 @@
+<header class="sidebar-header">
+    <span>Invoice</span>
+    <p (click)="togglePopup()">janmaijay</p>
+  
+    <!-- Popup for the logout button -->
+    <div class="popup" *ngIf="isPopupVisible">
+      <button (click)="logout()">Logout</button>
+    </div>
+  </header>
+  

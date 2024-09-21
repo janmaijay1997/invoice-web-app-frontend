@@ -1,0 +1,34 @@
+
+
+
+<div class="component_body">
+        <h1 class="component_title">User Management</h1> 
+        <div class="inner_body">
+                <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through the users -->
+                            <tr *ngFor="let user of users">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>{{ user.status }}</td>
+                                <td>
+                                    <button (click)="editUser(user.id)">Edit</button>
+                                    <button (click)="deactivateUser(user.id)">Deactivate</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </div>
+    </div>

@@ -1,0 +1,39 @@
+
+
+
+<div class="component_body">
+        <h1 class="component_title">Invoices</h1>
+        <div class="inner_body">
+                <form class="invoice_form">
+                        <input type="text" placeholder="Search by invoice number or client name">
+                        <button type="submit">Filter</button>
+                    </form>
+        
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through the invoices here -->
+                            <tr *ngFor="let invoice of invoices">
+                                <td>{{ invoice.id }}</td>
+                                <td>{{ invoice.client }}</td>
+                                <td>{{ invoice.date }}</td>
+                                <td>{{ invoice.total }}</td>
+                                <td>{{ invoice.status }}</td>
+                                <td>
+                                    <button (click)="viewInvoice(invoice.id)">View</button>
+                                    <button *ngIf="isAdmin" (click)="editInvoice(invoice.id)">Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </div>
+</div>

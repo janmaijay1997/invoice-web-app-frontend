@@ -1,22 +1,24 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
-import { DashboardComponent } from './main/dashboard/dashboard.component';
-import { UserManagmentComponent } from './main/user-managment/user-managment.component';
-import { AddUserComponent } from './main/add-user/add-user.component';
-import { SidebarComponent } from './helper/sidebar/sidebar.component';
-import { ViewInvoiceComponent } from './main/view-invoice/view-invoice.component';
-import { AddInvoiceComponent } from './main/add-invoice/add-invoice.component';
-import { HeaderComponent } from './helper/sidebar/header/header.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { PagesModule } from './pages/pages.module'; 
+import { RouterModule } from '@angular/router';
+import { HeaderComponent } from './helper/header/header.component';
+import { SidebarComponent } from './helper/sidebar/sidebar.component'; 
 import { HttpClientModule } from '@angular/common/http';
 
 // import {TableModule} from 'primeng/table';
 
  
+// import {TableModule} from 'primeng/table';
+
+
+
 // import { SidebarModule } from 'primeng/sidebar';
 // import { ButtonModule } from 'primeng/button';
 // import { TreeModule } from 'primeng/tree';
@@ -24,26 +26,25 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    DashboardComponent,
-    UserManagmentComponent,
-    AddUserComponent,
-    SidebarComponent,
-    ViewInvoiceComponent,
-    AddInvoiceComponent,
-    HeaderComponent
+    LoginComponent, 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+  
+    ReactiveFormsModule,
+    FormsModule,
+    PagesModule ,
+    RouterModule
     // TableModule
     // SidebarModule,
     // TreeModule,
     // ButtonModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA,NO_ERRORS_SCHEMA],
 })
 export class AppModule { }

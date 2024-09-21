@@ -1,8 +1,11 @@
 /* General Reset */
+
+@import "primeng/resources/primeng.css";
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 body {
@@ -157,7 +160,7 @@ nav a:hover {
 .invoice-container {
     background-color: white;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
@@ -306,22 +309,13 @@ body {
     align-items: center;
 }
 
-.sidebar {
-    width: 250px;
+
+
+
+.sidebar{
+    overflow: auto;
     height: 100%;
-    background-color: #333;
-    position: fixed;
-    left: -250px;
-    top: 51px !important;
-    transition: left 0.3s ease;
 }
-
-.sidebar.active {
-    left: 0;
-    top: 51px !important;
-
-}
-
 .sidebar ul {
     list-style-type: none;
     padding: 0;
@@ -332,6 +326,12 @@ body {
     padding: 15px;
     color: white;
     cursor: pointer;
+    &.active{
+        background: #007BFF !important;
+    }
+    &:hover{
+        background: #ffffff21;
+    }
 }
 
 .submenu {
@@ -343,23 +343,10 @@ body {
     display: block;
 }
 
-.toggle-btn {
-    cursor: pointer;
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    margin: 10px;
-    left: 200px;
 
-
-    margin: 10px;
-    position: absolute;
-    top: 0px;
-}
 
 .mainPortion {
-    padding: 20px;
+    // padding: 20px;
     margin-left: 0;
     transition: margin-left 0.3s ease;
 }
@@ -390,6 +377,166 @@ body {
     width: 200px !important;
 }
 
-mainPortion {
-    // width: calc(100% - 300px) ;
+
+
+.dashboardMain {
+    overflow: auto;
+    // height: calc(100vh - 123px);
+    height: 100%;
+}
+
+
+.dashboard_content{
+display: flex;
+flex-direction: column;
+gap: 15px;
+    .content_2{
+        display: flex;
+        width: 100%;
+        gap: 15px;
+        flex-wrap: wrap;
+        .content_item{
+            border-radius: 3px;
+            border: 1px solid gray;
+            background: white;
+            width: calc(50% - 7.5px);
+            overflow: hidden;
+            box-shadow: 0px 1px 3px #adadad;
+            @media (max-width:995px) {
+                width: 100%;  
+            }
+            .content_head{
+                border-bottom: 1px solid gray; 
+                background: #EFF2F7;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                h2{
+                    margin: 0; 
+                    padding: 5px 10px; 
+                    font-size: 17px;
+                    color: black;
+                }
+                button{
+                    color: black;
+                    background: transparent;
+                    padding: 5px;
+                    margin-right: 10px;
+                    border-radius: 3px;
+                    &:hover{
+                        background: #e5e5e5;
+
+                    }
+                }
+            }
+            .items{
+                padding: 10px;
+               
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                width: 100%;
+                
+                    .item_card{
+                        border-radius: 3px;
+                        width: calc(50% - 7.5px);
+                        // padding: 8px 10px;
+                        &.card_1{
+                            background: #f1f1f1;
+                            padding: 8px 10px;
+                        }
+                        &.card_2{
+                            background: #caecf5;
+                            padding: 8px 10px;
+                        }
+                        &.card_3{
+                            background: #ffd4d4;
+                            padding: 8px 10px;
+                        }
+                        &.card_4{
+                            background: #d1fde0;
+                            padding: 8px 10px;
+                        }
+                        p{
+                            color: black;
+                            &.top_text{
+                                font-size: 14px;
+                                font-weight: 600;
+                            }
+                            &.middle_text{
+                                font-size: 25px;
+                            }
+                            &.botom_text{
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                
+            }
+        }
+    }
+}
+    
+
+.page_body_main{
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    .body{
+       .content{
+           display: flex;
+           height: calc(100vh - 53px);
+           overflow: hidden;
+           .sidebar_body{
+               width: 300px;
+               background: black;
+               transition: .3s;
+               overflow: hidden;
+               &.hide{
+                   width: 0;
+               }
+           }
+           .main_content{
+               width: calc(100% - 300px);
+               position: relative;
+               transition: .3s;
+               &.show{
+                   width: 100%;
+               }
+               .router_body{
+                //    padding: 40px 0 0 ;
+                   height: 100%;
+                   overflow: auto
+               }
+               .toggle-btn{
+                
+                    cursor: pointer;
+                    padding: 10px;
+                    background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    left: 0;
+                
+                    position: absolute;
+                    top: 0px;
+                
+               }
+           }
+       } 
+    }
+}
+
+.component_body{
+    height: 100%;
+    background: white;
+    .component_title{
+        margin: 0 0 0 65px;
+    }
+    .inner_body{        
+        height: calc(100% - 51px);
+        width: 100%;
+        overflow: auto;
+        overflow-x: hidden;
+        padding: 20px;
+    }
 }

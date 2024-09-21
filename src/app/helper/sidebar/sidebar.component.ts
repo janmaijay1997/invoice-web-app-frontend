@@ -1,79 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { SidebarService } from 'src/app/services/sidebar.service';
-
+import { Router, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   menuItems: any[] = [
-    { label: 'Dashboard', submenu: [], active: false },
-    { label: 'View User', submenu: [], active: false },
-    { label: 'Add User', submenu: [], active: false },
-    { label: 'View invoice', submenu: [], active: false },
-    { label: 'Add invoice', submenu: [], active: false },
+    { label: 'Dashboard', route: '/dashboard', active: false },
+    { label: 'View User', route: '/userView', active: false },
+    { label: 'Add User', route: '/addUser', active: false },
+    { label: 'View invoice', route: '/InvoiceView', active: false },
+    { label: 'Add invoice', route: '/addInvoice', active: false }
   ];
 
   submenuActive: boolean[] = [];
   activeMenuIndex: number | null = null;
   activeSubmenuIndex: number | null = null;
 
-  constructor(private sidebarService: SidebarService,
+  constructor(
     private router: Router
   ) { }
+
   ngOnInit(): void {
-    this.toggleSidebar()
+    // Set the active item based on the current route when the component initializes
+    this.setActiveItemBasedOnRoute(this.router.url);
 
-
-  }
-  topggelFlage = false;
-  toggleSidebar() {
-    this.sidebarService.toggleSidebar(); // Use the service to toggle
-    this.topggelFlage = !this.topggelFlage;
-    // localStorage.setItem('topggelFlage',)
-    localStorage.setItem("lastname", `${this.topggelFlage}`);
-
+    // Subscribe to router events to update the active item on navigation
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.setActiveItemBasedOnRoute(event.urlAfterRedirects);
+      }
+    });
   }
 
-  toggleSubmenu(index: number) {
-    this.submenuActive[index] = !this.submenuActive[index];
-  }
+  setActiveItemBasedOnRoute(url: string) {
+    // Set all items to inactive first
+    this.menuItems.forEach(item => item.active = false);
 
-  selectedVal = 'Dashboard';
-
-  setActiveMenuItem(index: number, val: any) {
-    console.log(val);
-
-    this.selectedVal = val.label;
-    this.activeMenuIndex = index;
-    this.activeSubmenuIndex = null; // Reset submenu selection if a new menu is clicked
-    console.log(this.selectedVal);
-
-    if (val.label == 'Dashboard') {
-      this.router.navigate(['/dashboard']);
-    }
-    else if (val.label == 'View User') {
-      this.router.navigate(['/userView']);
-    }
-    else if (val.label == 'Add User') {
-      this.router.navigate(['/addUser']);
-
-    }
-    else if (val.label == 'View invoice') {
-
-      this.router.navigate(['/InvoiceView']);
-
-
-    }
-    else if (val.label == 'Add invoice') {
-      this.router.navigate(['/addInvoice']);
+    // Find the item that matches the current route and set it as active
+    const matchingItem = this.menuItems.find(item => url.startsWith(item.route));
+    if (matchingItem) {
+      matchingItem.active = true;
     }
   }
 
-  setActiveSubmenuItem(menuIndex: number, subIndex: number) {
-    this.activeMenuIndex = menuIndex;
-    this.activeSubmenuIndex = subIndex;
+  setActiveMenuItem(selectedItem: any) {
+    // Set the clicked item as active and navigate to its route
+    this.menuItems.forEach(item => item.active = false);
+    selectedItem.active = true;
+    this.router.navigate([selectedItem.route]);
   }
 }
