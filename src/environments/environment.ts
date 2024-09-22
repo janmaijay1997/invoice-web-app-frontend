@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  createInvoiceUrl:'http://localhost:8080/webportal/v1/createinvoice',
+  otherDetailsUrl:'http://localhost:8080/webportal/v1/otherdetails'
 };
 
 /*

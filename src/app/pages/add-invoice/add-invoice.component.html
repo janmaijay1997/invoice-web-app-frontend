@@ -1,194 +1,191 @@
 
-
 <div class="component_body">
     <h1 class="component_title">creat invoice</h1>
     <div class="inner_body">
-        <form>
-            <label for="client">Client Name</label>
-            <input type="text" id="client" placeholder="Enter client name">
+        <div [formGroup]="invoiceCreateFormGroup">
+            <!-- <label for="client">Client Name</label>
+             <input formControlName="clientName" type="text" id="client" placeholder="Enter client name" required>-->
 
-            <label for="invoiceDate">Invoice Date</label>
 
-            <!-- Flexbox container for horizontal alignment -->
-            <div class="table-row-container">
+             <!-- Flexbox container for horizontal alignment -->
+             <div class="table-row-container">
 
-                <!-- Account table -->
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Account Due</th>
-                                <th></th> <!-- Empty column for alignment -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>AccountType</td>
-                                <td>Private Account"</td>
-                            </tr>
-                            <tr>
-                                <td>Total Due</td>
-                                <td>$ 6600</td>
-                            </tr>
-                            <tr>
-                                <td>Payment Type</td>
-                                <td>Bank</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Bill to table -->
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bill To</th>
-                                <th></th> <!-- Empty column for alignment -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Amount</td>
-                                <td>{{ getGrandTotal() | number:'1.2-2' }}</td>
-                            </tr>
-                            <tr>
-                                <td>Payment Date</td>
-                                <td>2024-02-22</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Items Table -->
-            <div class="item-section">
-                <label>Items</label>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 8%">Vendor Invoice Ref</th>
-                                <th style="width: 15%">VendorId</th>
-                                <th style="width: 8%">Cost Code</th>
-                                <th style="width: 8%">Expense Code</th>
-                                <th style="width: 5%">Quantity</th>
-                                <th style="width: 5%">Amount</th>
-                                <th style="width: 8%">Rate of SAR</th>
-                                <th style="width: 5%">Unit</th>
-                                <th style="width: 20%">Description</th>
-                                <th style="width: 8%">Expense Type</th>
-                                <th style="width: 5%">Currency</th>
-                                <th style="width: 8%">Total</th>
-                                <th style="width: 5%">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of items; let i = index">
-                                <td>
-                                    <input type="text" [(ngModel)]="items[i].vendorInvoiceRef"
-                                        name="vendorInvoiceRef-{{i}}" placeholder="Ref" class="small-input">
+                 <!-- Account table -->
+                 <div class="table-container">
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Account Due</th>
+                                 <th></th> <!-- Empty column for alignment -->
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>AccountType</td>
+                                 <td>
+                                    <input type="text" formControlName="accountType"
+                                        placeholder="accountType" class="small-input">
                                 </td>
-                                <!-- Vendor Name Dropdown -->
-                                <td>
-                                    <select [(ngModel)]="items[i].vendorId" name="vendorId-{{i}}"
-                                        class="small-input">
-                                        <option *ngFor="let vendor of vendors" [value]="vendor.id">{{vendor.name}}
-                                        </option>
-                                    </select>
+                             </tr>
+                             <tr>
+                                 <td>Total Due</td>
+                                 <td>
+                                    <input type="number" formControlName="totalDue"
+                                        placeholder="totalDue" class="small-input">
                                 </td>
-                                <!-- Cost Code Dropdown -->
-                                <td>
-                                    <select [(ngModel)]="items[i].costCode" name="costCode-{{i}}"
-                                        class="small-input">
-                                        <option *ngFor="let costCode of costCodes" [value]="costCode">{{costCode}}
-                                        </option>
-                                    </select>
+                             </tr>
+                             <tr>
+                                 <td>Payment Type</td>
+                                 <td>
+                                    <input type="text" formControlName="paymentType"
+                                        placeholder="paymentType" class="small-input">
                                 </td>
-                                <!-- Expense Code Dropdown -->
-                                <td>
-                                    <select [(ngModel)]="items[i].expenseCode" name="expenseCode-{{i}}"
-                                        class="small-input">
-                                        <option *ngFor="let expenseCode of expenseCodes" [value]="expenseCode">
-                                            {{expenseCode}}</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="number" [(ngModel)]="items[i].quantity" name="quantity-{{i}}"
-                                        placeholder="Qty" class="small-input" (input)="calculateSubtotalAmount()">
-                                </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
 
-                                <td>
-                                    <input type="number" [(ngModel)]="items[i].amount" name="amount-{{i}}"
-                                        placeholder="Amount" class="small-input"
-                                        (input)="calculateSubtotalAmount()">
-                                </td>
+                 <!-- Bill to table -->
+                 <div class="table-container">
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Bill To</th>
+                                 <th></th> <!-- Empty column for alignment -->
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Amount</td>
+                                 <td>567</td>
+                             </tr>
+                             <tr>
+                                 <td>Payment Date</td>
+                                 <td>2024-02-22</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
 
-                                <td>
-                                    <input type="number" [(ngModel)]="items[i].rateOfSAR" name="rateOfSAR-{{i}}"
+             <!-- Items Table -->
+             <div class="item-section">
+                 <label>Items</label>
+                 <div class="table-responsive">
+                     <table>
+                         <thead>
+                             <tr>
+                                <th style="width: 8%">SR.No</th>
+                                 <th style="width: 8%">Vendor Invoice Ref</th>
+                                 <th style="width: 15%">Vendor</th>
+                                 <th style="width: 8%">Cost Code</th>
+                                 <th style="width: 8%">Expense Type</th>
+                                 <th style="width: 8%">Rate of SAR</th>
+                                 <th style="width: 8%">Total</th>
+                                 <th style="width: 5%">Currency</th>
+                                 <th style="width: 5%">Reccuring</th>
+                                 <th style="width: 20%">Description</th>
+                                 <th style="width: 5%">Action</th>
+                             </tr>
+                         </thead>
+                         <tbody formArrayName="items">
+                             <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                                 <td>
+                                     <span>{{i+1}}</span>
+                                 </td>
+                                 <td>
+                                     <input type="text" formControlName="vendorInvoiceRef"
+                                         placeholder="vendorInvoiceRef" class="small-input">
+                                 </td>
+                                 <!-- Vendor Name Dropdown -->
+                                 <td>
+                                     <select  formControlName="vendor"
+                                         class="small-input">
+                                         <option *ngFor="let vendorValue of vendors" [ngValue]="vendorValue">{{vendorValue.name}}
+                                         </option>
+                                     </select>
+                                 </td>
+                                 <!-- Cost Code Dropdown -->
+                                 <td>
+                                     <select formControlName="costCode"
+                                         class="small-input">
+                                         <option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">{{costCenter.code}}
+                                         </option>
+                                     </select>
+                                 </td>
+                                 <!-- Expense Code Dropdown -->
+                                 <td>
+                                     <select formControlName="expenseType"
+                                         class="small-input">
+                                         <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.code">
+                                             {{expenseType.code}}</option>
+                                     </select>
+                                 </td>
+                                 <td>
+                                    <input type="number" formControlName="rateOfSAR" 
                                         placeholder="rateOfSAR" class="small-input">
                                 </td>
-                                <!-- Unit Dropdown -->
                                 <td>
-                                    <select [(ngModel)]="items[i].unit" name="unit-{{i}}" class="small-input">
-                                        <option *ngFor="let unit of units" [value]="unit">{{unit}}</option>
-                                    </select>
+                                    <input type="number" formControlName="invoiceAmount" 
+                                        placeholder="rateOfSAR" class="small-input">
                                 </td>
                                 <td>
-                                    <input type="text" [(ngModel)]="items[i].description" name="description-{{i}}"
-                                        placeholder="Description">
-                                </td>
-                                <td>
-                                    <input type="text" [(ngModel)]="items[i].expenceType" name="expenceType-{{i}}"
-                                        placeholder="Expense Type" class="small-input">
-                                </td>
-                                <!-- Currency Dropdown -->
-                                <td>
-                                    <select [(ngModel)]="items[i].currency" name="currency-{{i}}"
+                                    <select formControlName="currency"
                                         class="small-input">
-                                        <option *ngFor="let currency of currenciesList"
-                                            [ngValue]="currency">
-                                            {{ currency.currencyName}}
+                                        <option *ngFor="let currencyValue of currenciesList"
+                                            [ngValue]="currencyValue.currencySymbol">
+                                            {{ currencyValue.currencySymbol}}
                                         </option>
                                     </select>
                                 </td>
                                 <td>
-                                    <span>{{items[i].quantity * items[i].amount}}</span>
+                                    <select formControlName="recurring"
+                                        class="small-input">
+                                        <option *ngFor="let recurring of recurrings" [value]="recurring">{{recurring}}
+                                        </option>
+                                    </select>
                                 </td>
-                                <td>
-                                    <button type="button" (click)="removeItem(i)">Remove</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                 <td>
+                                     <input type="text" formControlName="description"
+                                         placeholder="Description">
+                                 </td>
+                                 
+                                 <!-- Currency Dropdown -->
+                                 
+                                 <td>
+                                     <button type="button" (click)="removeItem(i)">Remove</button>
+                                 </td>
+                             </tr>
+                         </tbody>
+                     </table>
+                 </div>
 
-                <button type="button" (click)="addItem()">Add Item</button>
-            </div>
+                 <button type="button" (click)="addItem()">Add Item</button>
+             </div>
 
-            <!-- Sub Total -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Subtotal</th>
-                            <th></th> <!-- Empty column for alignment -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Adjustment</td>
-                            <td>0.00</td>
-                        </tr>
-                        <tr>
-                            <td>Grand Total</td>
-                            <td>{{ getGrandTotal() | number:'1.2-2' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+             <!-- Sub Total -->
+             <div class="table-container">
+                 <table>
+                     <thead>
+                         <tr>
+                             <th>Subtotal</th>
+                             <th></th> <!-- Empty column for alignment -->
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td>Adjustment</td>
+                             <td>0.00</td>
+                         </tr>
+                         <tr>
+                             <td>Grand Total</td>
+                             <td>{{totalInvoiceAmount}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+             </div>
 
-            <button type="button" (click)="submitInvoice()">Submit Invoice</button>
-        </form>
+             <button type="button" (click)="submitInvoice()">Submit Invoice</button>
+         </div>
     </div>
 </div>

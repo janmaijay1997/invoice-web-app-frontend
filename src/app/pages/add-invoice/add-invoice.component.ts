@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonDetailsService } from 'src/app/services/common-details.service';
+import { InvoiceService } from 'src/app/services/invoice.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface Currency {
@@ -35,23 +39,7 @@ interface Vendor {
 export class AddInvoiceComponent implements OnInit {
 
   sidebarActive: boolean = false;
-  clientName: string = '';
-  invoiceDate: string = '';
-  items: any[] = [
-    {
-      vendorInvoiceRef: '',
-      vendorId: '',
-      costCode: '',
-      expenseCode: '',
-      quantity: '',
-      unit: '',
-      rateOfSAR: '',
-      description: '',
-      expenceType: '',
-      currency: '',
-      subtotal: 0
-    }
-  ];
+  
 
   vendors = [
     { id: '1', name: 'Vendor 1' },
@@ -64,141 +52,167 @@ export class AddInvoiceComponent implements OnInit {
   expenseCodes = ['ExpenseCode1', 'ExpenseCode2', 'ExpenseCode3'];
   units = ['PCS', 'KG', 'Litre'];
   currencies = ['USD', 'EUR', 'GBP'];
+  recurrings=['Yes','No'];
+  vendorList:any;
+  expenseTypeList: any;
+  costCenterList: any;
+  currenciesList: any;
+  totalInvoiceAmount: number = 0; // Variable to keep track of the total amount
 
-  vendorList: Vendor[] = [];
-  expenseCodeList: ExpenseCode[] = [];
-  costCenterList: CostCenter[] = [];
-  currenciesList: Currency[] = [];
+  invoiceCreateFormGroup: FormGroup;
 
-  constructor(private sidebarService: SidebarService, private http: HttpClient) { } // Inject HttpClient
+  constructor(private fb: FormBuilder,private commonService:CommonDetailsService,private invoiceService:InvoiceService,private toastr: ToastrService) {
+    this.invoiceCreateFormGroup = this.fb.group({
+      clientName: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      items: this.fb.array([this.itemFormGroup()]),  // Initialize the form array with one item,
+      accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      totalDue: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+    });
+  }
+  ngOnInit(): void {
+    this.getCommonDetailsData();
+  }
 
-  ngOnInit() {
-    this.getAllOtherDetails();
-    let flage = localStorage.getItem("lastname");
-    this.sidebarService.sidebarActive$.subscribe((state: any) => {
-      this.sidebarActive = !state;
-      if (flage) {
-        this.sidebarActive = true;
+  // Getter for clientName
+  get clientName() {
+    return this.invoiceCreateFormGroup.get('clientName');
+  }
+
+  // Getter for accountType
+  get accountType() {
+    return this.invoiceCreateFormGroup.get('accountType');
+  }
+
+  // Getter for totalDue
+  get totalDue() {
+    return this.invoiceCreateFormGroup.get('totalDue');
+  }
+
+  // Getter for paymentType
+  get paymentType() {
+    return this.invoiceCreateFormGroup.get('paymentType');
+  }
+
+  // Getter for the FormArray (items)
+  get items(): FormArray {
+    return this.invoiceCreateFormGroup.get('items') as FormArray;
+  }
+
+  // Method to create a new FormGroup for an item
+  itemFormGroup(): FormGroup {
+    return this.fb.group({
+      vendorInvoiceRef: ['', Validators.required],
+      vendor: [null, Validators.required],
+      costCode: ['', Validators.required],
+      expenseType: ['', Validators.required],
+      rateOfSAR: ['', Validators.required],
+      recurring: ['', Validators.required],
+      description: ['', Validators.required],
+      currency: ['', Validators.required],
+      invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]]  // Pattern for numeric values
+    });
+  }
+
+  // Method to calculate the total invoice amount
+  getTotalInvoiceAmount(): number {
+    const items = this.items.value; // Get the array of items
+    let total = 0;
+
+    // Loop through each item and add the invoiceAmount value
+    items.forEach((item: any) => {
+      const amount = parseFloat(item.invoiceAmount); // Parse the value as float
+      if (!isNaN(amount)) {
+        total += amount; // Add to the total if it's a valid number
       }
     });
+
+    return total; // Return the total sum
   }
 
-  addItem() {
-    this.items.push({
-      vendorInvoiceRef: '',
-      vendorId: '',
-      costCode: '',
-      expenseCode: '',
-      quantity: 0,
-      amount: 0,
-      unit: '',
-      description: '',
-      expenceType: '',
-      currency: '',
-      subtotal: 0
-    });
+  // Method to add a new item to the FormArray
+  addItem(): void {
+    this.items.push(this.itemFormGroup());
+    // Update the total whenever a new item is added
+    this.totalInvoiceAmount = this.getTotalInvoiceAmount();
   }
 
-  removeItem(index: number) {
-    this.items.splice(index, 1);
+  // Method to remove an item from the FormArray
+  removeItem(index: number): void {
+    const removedItem = this.items.at(index); // Get the item to be removed
+    const amount = parseFloat(removedItem.get('invoiceAmount')?.value); // Get the invoice amount of the removed item
+
+    if (!isNaN(amount)) {
+      this.totalInvoiceAmount -= amount; // Subtract the amount from the total
+    }
+
+    this.items.removeAt(index); // Remove the item at the specified index
   }
 
-  calculateSubtotalAmount(): number {
-    return this.items.reduce((sum, item) => sum + (item.quantity * item.amount), 0);
-  }
-
-  getGrandTotal(): number {
-    return this.calculateSubtotalAmount(); // You can add more logic if needed
-  }
-
-  getAllOtherDetails() {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    this.http.get('http://localhost:8080/webportal/v1/otherdetails', { headers })
-      .subscribe(
-        (response: any) => {
-          // Assuming the response structure as shown in the example
-          console.log('Invoice Other details fetch successfully', response);
-
-          // Extract the currencies list from the API response
-          this.currenciesList = response.response.currenciesList.map((item: any) => ({
-            id: item.id,
-            currencyName: item.currencyName,
-            currencySymbol: item.currencySymbol
-          }));
-
-          this.vendorList = response.response.currenciesList.map((item: any) => ({
-            id: item.id,
-            vendorId: item.vendorId,
-            name: item.name
-          }));
-
-          this.expenseCodeList = response.response.currenciesList.map((item: any) => ({
-            id: item.id,
-            code: item.code,
-            type: item.type
-          }));
-
-          this.costCenterList = response.response.currenciesList.map((item: any) => ({
-            id: item.id,
-            code: item.code,
-            name: item.name
-          }));
-
-        },
-        error => {
-          console.error('Error fetching details', error);
-        }
-      );
-  }
-
+  // Method to submit the invoice form
   submitInvoice() {
-    const invoiceData = {
-      vendorInvoiceDate: this.invoiceDate,
+    console.log(this.items);
+    const totalInvoiceAmount = this.getTotalInvoiceAmount(); // Calculate the total amount
+  
+    const requestData = {
+      invoiceNumber: '',  // Dummy value for invoice number
       total: {
-        subTotal: this.calculateSubtotalAmount(),
-        adjustments: "0.00", // Adjust as needed
-        grandTotal: this.getGrandTotal()
+        subTotal: totalInvoiceAmount.toString(),  // Use the calculated totalInvoiceAmount
+        adjustments: '0.00',  // Dummy value for adjustments
+        grandTotal: '$ ' + (totalInvoiceAmount * 10).toString(),  // Example dummy value for grand total (just for illustration)
       },
       accountDue: {
-        accountType: "Private Account", // Customize as needed
-        totalDue: "$ 6657",
-        paymentType: "Bank"
+        accountType: this.accountType?.value || 'Private Account',  // Use form value, or a dummy value
+        totalDue: this.totalDue?.value.toString()|| 1,  // Dummy calculation for total due
+        paymentType: this.paymentType?.value || 'Bank',  // Use form value, or a dummy value
       },
       submitter: {
-        submiterName: "Samad",
-        department: "Telecom"
+        submitterName: 'Samad',  // Dummy value
+        department: 'Telecom',  // Dummy value
       },
-      items: this.items.map((item, index) => ({
-        refId: (index + 1).toString(), // If you have a reference ID
-        vendorInvoiceRef: item.vendorInvoiceRef,
-        rateOfSAR: item.rateOfSAR,
-        vendorId: item.vendorId,
-        costCode: item.costCode,
-        expenseCode: item.expenseCode,
-        quantity: item.quantity,
-        amount: item.amount,
-        unit: item.unit,
-        description: item.description,
-        expenceType: item.expenceType,
-        currency: item.currency,
-        total: item.quantity * item.amount
+      items: this.items.value.map((item: any, index: number) => ({
+        refId: (index + 1).toString(),  // Dummy value for refId, incrementing index
+        vendorInvoiceRef: item.vendorInvoiceRef || '',  // Use form value
+        vendorId: item.vendor.id,  // Dummy vendor ID
+        vendorName:  item.vendor.name,  // Dummy vendor name
+        vendorInvoiceDate: '2023-04-22',  // Dummy date
+        invoiceAmount: item.invoiceAmount || '',  // Use form value
+        recurring: item.recurring || 'NO',  // Use form value
+        costCode: item.costCode || '',  // Use form value
+        expenseType: item.expenseType || '',  // Use form value
+        description: item.description || 'test',  // Use form value or dummy
+        currency: item.currency || 'USD',  // Use form value or dummy
+        rateOfSAR: item.rateOfSAR || '1.00',  // Use form value or dummy
       }))
     };
+  
+    console.log(requestData);  // Log the final requestData JSON object
 
+    this.invoiceService.createInvoice(requestData).subscribe((response:any)=>{
+        console.log(response);
+this.toastr.success('Invoice Created successFully with  invoice id '+response.response.invoiceNumber, 'Success', {
+      timeOut: 300000, // Optional - already set in forRoot
+    });
+            this.invoiceCreateFormGroup.reset();
+    },(error: any) => {
+      console.error('Error fetching details:', error);
+      this.toastr.error('Something went wrong.', 'Error');
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    })
+      
 
-    this.http.post('http://localhost:8080/webportal/v1/createinvoice', invoiceData, { headers })
-      .subscribe(
-        response => {
-          console.log('Invoice submitted successfully', response);
-        },
-        error => {
-          console.error('Error submitting invoice', error);
-        }
-      );
   }
-
-
+  
+  getCommonDetailsData() {
+    this.commonService.getAllOtherDetails().subscribe(
+      (response: any) => {
+        this.costCenterList = response.response.costCenterList;
+        this.expenseTypeList = response.response.expenseCodesList;
+        this.currenciesList = response.response.currenciesList;
+      },
+      (error: any) => {
+        console.error('Error fetching details:', error);
+      }
+    );
+  }
 }

@@ -11,6 +11,8 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './helper/header/header.component';
 import { SidebarComponent } from './helper/sidebar/sidebar.component'; 
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // import {TableModule} from 'primeng/table';
 
@@ -33,15 +35,22 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-  
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
     PagesModule ,
-    RouterModule
+    RouterModule,
     // TableModule
     // SidebarModule,
     // TreeModule,
     // ButtonModule
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',  // Set position to top right
+      timeOut: 300000,  // 3 seconds duration
+      closeButton: true,  // Show a close button on toast
+      progressBar: true,  // Show progress bar on toast
+      preventDuplicates: true,  // Prevent duplicate toasts
+    }), //
   ],
   providers: [],
   bootstrap: [AppComponent],

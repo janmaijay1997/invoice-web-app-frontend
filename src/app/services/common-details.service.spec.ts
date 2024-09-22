@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SidebarService } from './sidebar.service';
+import { CommonDetailsService } from './common-details.service';
 
-describe('SidebarService', () => {
-  let service: SidebarService;
+describe('CommonDetailsService', () => {
+  let service: CommonDetailsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SidebarService);
+    service = TestBed.inject(CommonDetailsService);
   });
 
   it('should be created', () => {
