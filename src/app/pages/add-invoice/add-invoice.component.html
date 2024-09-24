@@ -127,7 +127,7 @@
                                 </td>
                                 <td>
                                     <input type="number" formControlName="invoiceAmount" 
-                                        placeholder="rateOfSAR" class="small-input">
+                                        placeholder="total" class="small-input">
                                 </td>
                                 <td>
                                     <select formControlName="currency"
@@ -179,7 +179,7 @@
                          </tr>
                          <tr>
                              <td>Grand Total</td>
-                             <td>{{totalInvoiceAmount}}</td>
+                             <td>{{getTotalInvoiceAmount()}}</td>
                          </tr>
                      </tbody>
                  </table>
