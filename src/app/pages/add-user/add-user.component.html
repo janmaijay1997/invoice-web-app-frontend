@@ -1,6 +1,59 @@
 
-<div class="mainPortion" [class.sidebar-open]="sidebarActive">
-    <div class="dashboardMain">
-        add user work
-    </div>
+<div class="component_body">
+        <h1 class="component_title">Add User</h1>
+        <div class="inner_body">
+            <div class="addUser_content">
+                <form action="">
+                    <div class="three_column">
+                        <div class="form_control">
+                            <label for="">First Name</label>
+                            <input type="text" placeholder="First name">
+                        </div>
+                        <div class="form_control">
+                            <label for="">Last Name</label>
+                            <input type="text" placeholder="Last name">
+                        </div>
+                        <div class="form_control">
+                            <label for="">Email</label>
+                            <input type="email" placeholder="Email">
+                        </div>
+                        <div class="form_control">
+                            <label for="">User Roll</label>
+                            <p-dropdown 
+                                [options]="userRollList" 
+                                
+                                optionLabel="name" 
+                                placeholder="Select user roll">
+                            </p-dropdown>
+                        </div>
+                        <div class="form_control">
+                            <label for="">Mobile No.</label>
+                            <input type="text" placeholder="Mobile no.">
+                        </div>
+                        <div class="form_control">
+                            <label for="">&nbsp;</label>
+                            <button (click)="visible = true">Verify</button>
+                        </div>
+                    </div>
+                    <div class="button_group">
+                        <button>Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 </div>
+
+<p-dialog header="Verify OTP" [draggable]="false" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <div class="otp_dialogox">
+        <div class="form_control">          
+            <label>Please enter OTP</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" />
+        </div>
+      
+        <div class="button_group">
+            <button  severity="secondary" (click)="visible = false">Resend</button>
+            <button  (click)="visible = false">Verify</button>
+        </div>
+
+    </div>
+    </p-dialog>

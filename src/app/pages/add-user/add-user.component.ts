@@ -8,7 +8,7 @@ import { SidebarService } from 'src/app/services/sidebar.service';
 })
 export class AddUserComponent implements OnInit {
   constructor(private sidebarService: SidebarService) { }
-
+  visible: boolean = false;
   sidebarActive: boolean = false;
   ngOnInit() {
     // Subscribe to the sidebar active state
@@ -22,6 +22,11 @@ export class AddUserComponent implements OnInit {
     });
 
   } users: any = [];
+
+
+  userRollList = [
+    { name: 'Admin', code: 'admin' },
+];
   deactivateUser(val: any) {
 
   }

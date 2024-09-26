@@ -16,6 +16,9 @@ import { RouterModule } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 @NgModule({
   declarations: [
     PagesComponent,
@@ -35,7 +38,10 @@ import { TableModule } from 'primeng/table';
     ReactiveFormsModule,
     PanelMenuModule,
     ButtonModule,
-    TableModule 
+    TableModule ,
+    InputTextModule,
+    DialogModule,
+    DropdownModule
 
   ],
   providers: [],

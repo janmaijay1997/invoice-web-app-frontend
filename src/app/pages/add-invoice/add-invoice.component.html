@@ -1,6 +1,6 @@
 
 <div class="component_body">
-    <h1 class="component_title">creat invoice</h1>
+    <h1 class="component_title">Create Invoice</h1>
     <div class="inner_body">
         <div [formGroup]="invoiceCreateFormGroup">
             <!-- <label for="client">Client Name</label>
@@ -75,25 +75,25 @@
                      <table>
                          <thead>
                              <tr>
-                                <th style="width: 8%">SR.No</th>
-                                 <th style="width: 8%">Vendor Invoice Ref</th>
-                                 <th style="width: 15%">Vendor</th>
-                                 <th style="width: 8%">Cost Code</th>
-                                 <th style="width: 8%">Expense Type</th>
-                                 <th style="width: 8%">Rate of SAR</th>
-                                 <th style="width: 8%">Total</th>
-                                 <th style="width: 5%">Currency</th>
-                                 <th style="width: 5%">Reccuring</th>
-                                 <th style="width: 20%">Description</th>
-                                 <th style="width: 5%">Action</th>
+                                <th style="min-width: 50px">SR.No</th>
+                                 <th style="min-width: 170px">Vendor Invoice Ref</th>
+                                 <th  style="min-width: 150px">Vendor</th>
+                                 <th style="min-width: 170px">Cost Code</th>
+                                 <th style="min-width: 170px">Expense Type</th>
+                                 <th style="min-width: 170px">Rate of SAR</th>
+                                 <th style="min-width: 170px">Total</th>
+                                 <th style="min-width: 170px">Currency</th>
+                                 <th style="min-width: 170px">Reccuring</th>
+                                 <th style="min-width: 200px">Description</th>
+                                 <th style="min-width: 170px">Action</th>
                              </tr>
                          </thead>
                          <tbody formArrayName="items">
                              <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-                                 <td>
+                                 <td style="min-width: 50px">
                                      <span>{{i+1}}</span>
                                  </td>
-                                 <td>
+                                 <td style="min-width: 170px">
                                      <input type="text" formControlName="vendorInvoiceRef"
                                          placeholder="vendorInvoiceRef" class="small-input">
                                  </td>

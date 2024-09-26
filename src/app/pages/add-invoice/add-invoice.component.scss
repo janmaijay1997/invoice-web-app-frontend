@@ -1,16 +1,21 @@
 .table-row-container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 20px; /* Optional spacing between the tables */
 }
 
 .table-container {
-    flex: 1; /* Ensures equal width for all tables */
+    // flex: 1; /* Ensures equal width for all tables */
     padding: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     border: 1px solid #ccc;
     background-color: #fff;
+    width: calc(50% - 10px);
+    @media (max-width:1000px) {
+        width: 100%;
+    }
 }
 
 table {
@@ -62,7 +67,7 @@ th, td {
 
 .small-input {
     width: 100%;
-    max-width: 100px;  // Limit the input width
+    // max-width: 100px;  // Limit the input width
 }
 
 input, select {
@@ -81,7 +86,9 @@ form {
   
   label {
     display: block;
-    margin-bottom: 5px;
+    margin : 10px 0;
+    font-weight: 600;
+    font-size: 23px;
   }
   
   input, select {
@@ -90,8 +97,9 @@ form {
   }
   
   button {
-    margin-top: 10px;
-    padding: 5px 10px;
+    margin : 10px 0;
+    padding: 10px;
+    border-radius: 5px;
   }
 
   form{
@@ -107,3 +115,4 @@ form {
 
   }
   
+ 

@@ -21,7 +21,7 @@ export class UserManagmentComponent implements OnInit {
       }
     });
 
-  } users: any = [];
+  } 
   deactivateUser(val: any) {
 
   }
@@ -32,5 +32,28 @@ export class UserManagmentComponent implements OnInit {
 
   }
 
+  users: any = [
+    {id:1,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:2,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:3,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:4,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:5,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:6,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:7,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:8,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:9,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:10,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:11,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:12,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:13,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:14,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:15,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:16,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:17,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:18,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:19,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+    {id:20,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
+  
+  ]
 
 }
