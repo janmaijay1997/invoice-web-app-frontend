@@ -1,4 +1,3 @@
-
 <div class="component_body">
     <h1 class="component_title">Create Invoice</h1>
     <div class="inner_body">
@@ -7,131 +6,154 @@
              <input formControlName="clientName" type="text" id="client" placeholder="Enter client name" required>-->
 
 
-             <!-- Flexbox container for horizontal alignment -->
-             <div class="table-row-container">
+            <!-- Flexbox container for horizontal alignment -->
+            <div class="table-row-container">
 
-                 <!-- Account table -->
-                 <div class="table-container">
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Account Due</th>
-                                 <th></th> <!-- Empty column for alignment -->
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>AccountType</td>
-                                 <td>
-                                    <input type="text" formControlName="accountType"
-                                        placeholder="accountType" class="small-input">
-                                </td>
-                             </tr>
-                             <tr>
-                                 <td>Total Due</td>
-                                 <td>
-                                    <input type="number" formControlName="totalDue"
-                                        placeholder="totalDue" class="small-input">
-                                </td>
-                             </tr>
-                             <tr>
-                                 <td>Payment Type</td>
-                                 <td>
-                                    <input type="text" formControlName="paymentType"
-                                        placeholder="paymentType" class="small-input">
-                                </td>
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
+                <!-- Account table -->
+                <div class="table-container">
+                    <table>
 
-                 <!-- Bill to table -->
-                 <div class="table-container">
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Bill To</th>
-                                 <th></th> <!-- Empty column for alignment -->
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>Amount</td>
-                                 <td>567</td>
-                             </tr>
-                             <tr>
-                                 <td>Payment Date</td>
-                                 <td>2024-02-22</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
-             </div>
-
-             <!-- Items Table -->
-             <div class="item-section">
-                 <label>Items</label>
-                 <div class="table-responsive">
-                     <table>
-                         <thead>
-                             <tr>
-                                <th style="min-width: 50px">SR.No</th>
-                                 <th style="min-width: 170px">Vendor Invoice Ref</th>
-                                 <th  style="min-width: 150px">Vendor</th>
-                                 <th style="min-width: 170px">Cost Code</th>
-                                 <th style="min-width: 170px">Expense Type</th>
-                                 <th style="min-width: 170px">Rate of SAR</th>
-                                 <th style="min-width: 170px">Total</th>
-                                 <th style="min-width: 170px">Currency</th>
-                                 <th style="min-width: 170px">Reccuring</th>
-                                 <th style="min-width: 200px">Description</th>
-                                 <th style="min-width: 170px">Action</th>
-                             </tr>
-                         </thead>
-                         <tbody formArrayName="items">
-                             <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-                                 <td style="min-width: 50px">
-                                     <span>{{i+1}}</span>
-                                 </td>
-                                 <td style="min-width: 170px">
-                                     <input type="text" formControlName="vendorInvoiceRef"
-                                         placeholder="vendorInvoiceRef" class="small-input">
-                                 </td>
-                                 <!-- Vendor Name Dropdown -->
-                                 <td>
-                                     <select  formControlName="vendor"
-                                         class="small-input">
-                                         <option *ngFor="let vendorValue of vendors" [ngValue]="vendorValue">{{vendorValue.name}}
-                                         </option>
-                                     </select>
-                                 </td>
-                                 <!-- Cost Code Dropdown -->
-                                 <td>
-                                     <select formControlName="costCode"
-                                         class="small-input">
-                                         <option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">{{costCenter.code}}
-                                         </option>
-                                     </select>
-                                 </td>
-                                 <!-- Expense Code Dropdown -->
-                                 <td>
-                                     <select formControlName="expenseType"
-                                         class="small-input">
-                                         <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.code">
-                                             {{expenseType.code}}</option>
-                                     </select>
-                                 </td>
-                                 <td>
-                                    <input type="number" formControlName="rateOfSAR" 
-                                        placeholder="rateOfSAR" class="small-input">
-                                </td>
+                        <tbody>
+                            <tr>
+                                <th>Account Type</th>
                                 <td>
-                                    <input type="number" formControlName="invoiceAmount" 
-                                        placeholder="total" class="small-input">
+                                    <select formControlName="accountType" class="small-input">
+                                        <option *ngFor="let accountType of accountsList" [value]="accountType.name">
+                                            {{accountType.name}}
+                                        </option>
+                                    </select>
                                 </td>
+                            </tr>
+                            <tr>
+                                <th>Payment Type</th>
                                 <td>
-                                    <select formControlName="currency"
+                                    <select formControlName="paymentType" class="small-input">
+                                        <option *ngFor="let paymentType of paymentTypeList" [value]="paymentType">
+                                            {{paymentType}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Submitter</th>
+                                <td>
+                                    <select formControlName="submitter" class="small-input">
+                                        <option *ngFor="let submitter of submitterList" [value]="submitter.name">
+                                            {{submitter.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Department</th>
+                                <td>
+                                    <select formControlName="department" class="small-input">
+                                        <option *ngFor="let department of departmentList" [value]="department.name">
+                                            {{department.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bill to table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Bill To</th>
+                                <td>
+                                    <input type="text" formControlName="billTo" placeholder="VendorName"
                                         class="small-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Payment Due date</th>
+                                <td>Dropdown</td>
+                                <!-- <input type="date" id="paymentDueDate" (change)="onDateChange($event)" /> -->
+                            </tr>
+                            <tr>
+                                <th>Vendor Bank Details</th>
+                                <td>Dropdown</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="item-section">
+                <label>Items</label>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="min-width: 50px">SR.No</th>
+                                <th style="min-width: 170px">Vendor Invoice Ref</th>
+                                <th style="min-width: 150px">Vendor</th>
+                                <th style="min-width: 150px">InvoiceDate</th>
+                                <th style="min-width: 170px">Cost Code</th>
+                                <th style="min-width: 170px">Expense Type</th>
+                                <th style="min-width: 170px">Rate of SAR</th>
+                                <th style="min-width: 170px">Total</th>
+                                <th style="min-width: 170px">Currency</th>
+                                <th style="min-width: 170px">Reccuring</th>
+                                <th style="min-width: 200px">Description</th>
+                                <th style="min-width: 200px">invoiceTotal</th>
+                                <th style="min-width: 170px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody formArrayName="items">
+                            <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                                <td style="min-width: 50px">
+                                    <span>{{i+1}}</span>
+                                </td>
+                                <td style="min-width: 170px">
+                                    <input type="text" formControlName="vendorInvoiceRef" placeholder="vendorInvoiceRef"
+                                        class="small-input">
+                                </td>
+                                <!-- Vendor Name Dropdown -->
+                                <td>
+                                    <select formControlName="vendorName" class="small-input">
+                                        <option *ngFor="let vendorValue of vendors" [ngValue]="vendorValue">
+                                            {{vendorValue.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="date" formControlName="vendorInvoiceDate" class="small-input"
+                                        (change)="onDateChange($event, item)">
+                                </td>
+                                <!-- Cost Code Dropdown -->
+                                <td>
+                                    <select formControlName="costCode" class="small-input">
+                                        <option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">
+                                            {{costCenter.code}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <!-- Expense Code Dropdown -->
+                                <td>
+                                    <select formControlName="expenseType" class="small-input">
+                                        <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.code">
+                                            {{expenseType.code}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="invoiceAmount" placeholder="total"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+                                <td>
+                                    <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencySymbol">
                                             {{ currencyValue.currencySymbol}}
@@ -139,53 +161,52 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select formControlName="recurring"
-                                        class="small-input">
+                                    <select formControlName="recurring" class="small-input">
                                         <option *ngFor="let recurring of recurrings" [value]="recurring">{{recurring}}
                                         </option>
                                     </select>
                                 </td>
-                                 <td>
-                                     <input type="text" formControlName="description"
-                                         placeholder="Description">
-                                 </td>
-                                 
-                                 <!-- Currency Dropdown -->
-                                 
-                                 <td>
-                                     <button type="button" (click)="removeItem(i)">Remove</button>
-                                 </td>
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
+                                <td>
+                                    <input type="text" formControlName="description" placeholder="Description">
+                                </td>
 
-                 <button type="button" (click)="addItem()">Add Item</button>
-             </div>
+                                <td>
+                                    <input type="text" formControlName="invoiceTotal" placeholder="Total"
+                                        class="small-input" readonly>
+                                </td>
+                                <td>
+                                    <button type="button" (click)="removeItem(i)">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-             <!-- Sub Total -->
-             <div class="table-container">
-                 <table>
-                     <thead>
-                         <tr>
-                             <th>Subtotal</th>
-                             <th></th> <!-- Empty column for alignment -->
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <tr>
-                             <td>Adjustment</td>
-                             <td>0.00</td>
-                         </tr>
-                         <tr>
-                             <td>Grand Total</td>
-                             <td>{{getTotalInvoiceAmount()}}</td>
-                         </tr>
-                     </tbody>
-                 </table>
-             </div>
+                <button id="addItem" type="button" (click)="addItem()">Add Item</button>
+            </div>
 
-             <button type="button" (click)="submitInvoice()">Submit Invoice</button>
-         </div>
+            <!-- Sub Total -->
+            <div class="table-container">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Subtotal</th>
+                            <td>{{getTotalInvoiceAmount()}}</td>
+                        </tr>
+                        <tr>
+                            <th>Adjustment</th>
+                            <td> <input type="number" formControlName="adjustments" placeholder="adjustments"
+                                    class="small-input"></td>
+                        </tr>
+                        <tr>
+                            <th>Grand Total</th>
+                            <td>{{getTotalInvoiceAmount()}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="submitInvoice" type="button" (click)="submitInvoice()">Submit Invoice</button>
+        </div>
     </div>
 </div>
