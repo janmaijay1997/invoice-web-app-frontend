@@ -147,11 +147,12 @@
                                         </option>
                                     </select>
                                 </td>
-                            
+
                                 <!-- Expense Code Dropdown -->
                                 <td>
                                     <select formControlName="expenseType" class="small-input">
-                                        <option *ngFor="let expenseType of expenseTypeList" [ngValue]="expenseType.code">
+                                        <option *ngFor="let expenseType of expenseTypeList"
+                                            [ngValue]="expenseType.code">
                                             {{expenseType.code}}</option>
                                     </select>
                                 </td>
@@ -182,7 +183,7 @@
                                 </td>
 
                                 <td>
-                                    <input type="text" formControlName="invoiceTotal" placeholder="Total"
+                                    <input type="number" formControlName="invoiceTotal" placeholder="Total"
                                         class="small-input" readonly>
                                 </td>
                                 <td>
@@ -202,16 +203,19 @@
                     <tbody>
                         <tr>
                             <th>Subtotal</th>
-                            <td>{{getTotalInvoiceAmount()}}</td>
+                            <td>
+                                <input type="text" formControlName="subTotalAmount" placeholder="Total"
+                                    class="small-input" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <th>Adjustment</th>
-                            <td> <input type="number" formControlName="adjustments" placeholder="adjustments"
-                                    class="small-input"></td>
+                            <input type="number" formControlName="adjustments" placeholder="adjustments"
+                                class="small-input">
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td>{{getTotalInvoiceAmount()}}</td>
+                            <td>{{ (getTotalInvoiceAmount() + (adjustments?.value || 0)).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>

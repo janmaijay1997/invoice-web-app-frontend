@@ -67,7 +67,7 @@ export class AddInvoiceComponent implements OnInit {
   departmentList: Department[] = [];
   paymentTypeList: string[] = [];
   invoiceStatus: string[] = [];
-  totalInvoiceAmount: number = 0; // Variable to keep track of the total amount
+  subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
 
   constructor(private fb: FormBuilder, private commonService: CommonDetailsService, private invoiceService: InvoiceService, private toastr: ToastrService) {
@@ -83,8 +83,8 @@ export class AddInvoiceComponent implements OnInit {
       vendorBankDetails: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
 
       items: this.fb.array([this.itemFormGroup()]),  // Initialize the form array with one item,
-      invoiceTotal: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       adjustments: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      subTotalAmount: [{ value: this.subTotalAmount, disabled: true }],
 
     });
   }
@@ -147,19 +147,17 @@ export class AddInvoiceComponent implements OnInit {
       currency: ['', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
-      invoiceTotal: [{ value: '', disabled: true }], // Disabled field, calculated value
+      invoiceTotal:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     });
   }
 
 
   onVendorChange(event: Event, item: AbstractControl): void {
-    const selectedVendor = (event.target as HTMLSelectElement).value; // Get the selected vendor object
+    const selectedVendor = (event.target as HTMLSelectElement).value; 
 
-    console.log(`Vendor Name----------------: ${selectedVendor}`); // Print the vendorId
-
-    const vendor = this.vendorList.find(v => v.vendorName === selectedVendor); // Find the vendor by name
+    const vendor = this.vendorList.find(v => v.vendorName === selectedVendor); 
     if (vendor) {
-      item.get('vendorId')?.setValue(vendor.vendorId); // Set the vendorId in the FormGroup
+      item.get('vendorId')?.setValue(vendor.vendorId);
     }
   }
 
@@ -177,21 +175,22 @@ export class AddInvoiceComponent implements OnInit {
     this.paymentDueDate?.setValue(selectedDate);
   }
 
-  // Method to calculate the total invoice amount
   getTotalInvoiceAmount(): number {
     const items = this.items.value; // Get the array of items
     let total = 0;
 
-    // Loop through each item and add the invoiceAmount value
+    // Loop through each item and add the invoiceTotal value
     items.forEach((item: any) => {
-      const amount = parseFloat(item.invoiceTotal); // Parse the value as float
+      const amount = parseFloat(item.invoiceTotal);
       if (!isNaN(amount)) {
-        total += amount; // Add to the total if it's a valid number
+        total += amount; 
       }
     });
-    return total; // Return the total sum
-  }
 
+    this.subTotalAmount = total; 
+    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total); 
+    return total; 
+  }
 
 
   // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
@@ -199,8 +198,15 @@ export class AddInvoiceComponent implements OnInit {
     const invoiceAmount = parseFloat(item.get('invoiceAmount')?.value) || 0; // Fallback to 0
     const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 0; // Fallback to 0
 
-    const total = invoiceAmount * rateOfSAR;
-    item.get('invoiceTotal')?.setValue(total); // Store the total in invoiceTotal
+    if (!isNaN(invoiceAmount) && !isNaN(rateOfSAR)) {
+      const total = invoiceAmount * rateOfSAR;
+      item.get('invoiceTotal')?.setValue(total);
+    } else {
+      console.warn("Invalid values for invoiceAmount or rateOfSAR in row:", item.value);
+    }
+
+    // Update the overall total whenever an item's total changes
+    this.getTotalInvoiceAmount();
   }
 
 
@@ -209,7 +215,7 @@ export class AddInvoiceComponent implements OnInit {
   addItem(): void {
     this.items.push(this.itemFormGroup());
     // Update the total whenever a new item is added
-    this.totalInvoiceAmount = this.getTotalInvoiceAmount();
+    this.subTotalAmount = this.getTotalInvoiceAmount();
   }
 
   // Method to remove an item from the FormArray
@@ -218,7 +224,7 @@ export class AddInvoiceComponent implements OnInit {
     const amount = parseFloat(removedItem.get('invoiceAmount')?.value); // Get the invoice amount of the removed item
 
     if (!isNaN(amount)) {
-      this.totalInvoiceAmount -= amount; // Subtract the amount from the total
+      this.subTotalAmount -= amount; // Subtract the amount from the total
     }
 
     this.items.removeAt(index); // Remove the item at the specified index
@@ -246,7 +252,7 @@ export class AddInvoiceComponent implements OnInit {
         };
       } else {
         // Handle the case where formGroup is null, if necessary
-        return null; 
+        return null;
       }
     }).filter(item => item !== null); // Filter out any null entries
   }
@@ -254,19 +260,18 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   submitInvoice() {
-    console.log(this.items);
-    const totalInvoiceAmount = this.getTotalInvoiceAmount(); // Calculate the total amount
+    const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
-      invoiceNumber: '',  // Dummy value for invoice number
+      invoiceNumber: '', 
       total: {
-        subTotal: totalInvoiceAmount.toString(),  // Use the calculated totalInvoiceAmount
-        adjustments: this.adjustments?.value,  // Dummy value for adjustments
-        grandTotal: '$' + (totalInvoiceAmount + this.adjustments?.value).toString(),  // Example dummy value for grand total (just for illustration)
+        subTotal: totalInvoiceAmount.toString(),  
+        adjustments: this.adjustments?.value, 
+        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(), 
       },
       accountDetails: {
-        accountType: this.accountType?.value || 'Private Account',  // Use form value, or a dummy value
-        paymentType: this.paymentType?.value || 'Bank',  // Use form value, or a dummy value
+        accountType: this.accountType?.value || 'Private Account',  
+        paymentType: this.paymentType?.value || 'Bank',
       },
       submitter: {
         submitterName: this.submitterName?.value,
@@ -285,10 +290,7 @@ export class AddInvoiceComponent implements OnInit {
       items: this.prepareItemsData(),
     };
 
-    console.log(requestData);  // Log the final requestData JSON object
-
     this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-      console.log(response);
       this.toastr.success('Invoice Created successFully with  invoice id ' + response.response.invoiceNumber, 'Success', {
         timeOut: 300000, // Optional - already set in forRoot
       });
