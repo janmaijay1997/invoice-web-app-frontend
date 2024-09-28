@@ -5,6 +5,8 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 
 interface Accounts {
   id: string;
@@ -70,9 +72,14 @@ export class AddInvoiceComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private commonService: CommonDetailsService, private invoiceService: InvoiceService, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder,
+    private commonService: CommonDetailsService,
+    private invoiceService: InvoiceService,
+    private toastr: ToastrService,
+    private router: Router,
+    private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
-
+      invoiceNumber: [''],
       accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       submitter: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
@@ -91,6 +98,50 @@ export class AddInvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+
+    const invoice = this.invoiceDataService.getInvoice();
+    console.log("Received Invoice:", invoice);
+
+    if (invoice) {
+      this.invoiceCreateFormGroup.get("invoiceNumber")?.setValue(invoice.invoiceNumber);
+      this.populateForm(invoice);
+    }
+
+  }
+
+  private populateForm(invoice: any): void {
+    this.invoiceCreateFormGroup.patchValue({
+      accountType: invoice.accountDetails.accountType,
+      paymentType: invoice.accountDetails.paymentType,
+      submitter: invoice.submitter.submitterName,
+      department: invoice.submitter.department,
+      billTo: invoice.vendorDetails.billTo,
+      paymentDueDate: invoice.vendorDetails.paymentDue,
+      vendorBankDetails: invoice.vendorDetails.vendorBankDetails,
+      adjustments: invoice.total.adjustments || '', // Handle optional adjustments
+    });
+
+    // If you need to populate items, you can do that as well
+    if (invoice.items) {
+      invoice.items.forEach((item: any) => {
+        const itemGroup = this.itemFormGroup();
+        itemGroup.patchValue({
+          vendorInvoiceRef: item.vendorInvoiceRef,
+          vendorName: item.vendorName,
+          vendorId: item.vendorId,
+          vendorInvoiceDate: item.vendorInvoiceDate,
+          costCode: item.costCode,
+          expenseType: item.expenseType,
+          description: item.description,
+          rateOfSAR: item.rateOfSAR,
+          currency: item.currency,
+          recurring: item.recurring,
+          invoiceAmount: item.invoiceAmount,
+          invoiceTotal: item.invoiceTotal,
+        });
+        this.items.push(itemGroup); // Add the item to the FormArray
+      });
+    }
   }
 
   // Getter for clientName
@@ -123,6 +174,10 @@ export class AddInvoiceComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('adjustments');
   }
 
+  get invoiceNumber() {
+    return this.invoiceCreateFormGroup.get('invoiceNumber');
+  }
+
   // Getter for paymentType
   get paymentType() {
     return this.invoiceCreateFormGroup.get('paymentType');
@@ -147,15 +202,15 @@ export class AddInvoiceComponent implements OnInit {
       currency: ['', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
-      invoiceTotal:  ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     });
   }
 
 
   onVendorChange(event: Event, item: AbstractControl): void {
-    const selectedVendor = (event.target as HTMLSelectElement).value; 
+    const selectedVendor = (event.target as HTMLSelectElement).value;
 
-    const vendor = this.vendorList.find(v => v.vendorName === selectedVendor); 
+    const vendor = this.vendorList.find(v => v.vendorName === selectedVendor);
     if (vendor) {
       item.get('vendorId')?.setValue(vendor.vendorId);
     }
@@ -183,13 +238,13 @@ export class AddInvoiceComponent implements OnInit {
     items.forEach((item: any) => {
       const amount = parseFloat(item.invoiceTotal);
       if (!isNaN(amount)) {
-        total += amount; 
+        total += amount;
       }
     });
 
-    this.subTotalAmount = total; 
-    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total); 
-    return total; 
+    this.subTotalAmount = total;
+    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
+    return total;
   }
 
 
@@ -260,17 +315,20 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   submitInvoice() {
+
+    let invoiceNumberId = this.invoiceNumber?.value || ''; // Assign value or null if undefined
+
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
-      invoiceNumber: '', 
+      invoiceNumber: invoiceNumberId,
       total: {
-        subTotal: totalInvoiceAmount.toString(),  
-        adjustments: this.adjustments?.value, 
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(), 
+        subTotal: totalInvoiceAmount.toString(),
+        adjustments: this.adjustments?.value,
+        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
       },
       accountDetails: {
-        accountType: this.accountType?.value || 'Private Account',  
+        accountType: this.accountType?.value || 'Private Account',
         paymentType: this.paymentType?.value || 'Bank',
       },
       submitter: {
@@ -286,7 +344,7 @@ export class AddInvoiceComponent implements OnInit {
 
       invoiceStatus: "PENDING", // TODO
       createdBy: "ADMIN",  // TODO pass value from session name
-
+      updatedBy : "ADMIN",  // TODO
       items: this.prepareItemsData(),
     };
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { InvoiceService } from 'src/app/services/invoice.service';
+import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { SidebarService } from 'src/app/services/sidebar.service';
 
 
@@ -38,7 +40,11 @@ interface Invoice {
   styleUrls: ['./view-invoice.component.scss']
 })
 export class ViewInvoiceComponent implements OnInit {
-  constructor(private sidebarService: SidebarService, private invoiceService: InvoiceService, private toastr: ToastrService) { }
+  constructor(private sidebarService: SidebarService,
+    private invoiceService: InvoiceService,
+    private toastr: ToastrService,
+    private router: Router,
+    private invoiceDataService:InvoiceDataService) { }
 
   invoiceList: Invoice[] = [];
   isAdmin: any;
@@ -61,8 +67,12 @@ export class ViewInvoiceComponent implements OnInit {
   viewInvoice(invoiceId: string) {
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
       (response: any) => {
-        this.invoiceList = response.response || []; // Ensure it defaults to an empty array if undefined
-        console.log("Invoice List:", this.invoiceList); // Log the invoice list for debugging
+        const invoice = response.response;
+        console.log("Invoice:", invoice);
+
+        // Navigate to the add invoice page and pass the invoice data as state
+        this.invoiceDataService.setInvoice(invoice);
+        this.router.navigate(['/addInvoice'], { state: { invoice } });
       },
       (error: any) => {
         console.error('Error fetching details:', error);
@@ -75,14 +85,11 @@ export class ViewInvoiceComponent implements OnInit {
     return dateString.split('T')[0]; // Split by 'T' and return the date part
   }
 
-
-  // Method to submit the invoice form
   getInvoiceList() {
     this.invoiceService.getInvoiceList().subscribe(
       (response: any) => {
-        // Assign the response data to invoiceList
-        this.invoiceList = response.response || []; // Ensure it defaults to an empty array if undefined
-        console.log("Invoice List:", this.invoiceList); // Log the invoice list for debugging
+        this.invoiceList = response.response || [];
+        console.log("Invoice List:", this.invoiceList);
       },
       (error: any) => {
         console.error('Error fetching details:', error);

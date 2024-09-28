@@ -22,7 +22,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-invoice>
                     <tr>
-                        <td style="min-width:150px">{{ invoice.invoiceNumber }}</td>
+                        <td style="min-width:150px" (click)="viewInvoice(invoice.invoiceNumber)">{{ invoice.invoiceNumber }}</td>
                         <td style="min-width:150px">{{ trimDate(invoice.invoiceCreatedDate) }}</td>
                         <td style="min-width:100px">{{ invoice.vendorDetails.billTo }}</td>
                         <td style="min-width:150px">{{ invoice.total.grandTotal }}</td>
