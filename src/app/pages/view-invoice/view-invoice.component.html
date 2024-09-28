@@ -1,47 +1,40 @@
-
-
-
 <div class="component_body">
-        <h1 class="component_title">Invoices</h1>
-        <div class="inner_body">
-                <form class="invoice_form">
-                        <input type="text" placeholder="Search by invoice number or client name">
-                        <button type="submit">Filter</button>
-                    </form>
-                    
+    <h1 class="component_title">Invoices</h1>
+    <div class="inner_body">
+        <form class="invoice_form">
+            <input type="text" placeholder="Search by invoice number">
+            <button type="submit">Filter</button>
+        </form>
+
         <div class="table_view">
-            
-            <p-table
-            [value]="invoices"
-            [paginator]="true"
-            [rows]="10"
-            [tableStyle]="{ 'min-width': '50rem' }"
-           
-        >
-            <ng-template pTemplate="header">
-                <tr>
-                        <th style="min-width:50px">Invoice #</th>
-                        <th style="min-width:150px">Client</th>
+
+            <p-table [value]="invoiceList" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:150px">Invoice Number</th>
                         <th style="min-width:150px">Date</th>
-                        <th style="min-width:100px">Total</th>
+                        <th style="min-width:100px">Vendor Name</th>
+                        <th style="min-width:150px">Amount</th>
+                        <th style="min-width:150px">Submitter</th>
                         <th style="min-width:150px">Status</th>
                         <th style="min-width:100px">Actions</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-invoice>
-                <tr>
-                        <td style="min-width:50px">{{ invoice.id }}</td>
-                        <td style="min-width:150px">{{ invoice.client }}</td>
-                        <td style="min-width:150px">{{ invoice.date }}</td>
-                        <td style="min-width:100px">{{ invoice.total }}</td>
-                        <td style="min-width:150px">{{ invoice.status }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-invoice>
+                    <tr>
+                        <td style="min-width:150px">{{ invoice.invoiceNumber }}</td>
+                        <td style="min-width:150px">{{ trimDate(invoice.invoiceCreatedDate) }}</td>
+                        <td style="min-width:100px">{{ invoice.vendorDetails.billTo }}</td>
+                        <td style="min-width:150px">{{ invoice.total.grandTotal }}</td>
+                        <td style="min-width:150px">{{ invoice.submitter.submitterName }}</td>
+                        <td style="min-width:150px">{{ invoice.invoiceStatus }}</td>
                         <td style="min-width:100px">
-                            <button (click)="viewInvoice(invoice.id)">View</button>
-                            <button *ngIf="isAdmin" (click)="editInvoice(invoice.id)">Edit</button>
+                            <button (click)="viewInvoice(invoice.invoiceNumber)">View</button>
+                            <button *ngIf="isAdmin" (click)="editInvoice(invoice.invoiceNumber)">Edit</button>
                         </td>
-                </tr>
-            </ng-template>
-        </p-table>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
-        </div>
+    </div>
 </div>

@@ -4,8 +4,11 @@
 
 export const environment = {
   production: false,
-  createInvoiceUrl:'http://localhost:8080/webportal/v1/createinvoice',
-  otherDetailsUrl:'http://localhost:8080/webportal/v1/otherdetails'
+  createInvoiceUrl: 'http://localhost:8080/webportal/v1/createinvoice',
+  otherDetailsUrl: 'http://localhost:8080/webportal/v1/otherdetails',
+  invoiceListUrl: 'http://localhost:8080/webportal/v1/invoices',
+  invoiceDetailsUrl: 'http://localhost:8080/webportal/v1/invoice/'
+
 };
 
 /*

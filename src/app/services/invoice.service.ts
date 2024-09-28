@@ -7,9 +7,17 @@ import { environment } from 'src/environments/environment';
 })
 export class InvoiceService {
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  createInvoice(createInvoiceRequestData:any):any {
-      return this.httpClient.post(environment.createInvoiceUrl,createInvoiceRequestData);
+  createInvoice(createInvoiceRequestData: any): any {
+    return this.httpClient.post(environment.createInvoiceUrl, createInvoiceRequestData);
+  }
+
+  getInvoiceList(): any {
+    return this.httpClient.get(environment.invoiceListUrl);
+  }
+
+  getInvoiceDetails(invoiceId: string): any {
+    return this.httpClient.get(environment.invoiceDetailsUrl + invoiceId);
   }
 }
