@@ -221,7 +221,8 @@
                 </table>
             </div>
 
-            <button id="submitInvoice" type="button" (click)="submitInvoice()">Submit Invoice</button>
+            <button id="saveInvoice" type="button" (click)="saveInvoice()">Save Invoice</button>
+            <button id="submitInvoice" type="button" (click)="submitInvoice()" *ngIf="isViewSubmitButton">Submit Invoice</button>
         </div>
     </div>
 </div>

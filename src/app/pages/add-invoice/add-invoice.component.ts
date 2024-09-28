@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { InvoiceDataService } from 'src/app/services/invoicedataservice';
+import { Subscription } from 'rxjs';
 
 interface Accounts {
   id: string;
@@ -57,7 +58,10 @@ interface Vendor {
 
 export class AddInvoiceComponent implements OnInit {
 
+  subscription: Subscription | undefined;
+
   sidebarActive: boolean = false;
+  isViewSubmitButton: boolean = false;
 
   recurrings = ['Yes', 'No'];
   vendorList: Vendor[] = [];
@@ -80,6 +84,7 @@ export class AddInvoiceComponent implements OnInit {
     private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
+      invoiceStatus: [''],
       accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       submitter: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
@@ -104,6 +109,7 @@ export class AddInvoiceComponent implements OnInit {
 
     if (invoice) {
       this.invoiceCreateFormGroup.get("invoiceNumber")?.setValue(invoice.invoiceNumber);
+      this.isViewSubmitButton = true;
       this.populateForm(invoice);
     }
 
@@ -178,6 +184,9 @@ export class AddInvoiceComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('invoiceNumber');
   }
 
+  get invoiceStatusValue() {
+    return this.invoiceCreateFormGroup.get('invoiceStatus');
+  }
   // Getter for paymentType
   get paymentType() {
     return this.invoiceCreateFormGroup.get('paymentType');
@@ -314,9 +323,8 @@ export class AddInvoiceComponent implements OnInit {
 
 
   // Method to submit the invoice form
-  submitInvoice() {
-
-    let invoiceNumberId = this.invoiceNumber?.value || ''; // Assign value or null if undefined
+  saveInvoice() {
+    let invoiceNumberId = this.invoiceNumber?.value || '';
 
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
@@ -342,9 +350,8 @@ export class AddInvoiceComponent implements OnInit {
         vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
       },
 
-      invoiceStatus: "PENDING", // TODO
+      invoiceStatus: this.invoiceStatus[0],
       createdBy: "ADMIN",  // TODO pass value from session name
-      updatedBy : "ADMIN",  // TODO
       items: this.prepareItemsData(),
     };
 
@@ -358,8 +365,51 @@ export class AddInvoiceComponent implements OnInit {
       this.toastr.error('Something went wrong.', 'Error');
 
     })
+  }
 
+  // Method to submit the invoice form
+  submitInvoice() {
 
+    let invoiceNumberId = this.invoiceNumber?.value || '';
+    const totalInvoiceAmount = this.getTotalInvoiceAmount();
+
+    const requestData = {
+      invoiceNumber: invoiceNumberId,
+      total: {
+        subTotal: totalInvoiceAmount.toString(),
+        adjustments: this.adjustments?.value,
+        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+      },
+      accountDetails: {
+        accountType: this.accountType?.value || '',
+        paymentType: this.paymentType?.value || '',
+      },
+      submitter: {
+        submitterName: this.submitterName?.value,
+        department: this.departmentName?.value,
+      },
+
+      vendorDetails: {
+        billTo: this.billTo?.value,
+        paymentDue: this.paymentDueDate?.value,
+        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+      },
+
+      invoiceStatus: this.invoiceStatus[1],
+      updatedBy: "ADMIN",  // TODO
+      items: this.prepareItemsData(),
+    };
+
+    this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
+      this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.response.invoiceNumber, 'Success', {
+        timeOut: 300000, // Optional - already set in forRoot
+      });
+      this.invoiceCreateFormGroup.reset();
+    }, (error: any) => {
+      console.error('Error fetching details:', error);
+      this.toastr.error('Something went wrong.', 'Error');
+
+    })
   }
 
   getCommonDetailsData() {
