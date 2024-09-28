@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice-details.component';
 @NgModule({
   declarations: [
     PagesComponent,
@@ -28,7 +29,8 @@ import { DropdownModule } from 'primeng/dropdown';
     DashboardComponent,
     AddInvoiceComponent,
     ViewInvoiceComponent,
-    UserManagmentComponent
+    UserManagmentComponent,
+    ViewInvoiceDetailsComponent,
   ],
   imports: [
     CommonModule,

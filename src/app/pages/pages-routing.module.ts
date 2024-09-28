@@ -6,15 +6,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddInvoiceComponent } from './add-invoice/add-invoice.component';
 import { ViewInvoiceComponent } from './view-invoice/view-invoice.component';
 import { PagesComponent } from './pages.component';
+import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice-details.component';
 const routes: Routes = [
 
   {
     path: '',
     component: PagesComponent,
-    children:[
+    children: [
       {
         path: '',
-        redirectTo: 'dashboard', 
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'userView', component: UserManagmentComponent },
       { path: 'addInvoice', component: AddInvoiceComponent },
       { path: 'InvoiceView', component: ViewInvoiceComponent },
+      { path: 'viewInvoiceDetail', component: ViewInvoiceDetailsComponent },
     ]
   }
 

@@ -72,7 +72,7 @@ export class ViewInvoiceComponent implements OnInit {
 
         // Navigate to the add invoice page and pass the invoice data as state
         this.invoiceDataService.setInvoice(invoice);
-        this.router.navigate(['/addInvoice'], { state: { invoice } });
+        this.router.navigate(['/viewInvoiceDetail'], { state: { invoice } });
       },
       (error: any) => {
         console.error('Error fetching details:', error);
