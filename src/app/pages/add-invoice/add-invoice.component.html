@@ -68,14 +68,19 @@
                             <tr>
                                 <th>Bill To</th>
                                 <td>
-                                    <input type="text" formControlName="billTo" placeholder="VendorName"
-                                        class="small-input">
+                                    <select formControlName="billTo" class="small-input">
+                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
+                                            {{vendor.vendorName}}
+                                        </option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Payment Due date</th>
-                                <td>Dropdown</td>
-                                <!-- <input type="date" id="paymentDueDate" (change)="onDateChange($event)" /> -->
+                                <td>
+                                    <input type="date" formControlName="paymentDueDate" class="small-input"
+                                        (change)="paymentDueDateType($event)">
+                                </td>
                             </tr>
                             <tr>
                                 <th>Vendor Bank Details</th>
@@ -113,34 +118,40 @@
                                 <td style="min-width: 50px">
                                     <span>{{i+1}}</span>
                                 </td>
+
                                 <td style="min-width: 170px">
                                     <input type="text" formControlName="vendorInvoiceRef" placeholder="vendorInvoiceRef"
                                         class="small-input">
                                 </td>
+
                                 <!-- Vendor Name Dropdown -->
                                 <td>
                                     <select formControlName="vendorName" class="small-input">
-                                        <option *ngFor="let vendorValue of vendors" [ngValue]="vendorValue">
-                                            {{vendorValue.name}}
+                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
+                                            {{vendor.vendorName}}
                                         </option>
                                     </select>
                                 </td>
+
+
                                 <td>
                                     <input type="date" formControlName="vendorInvoiceDate" class="small-input"
                                         (change)="onDateChange($event, item)">
                                 </td>
+
                                 <!-- Cost Code Dropdown -->
                                 <td>
                                     <select formControlName="costCode" class="small-input">
-                                        <option *ngFor="let costCenter of costCenterList" [value]="costCenter.code">
+                                        <option *ngFor="let costCenter of costCenterList" [ngValue]="costCenter.code">
                                             {{costCenter.code}}
                                         </option>
                                     </select>
                                 </td>
+                            
                                 <!-- Expense Code Dropdown -->
                                 <td>
                                     <select formControlName="expenseType" class="small-input">
-                                        <option *ngFor="let expenseType of expenseTypeList" [value]="expenseType.code">
+                                        <option *ngFor="let expenseType of expenseTypeList" [ngValue]="expenseType.code">
                                             {{expenseType.code}}</option>
                                     </select>
                                 </td>
@@ -155,14 +166,14 @@
                                 <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
-                                            [ngValue]="currencyValue.currencySymbol">
-                                            {{ currencyValue.currencySymbol}}
+                                            [ngValue]="currencyValue.currencyName">
+                                            {{ currencyValue.currencyName}}
                                         </option>
                                     </select>
                                 </td>
                                 <td>
                                     <select formControlName="recurring" class="small-input">
-                                        <option *ngFor="let recurring of recurrings" [value]="recurring">{{recurring}}
+                                        <option *ngFor="let recurring of recurrings" [ngValue]="recurring">{{recurring}}
                                         </option>
                                     </select>
                                 </td>

@@ -57,20 +57,8 @@ export class AddInvoiceComponent implements OnInit {
 
   sidebarActive: boolean = false;
 
-
-  vendors = [
-    { id: '1', name: 'Vendor 1' },
-    { id: '2', name: 'Vendor 2' },
-    { id: '3', name: 'Vendor 3' }
-  ];
-
-
-  costCodes = ['CostCode1', 'CostCode2', 'CostCode3'];
-  expenseCodes = ['ExpenseCode1', 'ExpenseCode2', 'ExpenseCode3'];
-  units = ['PCS', 'KG', 'Litre'];
-  currencies = ['USD', 'EUR', 'GBP'];
   recurrings = ['Yes', 'No'];
-  vendorList: any;
+  vendorList: Vendor[] = [];
   expenseTypeList: ExpenseCode[] = [];
   costCenterList: CostCenter[] = [];
   accountsList: Accounts[] = [];
@@ -80,25 +68,27 @@ export class AddInvoiceComponent implements OnInit {
   paymentTypeList: string[] = [];
   invoiceStatus: string[] = [];
   totalInvoiceAmount: number = 0; // Variable to keep track of the total amount
-
   invoiceCreateFormGroup: FormGroup;
 
   constructor(private fb: FormBuilder, private commonService: CommonDetailsService, private invoiceService: InvoiceService, private toastr: ToastrService) {
     this.invoiceCreateFormGroup = this.fb.group({
-      clientName: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
-      items: this.fb.array([this.itemFormGroup()]),  // Initialize the form array with one item,
+
       accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
-
       submitter: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       department: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
 
       billTo: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentDueDate: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
-      adjustments: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      vendorBankDetails: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+
+      items: this.fb.array([this.itemFormGroup()]),  // Initialize the form array with one item,
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      adjustments: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+
     });
   }
+
   ngOnInit(): void {
     this.getCommonDetailsData();
   }
@@ -148,7 +138,8 @@ export class AddInvoiceComponent implements OnInit {
     return this.fb.group({
       vendorInvoiceRef: ['', Validators.required],
       vendorName: ['', Validators.required],
-      vendorInvoiceDate: ['', Validators.required],  // Ensure this is present
+      vendorId: ['', Validators.required], //
+      vendorInvoiceDate: ['', Validators.required],
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
@@ -161,6 +152,18 @@ export class AddInvoiceComponent implements OnInit {
   }
 
 
+  onVendorChange(event: Event, item: AbstractControl): void {
+    const selectedVendor = (event.target as HTMLSelectElement).value; // Get the selected vendor object
+
+    console.log(`Vendor Name----------------: ${selectedVendor}`); // Print the vendorId
+
+    const vendor = this.vendorList.find(v => v.vendorName === selectedVendor); // Find the vendor by name
+    if (vendor) {
+      item.get('vendorId')?.setValue(vendor.vendorId); // Set the vendorId in the FormGroup
+    }
+  }
+
+
   onDateChange(event: Event, item: AbstractControl): void {
     const input = event.target as HTMLInputElement;
     const selectedDate = input.value; // This will be in YYYY-MM-DD format
@@ -168,6 +171,11 @@ export class AddInvoiceComponent implements OnInit {
     item.get('vendorInvoiceDate')?.setValue(selectedDate); // Update the FormGroup with the modified date
   }
 
+  paymentDueDateType(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const selectedDate = input.value; // This will be in YYYY-MM-DD format
+    this.paymentDueDate?.setValue(selectedDate);
+  }
 
   // Method to calculate the total invoice amount
   getTotalInvoiceAmount(): number {
@@ -216,6 +224,34 @@ export class AddInvoiceComponent implements OnInit {
     this.items.removeAt(index); // Remove the item at the specified index
   }
 
+
+  prepareItemsData(): any[] {
+    return this.items.controls.map((item: AbstractControl) => {
+      const formGroup = item as FormGroup;
+
+      if (formGroup) {
+        return {
+          vendorInvoiceRef: formGroup.get('vendorInvoiceRef')?.value || '',
+          vendorId: formGroup.get('vendorId')?.value || 'V1',
+          vendorName: formGroup.get('vendorName')?.value || '',
+          vendorInvoiceDate: formGroup.get('vendorInvoiceDate')?.value || '',
+          costCode: formGroup.get('costCode')?.value || '',
+          expenseType: formGroup.get('expenseType')?.value || '',
+          description: formGroup.get('description')?.value || 'test',
+          rateOfSAR: formGroup.get('rateOfSAR')?.value || '1.00',
+          currency: formGroup.get('currency')?.value || 'USD',
+          invoiceAmount: formGroup.get('invoiceAmount')?.value || '',
+          recurring: formGroup.get('recurring')?.value || 'NO',
+          invoiceTotal: formGroup.get('invoiceTotal')?.value || 0,
+        };
+      } else {
+        // Handle the case where formGroup is null, if necessary
+        return null; 
+      }
+    }).filter(item => item !== null); // Filter out any null entries
+  }
+
+
   // Method to submit the invoice form
   submitInvoice() {
     console.log(this.items);
@@ -246,20 +282,7 @@ export class AddInvoiceComponent implements OnInit {
       invoiceStatus: "PENDING", // TODO
       createdBy: "ADMIN",  // TODO pass value from session name
 
-      items: this.items.value.map((item: any, index: number) => ({
-        vendorInvoiceRef: item.vendorInvoiceRef || '',  // Use form value
-        vendorId: item.vendor.id?.value,  // Dummy vendor ID
-        vendorName: item.vendor.name?.value,  // Dummy vendor name
-        vendorInvoiceDate: item.vendorInvoiceDate?.value || '',  // Use form value
-        invoiceAmount: item.invoiceAmount?.value || '',  // Use form value
-        recurring: item.recurring?.value || 'NO',  // Use form value
-        costCode: item.costCode?.value || '',  // Use form value
-        expenseType: item.expenseType?.value || '',  // Use form value
-        description: item.description?.value || 'test',  // Use form value or dummy
-        currency: item.currency?.value || 'USD',  // Use form value or dummy
-        rateOfSAR: item.rateOfSAR?.value || '1.00',  // Use form value or dummy
-        invoiceTotal: item.invoiceTotal,
-      }))
+      items: this.prepareItemsData(),
     };
 
     console.log(requestData);  // Log the final requestData JSON object
@@ -290,6 +313,7 @@ export class AddInvoiceComponent implements OnInit {
         this.paymentTypeList = response.response.paymentType;
         this.invoiceStatus = response.response.invoiceStatus;
         this.submitterList = response.response.submitterList;
+        this.vendorList = response.response.vendorList;
 
       },
       (error: any) => {
