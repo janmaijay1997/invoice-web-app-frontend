@@ -2,13 +2,20 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const baseUrl = 'http://localhost:8080/webportal/v1'
 export const environment = {
   production: false,
-  createInvoiceUrl: 'http://localhost:8080/webportal/v1/createinvoice',
-  otherDetailsUrl: 'http://localhost:8080/webportal/v1/otherdetails',
-  invoiceListUrl: 'http://localhost:8080/webportal/v1/invoices',
-  invoiceDetailsUrl: 'http://localhost:8080/webportal/v1/invoice/'
+  createInvoiceUrl: baseUrl + '/createinvoice',
+  otherDetailsUrl: baseUrl + '/otherdetails',
+  invoiceListUrl: baseUrl + '/invoices',
+  invoiceDetailsUrl: baseUrl + '/invoice/',
+  createCostCenterUrl: baseUrl + '/create-costcenter',
+  createExpenseTypeUrl: baseUrl + '/create-expensetype',
+  createDepartmentUrl: baseUrl + '/create-department',
 
+  GetCostCentersUrl: baseUrl + '/costcenters',
+  GetExpenseTypesUrl: baseUrl + '/expensetypes',
+  GetDepartmentsUrl: baseUrl + '/departments',
 };
 
 /*

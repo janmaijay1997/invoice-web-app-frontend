@@ -30,7 +30,10 @@ interface Submitter {
 
 interface Department {
   id: string;
-  name: string;
+  departmentName: string;
+  departmentManager: string;
+  submitter: string;
+
 }
 
 interface CostCenter {
@@ -298,7 +301,7 @@ export class AddInvoiceComponent implements OnInit {
     };
 
     this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-      this.toastr.success('Invoice Created successFully with  invoice id ' + response.response.invoiceNumber, 'Success', {
+      this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 300000, // Optional - already set in forRoot
       });
       this.invoiceCreateFormGroup.reset();
@@ -312,15 +315,15 @@ export class AddInvoiceComponent implements OnInit {
   getCommonDetailsData() {
     this.commonService.getAllOtherDetails().subscribe(
       (response: any) => {
-        this.costCenterList = response.response.costCenterList;
-        this.expenseTypeList = response.response.expenseCodesList;
-        this.currenciesList = response.response.currenciesList;
-        this.accountsList = response.response.accountsList;
-        this.departmentList = response.response.departmentList;
-        this.paymentTypeList = response.response.paymentType;
-        this.invoiceStatus = response.response.invoiceStatus;
-        this.submitterList = response.response.submitterList;
-        this.vendorList = response.response.vendorList;
+        this.costCenterList = response.costCenterList;
+        this.expenseTypeList = response.expenseCodesList;
+        this.currenciesList = response.currenciesList;
+        this.accountsList = response.accountsList;
+        this.departmentList = response.departmentList;
+        this.paymentTypeList = response.paymentType;
+        this.invoiceStatus = response.invoiceStatus;
+        this.submitterList = response.submitterList;
+        this.vendorList = response.vendorList;
 
       },
       (error: any) => {

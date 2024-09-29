@@ -67,7 +67,7 @@ export class ViewInvoiceComponent implements OnInit {
   viewInvoice(invoiceId: string) {
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
       (response: any) => {
-        const invoice = response.response;
+        const invoice = response;
         console.log("Invoice:", invoice);
 
         // Navigate to the add invoice page and pass the invoice data as state
@@ -88,7 +88,7 @@ export class ViewInvoiceComponent implements OnInit {
   getInvoiceList() {
     this.invoiceService.getInvoiceList().subscribe(
       (response: any) => {
-        this.invoiceList = response.response || [];
+        this.invoiceList = response || [];
         console.log("Invoice List:", this.invoiceList);
       },
       (error: any) => {
