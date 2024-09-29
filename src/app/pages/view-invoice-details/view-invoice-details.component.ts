@@ -59,10 +59,9 @@ interface Vendor {
 export class ViewInvoiceDetailsComponent implements OnInit {
 
   subscription: Subscription | undefined;
-
   sidebarActive: boolean = false;
-  isViewSubmitButton: boolean = false;
-
+  isViewSubmitButton: boolean = true;
+  invoiceStatusValue: string = '';
   recurrings = ['Yes', 'No'];
   vendorList: Vendor[] = [];
   expenseTypeList: ExpenseCode[] = [];
@@ -84,7 +83,6 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
-      invoiceStatus: [''],
       accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       submitter: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
@@ -109,11 +107,19 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
     if (invoice) {
       this.invoiceCreateFormGroup.get("invoiceNumber")?.setValue(invoice.invoiceNumber);
-      this.isViewSubmitButton = true;
+      if (invoice.invoiceStatus === 'SUBMITTED') {
+        this.isViewSubmitButton = false;
+        this.invoiceCreateFormGroup.disable();
+      }
       this.populateForm(invoice);
+    } else {
+      this.addItem();
     }
 
   }
+
+
+
 
   private populateForm(invoice: any): void {
     this.invoiceCreateFormGroup.patchValue({
@@ -127,7 +133,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       adjustments: invoice.total.adjustments || '', // Handle optional adjustments
     });
 
-    // If you need to populate items, you can do that as well
+    this.items.clear();
+ 
+ 
     if (invoice.items) {
       invoice.items.forEach((item: any) => {
         const itemGroup = this.itemFormGroup();
@@ -184,9 +192,6 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('invoiceNumber');
   }
 
-  get invoiceStatusValue() {
-    return this.invoiceCreateFormGroup.get('invoiceStatus');
-  }
   // Getter for paymentType
   get paymentType() {
     return this.invoiceCreateFormGroup.get('paymentType');
@@ -327,7 +332,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
-      invoiceNumber: this.invoiceNumber,
+      invoiceNumber: this.invoiceNumber?.value,
       total: {
         subTotal: totalInvoiceAmount.toString(),
         adjustments: this.adjustments?.value,
@@ -370,7 +375,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
-      invoiceNumber: this.invoiceNumber,
+      invoiceNumber: this.invoiceNumber?.value,
       total: {
         subTotal: totalInvoiceAmount.toString(),
         adjustments: this.adjustments?.value,
