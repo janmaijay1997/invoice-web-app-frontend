@@ -2,36 +2,40 @@
   <h1 class="component_title">Dashboard</h1>
 
   <!-- Row containing Cost Center and Expense Type tables -->
+  <!-- Row containing Cost Center and Expense Type tables -->
   <div class="horizontal-container">
     <div class="horizontal-item">
       <h3>Cost Center</h3>
       <button id="AddCostCenter">Add</button>
       <form [formGroup]="costCenterForm">
-        <table id="costCenterTable">
-          <thead>
-            <tr>
-              <th style="min-width: 170px">Cost Center Name</th>
-              <th style="min-width: 170px">Cost Center Code</th>
-              <th style="min-width: 100px">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input type="text" formControlName="centerName" placeholder="Cost Center Name" class="small-input">
-              </td>
-              <td>
-                <input type="text" formControlName="centerCode" placeholder="Cost Center Code" class="small-input">
-              </td>
-              <td>
-                <button id="edit" type="button" class="edit-btn small-input">Edit</button>
-                <button id="delete" type="button" class="delete-btn small-input">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Scrollable container for the table -->
+        <div class="table-container">
+          <table id="costCenterTable">
+            <thead>
+              <tr>
+                <th style="min-width: 170px">Cost Center Name</th>
+                <th style="min-width: 170px">Cost Center Code</th>
+                <th style="min-width: 100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="costCenters">
+              <tr *ngFor="let costCenter of costCenters.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <input type="text" formControlName="name" placeholder="Cost Center Name" class="small-input">
+                </td>
+                <td>
+                  <input type="text" formControlName="code" placeholder="Cost Center Code" class="small-input">
+                </td>
+                <td>
+                  <button id="save" type="button" class="save-btn small-input" (click)="saveCostCenter(i)">Save</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
+
 
     <div class="horizontal-item">
       <h3>Expense Type</h3>
