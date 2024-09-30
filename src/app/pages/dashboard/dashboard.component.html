@@ -6,7 +6,7 @@
   <div class="horizontal-container">
     <div class="horizontal-item">
       <h3>Cost Center</h3>
-      <button id="AddCostCenter">Add</button>
+      <button id="AddCostCenter" (click)="openAddModal()">Add</button>
       <form [formGroup]="costCenterForm">
         <!-- Scrollable container for the table -->
         <div class="table-container">
@@ -35,6 +35,27 @@
         </div>
       </form>
     </div>
+
+
+    <!-- Modal Popup for Adding New Cost Center -->
+    <div *ngIf="showAddModal" class="modal">
+      <div class="modal-content">
+        <h3>Add New Cost Center</h3>
+        <form [formGroup]="newCostCenterForm">
+          <div>
+            <label for="newName">Name:</label>
+            <input id="newName" formControlName="name" type="text" placeholder="Cost Center Name">
+          </div>
+          <div>
+            <label for="newCode">Code:</label>
+            <input id="newCode" formControlName="code" type="text" placeholder="Cost Center Code">
+          </div>
+          <button type="button" (click)="createNewCostCenter()">Create</button>
+          <button type="button" (click)="closeAddModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
 
 
     <div class="horizontal-item">

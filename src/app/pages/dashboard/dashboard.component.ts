@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
@@ -30,7 +30,11 @@ interface Department {
 })
 export class DashboardComponent implements OnInit {
 
+  newCostCenterForm: FormGroup;
   costCenterForm: FormGroup;
+  showAddModal = false;
+
+
   expenseTypeForm: FormGroup;
   departmentForm: FormGroup;
   showSidebar: any = false;
@@ -61,6 +65,13 @@ export class DashboardComponent implements OnInit {
     this.costCenterForm = this.fb.group({
       costCenters: this.fb.array([]),
     });
+
+
+    // Form for new Cost Center in modal
+    this.newCostCenterForm = this.fb.group({
+      name: ['', Validators.required],
+      code: ['', Validators.required],
+    });
   }
 
   ngOnInit() {
@@ -76,36 +87,39 @@ export class DashboardComponent implements OnInit {
     return this.costCenterForm.get('costCenters') as FormArray;
   }
 
+  openAddModal() {
+    this.showAddModal = true;
+  }
 
-  // Method to create a new Cost Center (and push to the form)
-  createCostCenter() {
-    const requestData = {
-      name: this.costCenterForm.get('name')?.value,
-      code: this.costCenterForm.get('code')?.value,
-    };
+  closeAddModal() {
+    this.showAddModal = false;
+  }
 
-    if (requestData.name && requestData.code) {
-      this.commonDetailsService.createCostCenter(requestData).subscribe(
+
+  createNewCostCenter() {
+    if (this.newCostCenterForm.valid) {
+      const newCostCenter = this.newCostCenterForm.value;
+
+      // Push the new cost center into the form array
+      this.costCenters.push(this.fb.group({
+        name: [newCostCenter.name],
+        code: [newCostCenter.code],
+      }));
+
+      // Optionally save it to the server
+      this.commonDetailsService.createCostCenter(newCostCenter).subscribe(
         (response: any) => {
-          this.toastr.success('Cost Center created successfully', 'Success', {
-            timeOut: 3000,
-          });
-
-          // Add the new cost center to the form and list
-          const newCostCenterGroup = this.fb.group({
-            name: [requestData.name],
-            code: [requestData.code]
-          });
-          this.costCenters.push(newCostCenterGroup);
-          this.costCenterList.push(requestData); // Add to list after successful creation
+          this.toastr.success('Cost Center created successfully', 'Success');
         },
         (error: any) => {
-          console.error('Error creating Cost Center:', error);
-          this.toastr.error('Failed to create Cost Center.', 'Error');
+          this.toastr.warning(error.error, 'Error');
         }
       );
+
+      // Close the modal
+      this.closeAddModal();
     } else {
-      this.toastr.error('Please provide valid Cost Center details.', 'Error');
+      this.toastr.error('Please fill out the form.', 'Error');
     }
   }
 
