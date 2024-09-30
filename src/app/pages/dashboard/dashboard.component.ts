@@ -201,6 +201,25 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  deleteCostCenter(index: number) {
+    const updatedCostCenter = this.costCenters.at(index).value;
+
+    const requestData = {
+      name: updatedCostCenter.name
+    }
+
+    this.commonDetailsService.deleteCostCenter(requestData).subscribe((response: any) => {
+      this.toastr.success('Cost Center Deleted successfully', 'Success');
+      this.costCenterList[index] = updatedCostCenter;
+    },
+      (error: any) => {
+        console.error('Error Deleting Cost Center:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
+
 
 
 
@@ -274,6 +293,24 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  deleteExpenseType(index: number) {
+    const updatedExpenseType = this.costCenters.at(index).value;
+
+    const requestData = {
+      name: updatedExpenseType.expenseName
+    }
+
+    this.commonDetailsService.deleteExpenseType(requestData).subscribe((response: any) => {
+      this.toastr.success('Expense Type Deleted successfully', 'Success');
+      this.expenseTypeList[index] = updatedExpenseType;
+    },
+      (error: any) => {
+        console.error('Error Deleting Expense Type:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
 
   // ------------------------------------------------------
 
@@ -340,6 +377,25 @@ export class DashboardComponent implements OnInit {
     },
       (error: any) => {
         console.error('Error saving Departments:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
+
+   deleteDepartment(index: number) {
+    const updatedDepartment = this.costCenters.at(index).value;
+
+    const requestData = {
+      name: updatedDepartment.departmentName
+    }
+
+    this.commonDetailsService.deleteExpenseType(requestData).subscribe((response: any) => {
+      this.toastr.success('Department Deleted successfully', 'Success');
+      this.departmentList[index] = updatedDepartment;
+    },
+      (error: any) => {
+        console.error('Error Deleting Department:', error.error);
         this.toastr.warning(error.error, 'Error');
       }
     );

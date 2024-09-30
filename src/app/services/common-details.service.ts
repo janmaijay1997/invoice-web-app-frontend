@@ -40,4 +40,17 @@ export class CommonDetailsService {
   getDepartmentsList() {
     return this.httpClient.get(environment.GetDepartmentsUrl);
   }
+
+
+  deleteCostCenter(requetBody: any): any {
+    return this.httpClient.post(environment.deleteCostCentersUrl, requetBody);
+  }
+
+  deleteExpenseType(requetBody: any): any {
+    return this.httpClient.post(environment.deleteExpenseTypesUrl, requetBody);
+  }
+
+  deleteDepartments(requetBody: any): any {
+    return this.httpClient.post(environment.deleteDepartmentsUrl, requetBody);
+  }
 }

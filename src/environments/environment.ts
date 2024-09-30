@@ -16,6 +16,10 @@ export const environment = {
   GetCostCentersUrl: baseUrl + '/costcenters',
   GetExpenseTypesUrl: baseUrl + '/expensetypes',
   GetDepartmentsUrl: baseUrl + '/departments',
+
+  deleteCostCentersUrl: baseUrl + '/delete-costcenter',
+  deleteExpenseTypesUrl: baseUrl + '/delete-expensetype',
+  deleteDepartmentsUrl: baseUrl + '/delete-department',
 };
 
 /*
