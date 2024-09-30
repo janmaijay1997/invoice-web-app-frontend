@@ -110,40 +110,67 @@
     </div>
 
 
+    <!-- Modal Popup for Adding New Expense Type -->
+    <div *ngIf="showAddModal" class="modal">
+      <div class="modal-content">
+        <h3>Add Departments</h3>
+        <form [formGroup]="newDepartmentForm">
+          <div>
+            <label for="departmentName">Name:</label>
+            <input id="departmentName" formControlName="departmentName" type="text" placeholder="Name">
+          </div>
+          <div>
+            <label for="departmentManager">Code:</label>
+            <input id="departmentManager" formControlName="departmentManager" type="text" placeholder="Manager">
+          </div>
+          <div>
+            <label for="submitter">Submitter:</label>
+            <input id="submitter" formControlName="submitter" type="text" placeholder="Submitter">
+          </div>
+          <button type="button" (click)="createDepartments()">Create</button>
+          <button type="button" (click)="closeAddModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
 
 
     <!-- Row for Departments/Vendors table -->
     <div class="horizontal-item">
       <h3>Departments</h3>
+      <button id="departments" (click)="openAddModal()">Add</button>
       <form [formGroup]="departmentForm">
-        <table id="departmentTable">
-          <thead>
-            <tr>
-              <th style="min-width: 170px">Department Name</th>
-              <th style="min-width: 170px">Manager</th>
-              <th style="min-width: 170px">Submitter</th>
-              <th style="min-width: 100px">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input type="text" formControlName="departmentName" placeholder="Department Name" class="small-input">
-              </td>
-              <td>
-                <input type="text" formControlName="departmentManager" placeholder="Department Manager"
-                  class="small-input">
-              </td>
-              <td>
-                <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
-              </td>
-              <td>
-                <button id="edit" type="button" class="edit-btn small-input" onclick="createDepartments()">Edit</button>
-                <button id="delete" type="button" class="delete-btn small-input">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Scrollable container for the table -->
+        <div class="table-container">
+          <table id="departmentType">
+            <thead>
+              <tr>
+                <th style="min-width: 170px">Department Name</th>
+                <th style="min-width: 170px">Manager</th>
+                <th style="min-width: 170px">Submitter</th>
+                <th style="min-width: 100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="departments">
+              <tr *ngFor="let department of departments.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <input type="text" formControlName="departmentName" placeholder="Department Name" class="small-input">
+                </td>
+                <td>
+                  <input type="text" formControlName="departmentManager" placeholder="Department Manager"
+                    class="small-input">
+                </td>
+                <td>
+                  <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
+                </td>
+                <td> <button id="save" type="button" class="save-btn small-input"
+                    (click)="saveDepartment(i)">Save</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
+
   </div>

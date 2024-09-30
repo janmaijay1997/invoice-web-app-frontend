@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
-import { InvoiceService } from 'src/app/services/invoice.service';
 import { SidebarService } from 'src/app/services/sidebar.service';
 
 
@@ -37,7 +35,9 @@ export class DashboardComponent implements OnInit {
   newExpenseTypeForm: FormGroup;
   expenseTypeForm: FormGroup;
 
+  newDepartmentForm: FormGroup;
   departmentForm: FormGroup;
+
   showSidebar: any = false;
   sidebarActive: boolean = true;
   visibleSidebar: boolean = true;
@@ -52,12 +52,6 @@ export class DashboardComponent implements OnInit {
     private toastr: ToastrService,
     private fb: FormBuilder) {
 
-
-    this.departmentForm = this.fb.group({
-      departmentName: new FormControl(''),
-      departmentManager: new FormControl(''),
-      submitter: new FormControl(''),
-    });
 
     this.costCenterForm = this.fb.group({
       costCenters: this.fb.array([]),
@@ -78,6 +72,16 @@ export class DashboardComponent implements OnInit {
       expenseCode: ['', Validators.required],
     });
 
+    this.departmentForm = this.fb.group({
+      departments: this.fb.array([]),
+    });
+
+    this.newDepartmentForm = this.fb.group({
+      departmentName: new FormControl(''),
+      departmentManager: new FormControl(''),
+      submitter: new FormControl(''),
+    });
+
   }
 
   ngOnInit() {
@@ -88,6 +92,8 @@ export class DashboardComponent implements OnInit {
 
     this.getCostCenterList();
     this.getExpenseTypeList();
+    this.getDepartmentsList();
+
   }
 
   get costCenters(): FormArray {
@@ -98,6 +104,9 @@ export class DashboardComponent implements OnInit {
     return this.expenseTypeForm.get('expenseTypes') as FormArray;
   }
 
+  get departments(): FormArray {
+    return this.departmentForm.get('departments') as FormArray;
+  }
 
   openAddModal() {
     this.showAddModal = true;
@@ -247,35 +256,74 @@ export class DashboardComponent implements OnInit {
 
 
 
+  // ------------------------------------------------------
 
-
-
-  //  --------------------------------------------------------------
 
   createDepartments() {
-    const requestData = {
-      departmentName: this.costCenterForm.get("departmentName")?.value,
-      departmentManager: this.costCenterForm.get("departmentManager")?.value,
-      submitter: this.costCenterForm.get("submitter")?.value,
-    };
+    if (this.newDepartmentForm.valid) {
+      const newDepartmentName = this.newDepartmentForm.value;
 
-    this.commonDetailsService.createDepartments(requestData).subscribe((response: any) => {
-      this.toastr.success('Departments Created successFully', 'Success', {
-        timeOut: 300000, // Optional - already set in forRoot
-      });
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-    })
+      // Push the new Department into the form array
+      this.costCenters.push(this.fb.group({
+        departmentName: [newDepartmentName.departmentName],
+        departmentManager: [newDepartmentName.departmentManager],
+        submitter: [newDepartmentName.submitter],
+      }));
+
+      this.commonDetailsService.createDepartments(newDepartmentName).subscribe(
+        (response: any) => {
+          this.toastr.success('Department created successfully', 'Success');
+        },
+        (error: any) => {
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+
+      this.closeAddModal();
+    } else {
+      this.toastr.error('Please fill out the form.', 'Error');
+    }
   }
 
-  getDepartmentsList() {
-    this.commonDetailsService.getDepartmentsList().subscribe((response: any) => {
-      this.departmentList = response;
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-    })
+
+  async getDepartmentsList() {
+    this.commonDetailsService.getDepartmentsList().subscribe(
+      (response: any) => {
+        this.departmentList = response;
+        this.populateDepartmentsFormArray();
+      },
+      (error: any) => {
+        console.error('Error fetching Department list:', error);
+        this.toastr.error('Failed to fetch Department list.', 'Error');
+      }
+    );
+  }
+
+
+  populateDepartmentsFormArray() {
+    this.departmentList.forEach((department: Department) => {
+      const group = this.fb.group({
+        departmentName: [department.departmentName],
+        departmentManager: [department.departmentManager],
+        submitter: [department.submitter],
+      });
+      this.departments.push(group);
+    });
+  }
+
+
+  saveDepartment(index: number) {
+    const updatedDepartments = this.departments.at(index).value;
+
+    this.commonDetailsService.createDepartments(updatedDepartments).subscribe((response: any) => {
+      this.toastr.success('Department saved successfully', 'Success');
+      this.departmentList[index] = updatedDepartments;
+    },
+      (error: any) => {
+        console.error('Error saving Departments:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
   }
 
 }
