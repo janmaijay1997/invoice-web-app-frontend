@@ -13,8 +13,8 @@ interface CostCenter {
 }
 
 interface ExpenseType {
-  type: string;
-  code: string;
+  expenseName: string;
+  expenseCode: string;
 }
 
 interface Department {
@@ -34,8 +34,9 @@ export class DashboardComponent implements OnInit {
   costCenterForm: FormGroup;
   showAddModal = false;
 
-
+  newExpenseTypeForm: FormGroup;
   expenseTypeForm: FormGroup;
+
   departmentForm: FormGroup;
   showSidebar: any = false;
   sidebarActive: boolean = true;
@@ -51,10 +52,6 @@ export class DashboardComponent implements OnInit {
     private toastr: ToastrService,
     private fb: FormBuilder) {
 
-    this.expenseTypeForm = this.fb.group({
-      expenseName: new FormControl(''),
-      expenseCode: new FormControl(''),
-    });
 
     this.departmentForm = this.fb.group({
       departmentName: new FormControl(''),
@@ -66,12 +63,21 @@ export class DashboardComponent implements OnInit {
       costCenters: this.fb.array([]),
     });
 
-
-    // Form for new Cost Center in modal
     this.newCostCenterForm = this.fb.group({
       name: ['', Validators.required],
       code: ['', Validators.required],
     });
+
+
+    this.expenseTypeForm = this.fb.group({
+      expenseTypes: this.fb.array([]),
+    });
+
+    this.newExpenseTypeForm = this.fb.group({
+      expenseName: ['', Validators.required],
+      expenseCode: ['', Validators.required],
+    });
+
   }
 
   ngOnInit() {
@@ -81,11 +87,17 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getCostCenterList();
+    this.getExpenseTypeList();
   }
 
   get costCenters(): FormArray {
     return this.costCenterForm.get('costCenters') as FormArray;
   }
+
+  get expenseTypes(): FormArray {
+    return this.expenseTypeForm.get('expenseTypes') as FormArray;
+  }
+
 
   openAddModal() {
     this.showAddModal = true;
@@ -106,7 +118,6 @@ export class DashboardComponent implements OnInit {
         code: [newCostCenter.code],
       }));
 
-      // Optionally save it to the server
       this.commonDetailsService.createCostCenter(newCostCenter).subscribe(
         (response: any) => {
           this.toastr.success('Cost Center created successfully', 'Success');
@@ -116,7 +127,6 @@ export class DashboardComponent implements OnInit {
         }
       );
 
-      // Close the modal
       this.closeAddModal();
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
@@ -173,30 +183,74 @@ export class DashboardComponent implements OnInit {
   // ------------------------------------------------------------------------------------------------
 
   createExpenseType() {
-    const requestData = {
-      expenseName: this.costCenterForm.get("expenseName")?.value,
-      expenseCode: this.costCenterForm.get("expenseCode")?.value,
-    };
+    if (this.newExpenseTypeForm.valid) {
+      const newExpenseType = this.newExpenseTypeForm.value;
 
-    this.commonDetailsService.createExpenseType(requestData).subscribe((response: any) => {
-      this.toastr.success('Expense Type Created successFully', 'Success', {
-        timeOut: 300000, // Optional - already set in forRoot
+      // Push the new cost center into the form array
+      this.expenseTypes.push(this.fb.group({
+        expenseName: [newExpenseType.type],
+        expenseCode: [newExpenseType.code],
+      }));
+
+      this.commonDetailsService.createExpenseType(newExpenseType).subscribe(
+        (response: any) => {
+          this.toastr.success('Expense Type created successfully', 'Success');
+        },
+        (error: any) => {
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+
+      this.closeAddModal();
+    } else {
+      this.toastr.error('Please fill out the form.', 'Error');
+    }
+  }
+
+  // Fetch the cost center list and populate the form array
+  async getExpenseTypeList() {
+    this.commonDetailsService.getExpenseTypeList().subscribe(
+      (response: any) => {
+        this.expenseTypeList = response;
+        this.populateExpenseTypeFormArray();
+      },
+      (error: any) => {
+        console.error('Error fetching Cost Center list:', error);
+        this.toastr.error('Failed to fetch Cost Center list.', 'Error');
+      }
+    );
+  }
+
+  populateExpenseTypeFormArray() {
+    this.expenseTypeList.forEach((expenseType: ExpenseType) => {
+      const group = this.fb.group({
+        expenseName: [expenseType.expenseName],
+        expenseCode: [expenseType.expenseCode]
       });
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-    })
+      this.expenseTypes.push(group);
+    });
   }
 
-  getExpenseTypeList() {
-    this.commonDetailsService.getExpenseTypeList().subscribe((response: any) => {
-      this.expenseTypeList = response;
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-    })
+  saveExpenseType(index: number) {
+    const updatedExpenseType = this.expenseTypes.at(index).value;
+
+    this.commonDetailsService.createExpenseType(updatedExpenseType).subscribe((response: any) => {
+      this.toastr.success('Expense Type saved successfully', 'Success');
+      this.costCenterList[index] = updatedExpenseType;
+    },
+      (error: any) => {
+        console.error('Error saving Expense Type:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
   }
 
+
+
+
+
+
+  //  --------------------------------------------------------------
 
   createDepartments() {
     const requestData = {

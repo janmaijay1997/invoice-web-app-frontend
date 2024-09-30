@@ -2,7 +2,6 @@
   <h1 class="component_title">Dashboard</h1>
 
   <!-- Row containing Cost Center and Expense Type tables -->
-  <!-- Row containing Cost Center and Expense Type tables -->
   <div class="horizontal-container">
     <div class="horizontal-item">
       <h3>Cost Center</h3>
@@ -37,6 +36,41 @@
     </div>
 
 
+
+    <div class="horizontal-item">
+      <h3>Expense Type</h3>
+      <button id="expenseType" (click)="openAddModal()">Add</button>
+      <form [formGroup]="expenseTypeForm">
+        <!-- Scrollable container for the table -->
+        <div class="table-container">
+          <table id="expenseTypeTable">
+            <thead>
+              <tr>
+                <th style="min-width: 170px">Name of Chart of Account</th>
+                <th style="min-width: 170px">Code (6-8 digits only)</th>
+                <th style="min-width: 100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="expenseTypes">
+              <tr *ngFor="let expenseType of expenseTypes.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <input type="text" formControlName="expenseName" placeholder="Name" class="small-input">
+                </td>
+                <td>
+                  <input type="text" formControlName="expenseCode" placeholder="Code" class="small-input">
+                </td>
+                <td> <button id="save" type="button" class="save-btn small-input"
+                    (click)="saveExpenseType(i)">Save</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+
+
+
     <!-- Modal Popup for Adding New Cost Center -->
     <div *ngIf="showAddModal" class="modal">
       <div class="modal-content">
@@ -56,29 +90,55 @@
       </div>
     </div>
 
+    <!-- Modal Popup for Adding New Expense Type -->
+    <div *ngIf="showAddModal" class="modal">
+      <div class="modal-content">
+        <h3>Add Expense Type</h3>
+        <form [formGroup]="newExpenseTypeForm">
+          <div>
+            <label for="expenseName">Type:</label>
+            <input id="expenseName" formControlName="expenseName" type="text" placeholder="ExpenseType Name">
+          </div>
+          <div>
+            <label for="expenseCode">Code:</label>
+            <input id="expenseCode" formControlName="expenseCode" type="text" placeholder="ExpenseType Code">
+          </div>
+          <button type="button" (click)="createExpenseType()">Create</button>
+          <button type="button" (click)="closeAddModal()">Cancel</button>
+        </form>
+      </div>
+    </div>
 
 
+
+
+    <!-- Row for Departments/Vendors table -->
     <div class="horizontal-item">
-      <h3>Expense Type</h3>
-      <form [formGroup]="expenseTypeForm">
-        <table id="expenseTypeTable">
+      <h3>Departments</h3>
+      <form [formGroup]="departmentForm">
+        <table id="departmentTable">
           <thead>
             <tr>
-              <th style="min-width: 170px">Name of Chart of Account</th>
-              <th style="min-width: 170px">Code (6-8 digits only)</th>
+              <th style="min-width: 170px">Department Name</th>
+              <th style="min-width: 170px">Manager</th>
+              <th style="min-width: 170px">Submitter</th>
               <th style="min-width: 100px">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <input type="text" formControlName="expenseName" placeholder="Name" class="small-input">
+                <input type="text" formControlName="departmentName" placeholder="Department Name" class="small-input">
               </td>
               <td>
-                <input type="text" formControlName="expenseCode" placeholder="Code" class="small-input">
+                <input type="text" formControlName="departmentManager" placeholder="Department Manager"
+                  class="small-input">
               </td>
               <td>
-                <button id="edit" type="button" class="edit-btn small-input" onclick="createExpenseType()">Edit</button>
+                <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
+              </td>
+              <td>
+                <button id="edit" type="button" class="edit-btn small-input" onclick="createDepartments()">Edit</button>
                 <button id="delete" type="button" class="delete-btn small-input">Delete</button>
               </td>
             </tr>
@@ -87,39 +147,3 @@
       </form>
     </div>
   </div>
-
-  <!-- Row for Departments/Vendors table -->
-  <div class="horizontal-item">
-    <h3>Departments</h3>
-    <form [formGroup]="departmentForm">
-      <table id="departmentTable">
-        <thead>
-          <tr>
-            <th style="min-width: 170px">Department Name</th>
-            <th style="min-width: 170px">Manager</th>
-            <th style="min-width: 170px">Submitter</th>
-            <th style="min-width: 100px">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <input type="text" formControlName="departmentName" placeholder="Department Name" class="small-input">
-            </td>
-            <td>
-              <input type="text" formControlName="departmentManager" placeholder="Department Manager"
-                class="small-input">
-            </td>
-            <td>
-              <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
-            </td>
-            <td>
-              <button id="edit" type="button" class="edit-btn small-input" onclick="createDepartments()">Edit</button>
-              <button id="delete" type="button" class="delete-btn small-input">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
-  </div>
-</div>
