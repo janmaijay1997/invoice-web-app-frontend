@@ -9,24 +9,16 @@
 /* Individual items (tables) in flexbox */
 .horizontal-item {
   flex: 1;
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #ccc;
   text-align: center;
 }
 
 /* Styling for smaller row height */
 table th, table td {
-  padding: 8px; /* Reduce the padding to make the row height smaller */
+  padding: 10px; /* Reduce the padding to make the row height smaller */
 }
 
-/* Button Styling */
-.edit-btn {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
 
 .delete-btn {
   background-color: red;
@@ -85,4 +77,33 @@ table th, table td {
 
 button {
   margin: 10px 0;
+}
+
+
+
+
+//VVV
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1140px; /* You can adjust based on your design */
+}
+
+/* Row */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* Column */
+.col {
+    flex: 1;
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
 }

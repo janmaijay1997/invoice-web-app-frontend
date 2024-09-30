@@ -30,7 +30,10 @@ export class DashboardComponent implements OnInit {
 
   newCostCenterForm: FormGroup;
   costCenterForm: FormGroup;
-  showAddModal = false;
+  showAddExpenseTypeModal = false;
+  showAddCostCenterModel = false;
+
+  showAddDepartmenteModal = false;
 
   newExpenseTypeForm: FormGroup;
   expenseTypeForm: FormGroup;
@@ -108,12 +111,28 @@ export class DashboardComponent implements OnInit {
     return this.departmentForm.get('departments') as FormArray;
   }
 
-  openAddModal() {
-    this.showAddModal = true;
+
+
+  openAddCostCenterModal() {
+    this.showAddCostCenterModel = true;
+  }
+  closeAddCostCenterModel() {
+    this.showAddCostCenterModel = false;
   }
 
-  closeAddModal() {
-    this.showAddModal = false;
+
+  openAddExpenseTypeModal() {
+    this.showAddExpenseTypeModal = true;
+  }
+  closeExpenseTypeModal() {
+    this.showAddExpenseTypeModal = false;
+  }
+
+  openAddDepartmentsModal() {
+    this.showAddDepartmenteModal = true;
+  }
+  closeDepartmentsModal() {
+    this.showAddDepartmenteModal = false;
   }
 
 
@@ -136,7 +155,7 @@ export class DashboardComponent implements OnInit {
         }
       );
 
-      this.closeAddModal();
+      this.closeAddCostCenterModel();
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
@@ -210,7 +229,7 @@ export class DashboardComponent implements OnInit {
         }
       );
 
-      this.closeAddModal();
+      this.closeExpenseTypeModal();
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
@@ -279,7 +298,7 @@ export class DashboardComponent implements OnInit {
         }
       );
 
-      this.closeAddModal();
+      this.closeDepartmentsModal();
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
