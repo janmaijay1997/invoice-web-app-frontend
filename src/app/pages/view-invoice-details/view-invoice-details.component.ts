@@ -23,8 +23,8 @@ interface Currency {
 
 interface ExpenseCode {
   id: string;
-  code: string;
-  type: string;
+  expenseCode: string;
+  expenseName: string;
 }
 
 interface Submitter {
@@ -35,7 +35,10 @@ interface Submitter {
 
 interface Department {
   id: string;
-  name: string;
+  departmentName: string;
+  departmentManager: string;
+  submitter: string;
+
 }
 
 interface CostCenter {
@@ -134,8 +137,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     });
 
     this.items.clear();
- 
- 
+
+
     if (invoice.items) {
       invoice.items.forEach((item: any) => {
         const itemGroup = this.itemFormGroup();

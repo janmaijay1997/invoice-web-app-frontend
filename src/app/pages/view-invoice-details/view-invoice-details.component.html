@@ -48,8 +48,8 @@
                                 <th>Department</th>
                                 <td>
                                     <select formControlName="department" class="small-input">
-                                        <option *ngFor="let department of departmentList" [value]="department.name">
-                                            {{department.name}}
+                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
+                                            {{department.departmentName}}
                                         </option>
                                     </select>
                                 </td>
@@ -152,8 +152,8 @@
                                 <td>
                                     <select formControlName="expenseType" class="small-input">
                                         <option *ngFor="let expenseType of expenseTypeList"
-                                            [ngValue]="expenseType.code">
-                                            {{expenseType.code}}</option>
+                                            [ngValue]="expenseType.expenseCode">
+                                            {{expenseType.expenseCode}}</option>
                                     </select>
                                 </td>
                                 <td>

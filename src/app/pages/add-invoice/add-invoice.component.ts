@@ -18,8 +18,8 @@ interface Currency {
 
 interface ExpenseCode {
   id: string;
-  code: string;
-  type: string;
+  expenseCode: string;
+  expenseName: string;
 }
 
 interface Submitter {
