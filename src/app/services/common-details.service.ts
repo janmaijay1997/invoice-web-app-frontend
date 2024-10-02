@@ -27,6 +27,10 @@ export class CommonDetailsService {
     return this.httpClient.post(environment.createDepartmentUrl, requetBody);
   }
 
+  createVendor(requetBody: any): any {
+    return this.httpClient.post(environment.createVendorUrl, requetBody);
+  }
+
 
 
   getCostCenterList() {
@@ -41,6 +45,11 @@ export class CommonDetailsService {
     return this.httpClient.get(environment.GetDepartmentsUrl);
   }
 
+  getVendorList(): any {
+    return this.httpClient.get(environment.GetVendorUrl);
+  }
+
+
 
   deleteCostCenter(requetBody: any): any {
     return this.httpClient.post(environment.deleteCostCentersUrl, requetBody);
@@ -52,5 +61,9 @@ export class CommonDetailsService {
 
   deleteDepartments(requetBody: any): any {
     return this.httpClient.post(environment.deleteDepartmentsUrl, requetBody);
+  }
+
+  deleteVendor(requetBody: any): any {
+    return this.httpClient.post(environment.deleteVendorUrl, requetBody);
   }
 }

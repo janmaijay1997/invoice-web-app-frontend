@@ -12,14 +12,21 @@ export const environment = {
   createCostCenterUrl: baseUrl + '/create-costcenter',
   createExpenseTypeUrl: baseUrl + '/create-expensetype',
   createDepartmentUrl: baseUrl + '/create-department',
+  createVendorUrl: baseUrl + '/create-vendors',
+
 
   GetCostCentersUrl: baseUrl + '/costcenters',
   GetExpenseTypesUrl: baseUrl + '/expensetypes',
   GetDepartmentsUrl: baseUrl + '/departments',
+  GetVendorUrl: baseUrl + '/vendors',
 
   deleteCostCentersUrl: baseUrl + '/delete-costcenter',
   deleteExpenseTypesUrl: baseUrl + '/delete-expensetype',
   deleteDepartmentsUrl: baseUrl + '/delete-department',
+  deleteVendorUrl: baseUrl + '/delete -vendor',
+
+
+
 };
 
 /*

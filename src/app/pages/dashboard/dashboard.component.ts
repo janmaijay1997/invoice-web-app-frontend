@@ -21,6 +21,21 @@ interface Department {
   submitter: string;
 }
 
+interface Vendor {
+  id: string;
+  vendorId: string;
+  vendorName: string;
+  address: string;
+  phoneNumber: string;
+  bankDetails: BankDetails;
+}
+
+interface BankDetails {
+  bankName: string;
+  ibanNumber: string;
+  bankAddress: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,16 +45,21 @@ export class DashboardComponent implements OnInit {
 
   newCostCenterForm: FormGroup;
   costCenterForm: FormGroup;
+
   showAddExpenseTypeModal = false;
   showAddCostCenterModel = false;
-
   showAddDepartmenteModal = false;
+  showAddVendorModal = false;
+
 
   newExpenseTypeForm: FormGroup;
   expenseTypeForm: FormGroup;
 
   newDepartmentForm: FormGroup;
   departmentForm: FormGroup;
+
+  newVendorForm: FormGroup;
+  vendorForm: FormGroup;
 
   showSidebar: any = false;
   sidebarActive: boolean = true;
@@ -48,6 +68,8 @@ export class DashboardComponent implements OnInit {
   costCenterList: CostCenter[] = [];
   expenseTypeList: ExpenseType[] = [];
   departmentList: Department[] = [];
+  vendorList: Vendor[] = [];
+
 
 
   constructor(private sidebarService: SidebarService,
@@ -85,6 +107,17 @@ export class DashboardComponent implements OnInit {
       submitter: new FormControl(''),
     });
 
+
+    this.vendorForm = this.fb.group({
+      vendors: this.fb.array([]),
+    });
+
+    this.newVendorForm = this.fb.group({
+      vendorId: new FormControl(''),
+      vendorName: new FormControl(''),
+      bankDetails: new FormControl(''),
+    });
+
   }
 
   ngOnInit() {
@@ -96,6 +129,7 @@ export class DashboardComponent implements OnInit {
     this.getCostCenterList();
     this.getExpenseTypeList();
     this.getDepartmentsList();
+    this.getVendorList();
 
   }
 
@@ -109,6 +143,10 @@ export class DashboardComponent implements OnInit {
 
   get departments(): FormArray {
     return this.departmentForm.get('departments') as FormArray;
+  }
+
+  get vendors(): FormArray {
+    return this.departmentForm.get('vendors') as FormArray;
   }
 
 
@@ -133,6 +171,14 @@ export class DashboardComponent implements OnInit {
   }
   closeDepartmentsModal() {
     this.showAddDepartmenteModal = false;
+  }
+
+
+  openAddVendorModal() {
+    this.showAddVendorModal = true;
+  }
+  closeVendorModal() {
+    this.showAddVendorModal = false;
   }
 
 
@@ -383,7 +429,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-   deleteDepartment(index: number) {
+  deleteDepartment(index: number) {
     const updatedDepartment = this.costCenters.at(index).value;
 
     const requestData = {
@@ -396,6 +442,100 @@ export class DashboardComponent implements OnInit {
     },
       (error: any) => {
         console.error('Error Deleting Department:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
+
+
+  // ----------------------------------------
+
+  createVendor() {
+    if (this.newVendorForm.valid) {
+      const newVendor = this.newVendorForm.value;
+
+      // Push the new Department into the form array
+      this.vendors.push(this.fb.group({
+        vendorId: [newVendor.vendorId],
+        vendorName: [newVendor.vendorName],
+        address: [newVendor.address],
+        phoneNumber: [newVendor.phoneNumber],
+        bankDetails: [newVendor.bankDetails],
+      }));
+
+      this.commonDetailsService.createVendor(newVendor).subscribe(
+        (response: any) => {
+          this.toastr.success('Department created successfully', 'Success');
+        },
+        (error: any) => {
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+
+      this.closeDepartmentsModal();
+    } else {
+      this.toastr.error('Please fill out the form.', 'Error');
+    }
+  }
+
+
+  async getVendorList() {
+    this.commonDetailsService.getVendorList().subscribe(
+      (response: any) => {
+        this.vendorList = response;
+        this.populateVendorsFormArray();
+      },
+      (error: any) => {
+        console.error('Error fetching Vendor list:', error);
+        this.toastr.error('Failed to fetch Vendor list.', 'Error');
+      }
+    );
+  }
+
+
+  populateVendorsFormArray() {
+    this.vendorList.forEach((vendor: Vendor) => {
+      const group = this.fb.group({
+        vendorId: [vendor.vendorId],
+        vendorName: [vendor.vendorName],
+        address: [vendor.address],
+        phoneNumber: [vendor.phoneNumber],
+        bankDetails: [vendor.bankDetails],
+      });
+      this.vendors.push(group);
+    });
+  }
+
+
+  saveVendor(index: number) {
+    const updatedDepartments = this.vendors.at(index).value;
+
+    this.commonDetailsService.createVendor(updatedDepartments).subscribe((response: any) => {
+      this.toastr.success('Vendor saved successfully', 'Success');
+      this.departmentList[index] = updatedDepartments;
+    },
+      (error: any) => {
+        console.error('Error saving Vendor:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
+
+  deleteVendor(index: number) {
+    const updatedDepartment = this.costCenters.at(index).value;
+
+    const requestData = {
+      name: updatedDepartment.departmentName
+    }
+
+    this.commonDetailsService.deleteVendor(requestData).subscribe((response: any) => {
+      this.toastr.success('Vendor Deleted successfully', 'Success');
+      this.departmentList[index] = updatedDepartment;
+    },
+      (error: any) => {
+        console.error('Error Deleting Vendor:', error.error);
         this.toastr.warning(error.error, 'Error');
       }
     );

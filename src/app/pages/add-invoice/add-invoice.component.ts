@@ -46,6 +46,13 @@ interface Vendor {
   id: string;
   vendorId: string;
   vendorName: string;
+  bankDetails: BankDetails;
+}
+
+interface BankDetails {
+  bankName: string;
+  ibanNumber: string;
+  bankAddress: string;
 }
 
 @Component({
@@ -308,7 +315,6 @@ export class AddInvoiceComponent implements OnInit {
     }, (error: any) => {
       console.error('Error fetching details:', error);
       this.toastr.error('Something went wrong.', 'Error');
-
     })
   }
 
