@@ -5,25 +5,25 @@
 const baseUrl = 'http://localhost:8080/webportal/v1'
 export const environment = {
   production: false,
-  createInvoiceUrl: baseUrl + '/createinvoice',
-  otherDetailsUrl: baseUrl + '/otherdetails',
-  invoiceListUrl: baseUrl + '/invoices',
-  invoiceDetailsUrl: baseUrl + '/invoice/',
-  createCostCenterUrl: baseUrl + '/create-costcenter',
-  createExpenseTypeUrl: baseUrl + '/create-expensetype',
-  createDepartmentUrl: baseUrl + '/create-department',
-  createVendorUrl: baseUrl + '/create-vendors',
+  createInvoiceUrl: baseUrl + '/invoice/createinvoice',
+  otherDetailsUrl: baseUrl + '/invoice/otherdetails',
+  invoiceListUrl: baseUrl + '/invoice/invoices',
+  invoiceDetailsUrl: baseUrl + '/invoice/invoiceDetails/',
+  createCostCenterUrl: baseUrl + '/invoice/create-costcenter',
+  createExpenseTypeUrl: baseUrl + '/invoice/create-expensetype',
+  createDepartmentUrl: baseUrl + '/invoice/create-department',
+  createVendorUrl: baseUrl + '/invoice/create-vendors',
 
 
-  GetCostCentersUrl: baseUrl + '/costcenters',
-  GetExpenseTypesUrl: baseUrl + '/expensetypes',
-  GetDepartmentsUrl: baseUrl + '/departments',
-  GetVendorUrl: baseUrl + '/vendors',
+  GetCostCentersUrl: baseUrl + '/invoice/costcenters',
+  GetExpenseTypesUrl: baseUrl + '/invoice/expensetypes',
+  GetDepartmentsUrl: baseUrl + '/invoice/departments',
+  GetVendorUrl: baseUrl + '/invoice/vendors',
 
-  deleteCostCentersUrl: baseUrl + '/delete-costcenter',
-  deleteExpenseTypesUrl: baseUrl + '/delete-expensetype',
-  deleteDepartmentsUrl: baseUrl + '/delete-department',
-  deleteVendorUrl: baseUrl + '/delete -vendor',
+  deleteCostCentersUrl: baseUrl + '/invoice/delete-costcenter',
+  deleteExpenseTypesUrl: baseUrl + '/invoice/delete-expensetype',
+  deleteDepartmentsUrl: baseUrl + '/invoice/delete-department',
+  deleteVendorUrl: baseUrl + '/invoice/delete -vendor',
 
 
 
