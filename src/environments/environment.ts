@@ -5,6 +5,9 @@
 const baseUrl = 'http://localhost:8080/webportal/v1'
 export const environment = {
   production: false,
+
+  loginUser: baseUrl + '/login',
+
   createInvoiceUrl: baseUrl + '/invoice/createinvoice',
   otherDetailsUrl: baseUrl + '/invoice/otherdetails',
   invoiceListUrl: baseUrl + '/invoice/invoices',

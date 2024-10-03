@@ -1,13 +1,28 @@
 <!-- login.component.html -->
 <div class="login-container" style="width: 500px;margin: auto;margin-top: 10px;">
   <h2>Login</h2>
-  <form>
-    <label for="username">Email or Mobile:</label>
-    <input type="text" id="username" placeholder="Enter email or mobile">
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" placeholder="Enter password">
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+    <label for="email">Email:</label>
+    <input type="text" id="email" placeholder="Enter email" [disabled]="otpInput" [(ngModel)]="loginData.email"
+      name="email" required #emailCtrl="ngModel">
+    <div *ngIf="emailCtrl.invalid && emailCtrl.touched" class="text-danger">
+      Email is required
+    </div>
 
-    <button type="submit" (click) ="login()">Login</button>
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter password" [disabled]="otpInput"
+      [(ngModel)]="loginData.password" name="password" required #passwordCtrl="ngModel">
+    <div *ngIf="passwordCtrl.invalid && passwordCtrl.touched" class="text-danger">
+      Password is required
+    </div>
+    <ng-container *ngIf="otpInput">
+      <label for="otp">OTP:</label>
+      <input type="text" id="otp" placeholder="Enter OTP" [(ngModel)]="loginData.otp" name="otp" required
+        #otpCtrl="ngModel">
+      <div *ngIf="otpCtrl.invalid && otpCtrl.touched" class="text-danger">
+        OTP is required
+      </div>
+    </ng-container>
+    <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Login</button>
   </form>
 </div>

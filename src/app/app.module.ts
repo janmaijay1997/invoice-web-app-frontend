@@ -10,9 +10,10 @@ import { PagesModule } from './pages/pages.module';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './helper/header/header.component';
 import { SidebarComponent } from './helper/sidebar/sidebar.component'; 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DefaultRequestOptions } from './services/interceptor';
 
 // import {TableModule} from 'primeng/table';
 
@@ -52,7 +53,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       preventDuplicates: true,  // Prevent duplicate toasts
     }), //
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DefaultRequestOptions,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA,NO_ERRORS_SCHEMA],
 })
