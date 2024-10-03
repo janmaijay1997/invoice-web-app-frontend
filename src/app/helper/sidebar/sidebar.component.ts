@@ -1,28 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { extractRolesFromToken } from 'src/app/utils/jwt-util';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   menuItems: any[] = [
-    { label: 'Dashboard', route: '/dashboard', active: false },
-    { label: 'View User', route: '/userView', active: false },
-    { label: 'Add User', route: '/addUser', active: false },
-    { label: 'View invoice', route: '/InvoiceView', active: false },
-    { label: 'Add invoice', route: '/addInvoice', active: false }
+    { label: 'Dashboard', route: '/dashboard', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
+    { label: 'View User', route: '/userView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
+    { label: 'Add User', route: '/addUser', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
+    { label: 'View Invoice', route: '/InvoiceView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
+    { label: 'Add Invoice', route: '/addInvoice', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'] }
   ];
 
   submenuActive: boolean[] = [];
   activeMenuIndex: number | null = null;
   activeSubmenuIndex: number | null = null;
+  userRoles: string[] = [];
 
   constructor(
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    // Decode JWT token and extract roles
+    this.userRoles = extractRolesFromToken();
+
+    // Filter menu items based on roles
+    this.filterMenuItemsBasedOnRoles();
+
     // Set the active item based on the current route when the component initializes
     this.setActiveItemBasedOnRoute(this.router.url);
 
@@ -32,6 +40,13 @@ export class SidebarComponent {
         this.setActiveItemBasedOnRoute(event.urlAfterRedirects);
       }
     });
+  }
+
+
+  filterMenuItemsBasedOnRoles() {
+    this.menuItems = this.menuItems.filter(item =>
+      item.roles.some((role :any) => this.userRoles.includes(role))
+    );
   }
 
   setActiveItemBasedOnRoute(url: string) {

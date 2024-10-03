@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +22,8 @@ export class HeaderComponent implements OnInit {
   // Perform logout logic here
   logout() {
     console.log("User logged out");
+    localStorage.clear();
+    this.router.navigate(['/login'])
     // You can add actual logout logic here, like redirecting to a login page or clearing session data
   }
 }

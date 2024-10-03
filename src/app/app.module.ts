@@ -47,7 +47,7 @@ import { DefaultRequestOptions } from './services/interceptor';
     // ButtonModule
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',  // Set position to top right
-      timeOut: 300000,  // 3 seconds duration
+      timeOut: 5000,  // 3 seconds duration
       closeButton: true,  // Show a close button on toast
       progressBar: true,  // Show progress bar on toast
       preventDuplicates: true,  // Prevent duplicate toasts

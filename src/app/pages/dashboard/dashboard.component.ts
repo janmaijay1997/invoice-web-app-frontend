@@ -6,16 +6,19 @@ import { SidebarService } from 'src/app/services/sidebar.service';
 
 
 interface CostCenter {
+  id: number,
   name: string;
   code: string;
 }
 
 interface ExpenseType {
+  id: number,
   expenseName: string;
   expenseCode: string;
 }
 
 interface Department {
+  id: number,
   departmentName: string;
   departmentManager: string;
   submitter: string;
@@ -47,8 +50,11 @@ export class DashboardComponent implements OnInit {
   costCenterForm: FormGroup;
 
   showAddExpenseTypeModal = false;
+  editExpenseTypeModel = false;
   showAddCostCenterModel = false;
+  editCostCenterModel = false;
   showAddDepartmenteModal = false;
+  editDepartmenteModal = false;
   showAddVendorModal = false;
 
 
@@ -83,6 +89,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.newCostCenterForm = this.fb.group({
+      id: [''],
       name: ['', Validators.required],
       code: ['', Validators.required],
     });
@@ -93,6 +100,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.newExpenseTypeForm = this.fb.group({
+      id: [''],
       expenseName: ['', Validators.required],
       expenseCode: ['', Validators.required],
     });
@@ -102,6 +110,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.newDepartmentForm = this.fb.group({
+      id: [''],
       departmentName: new FormControl(''),
       departmentManager: new FormControl(''),
       submitter: new FormControl(''),
@@ -149,8 +158,6 @@ export class DashboardComponent implements OnInit {
     return this.departmentForm.get('vendors') as FormArray;
   }
 
-
-
   openAddCostCenterModal() {
     this.showAddCostCenterModel = true;
   }
@@ -181,16 +188,26 @@ export class DashboardComponent implements OnInit {
     this.showAddVendorModal = false;
   }
 
+  // -----------------------------------------Cost Center-------------------------------------------------------
 
   createNewCostCenter() {
     if (this.newCostCenterForm.valid) {
       const newCostCenter = this.newCostCenterForm.value;
-
+      console.log(newCostCenter);
       // Push the new cost center into the form array
-      this.costCenters.push(this.fb.group({
-        name: [newCostCenter.name],
-        code: [newCostCenter.code],
-      }));
+
+      if (newCostCenter.id) {
+        this.costCenters.push(this.fb.group({
+          id: [newCostCenter.id],
+          name: [newCostCenter.name],
+          code: [newCostCenter.code],
+        }));
+      } else {
+        this.costCenters.push(this.fb.group({
+          name: [newCostCenter.name],
+          code: [newCostCenter.code],
+        }));
+      }
 
       this.commonDetailsService.createCostCenter(newCostCenter).subscribe(
         (response: any) => {
@@ -205,6 +222,16 @@ export class DashboardComponent implements OnInit {
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
+  }
+
+  editCostCenter(index: any) {
+    this.editCostCenterModel = true;
+    this.newCostCenterForm.setValue({
+      id: index.value.id,
+      name: index.value.name,
+      code: index.value.code,
+    });
+    this.showAddCostCenterModel = true;
   }
 
   // Fetch the cost center list and populate the form array
@@ -225,6 +252,7 @@ export class DashboardComponent implements OnInit {
   populateFormArray() {
     this.costCenterList.forEach((costCenter: CostCenter) => {
       const group = this.fb.group({
+        id: [costCenter?.id],
         name: [costCenter.name],
         code: [costCenter.code]
       });
@@ -246,9 +274,8 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-
-  deleteCostCenter(index: number) {
-    const updatedCostCenter = this.costCenters.at(index).value;
+  deleteCostCenter(index: any) {
+    const updatedCostCenter = index.value;
 
     const requestData = {
       name: updatedCostCenter.name
@@ -265,28 +292,31 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-
-
-
-
-
-
-
-
-  // ------------------------------------------------------------------------------------------------
+  // -----------------------------------------ExpenseType-------------------------------------------------------
 
   createExpenseType() {
     if (this.newExpenseTypeForm.valid) {
       const newExpenseType = this.newExpenseTypeForm.value;
 
-      // Push the new cost center into the form array
-      this.expenseTypes.push(this.fb.group({
-        expenseName: [newExpenseType.type],
-        expenseCode: [newExpenseType.code],
-      }));
+      if (newExpenseType.id) {
+        // Push the new cost center into the form array
+        this.expenseTypes.push(this.fb.group({
+          id: [newExpenseType.id],
+          expenseName: [newExpenseType.type],
+          expenseCode: [newExpenseType.code],
+        }));
+
+      } else {
+        // Push the new cost center into the form array
+        this.expenseTypes.push(this.fb.group({
+          expenseName: [newExpenseType.type],
+          expenseCode: [newExpenseType.code],
+        }));
+      }
 
       this.commonDetailsService.createExpenseType(newExpenseType).subscribe(
         (response: any) => {
+          this.getExpenseTypeList();
           this.toastr.success('Expense Type created successfully', 'Success');
         },
         (error: any) => {
@@ -298,6 +328,17 @@ export class DashboardComponent implements OnInit {
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
+  }
+
+  editExpenseCenter(index: any) {
+    this.editExpenseTypeModel = true;
+
+    this.newExpenseTypeForm.setValue({
+      id: index.value.id,
+      expenseName: index.value.expenseName,
+      expenseCode: index.value.expenseCode,
+    });
+    this.showAddExpenseTypeModal = true;
   }
 
   // Fetch the cost center list and populate the form array
@@ -317,6 +358,7 @@ export class DashboardComponent implements OnInit {
   populateExpenseTypeFormArray() {
     this.expenseTypeList.forEach((expenseType: ExpenseType) => {
       const group = this.fb.group({
+        id: [expenseType.id],
         expenseName: [expenseType.expenseName],
         expenseCode: [expenseType.expenseCode]
       });
@@ -339,8 +381,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  deleteExpenseType(index: number) {
-    const updatedExpenseType = this.costCenters.at(index).value;
+  deleteExpenseType(index: any) {
+    const updatedExpenseType = index.value;
 
     const requestData = {
       name: updatedExpenseType.expenseName
@@ -358,19 +400,31 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  // ------------------------------------------------------
+  // ------------------------Department------------------------------//
 
 
   createDepartments() {
     if (this.newDepartmentForm.valid) {
       const newDepartmentName = this.newDepartmentForm.value;
 
-      // Push the new Department into the form array
-      this.costCenters.push(this.fb.group({
-        departmentName: [newDepartmentName.departmentName],
-        departmentManager: [newDepartmentName.departmentManager],
-        submitter: [newDepartmentName.submitter],
-      }));
+      if (newDepartmentName.id) {
+        // Push the new Department into the form array
+        this.costCenters.push(this.fb.group({
+          id:  [newDepartmentName.id],
+          departmentName: [newDepartmentName.departmentName],
+          departmentManager: [newDepartmentName.departmentManager],
+          submitter: [newDepartmentName.submitter],
+        }));
+
+      } else {
+        // Push the new Department into the form array
+        this.costCenters.push(this.fb.group({
+          departmentName: [newDepartmentName.departmentName],
+          departmentManager: [newDepartmentName.departmentManager],
+          submitter: [newDepartmentName.submitter],
+        }));
+
+      }
 
       this.commonDetailsService.createDepartments(newDepartmentName).subscribe(
         (response: any) => {
@@ -385,6 +439,18 @@ export class DashboardComponent implements OnInit {
     } else {
       this.toastr.error('Please fill out the form.', 'Error');
     }
+  }
+
+  editDepartment(index: any) {
+    this.editDepartmenteModal = true;
+
+    this.newDepartmentForm.setValue({
+      id: index.value.id,
+      departmentName: index.value.departmentName,
+      departmentManager: index.value.departmentManager,
+      submitter: index.value.submitter,
+    });
+    this.showAddDepartmenteModal = true;
   }
 
 
@@ -405,6 +471,7 @@ export class DashboardComponent implements OnInit {
   populateDepartmentsFormArray() {
     this.departmentList.forEach((department: Department) => {
       const group = this.fb.group({
+        id: department.id,
         departmentName: [department.departmentName],
         departmentManager: [department.departmentManager],
         submitter: [department.submitter],
@@ -429,8 +496,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  deleteDepartment(index: number) {
-    const updatedDepartment = this.costCenters.at(index).value;
+  deleteDepartment(index: any) {
+    const updatedDepartment = index.value;
 
     const requestData = {
       name: updatedDepartment.departmentName

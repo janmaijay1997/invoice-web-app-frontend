@@ -322,6 +322,7 @@ body {
 .sidebar{
     overflow: auto;
     height: 100%;
+    max-width: 215px;
 }
 .sidebar ul {
     list-style-type: none;
@@ -495,7 +496,7 @@ gap: 15px;
            height: calc(100vh - 53px);
            overflow: hidden;
            .sidebar_body{
-               width: 300px;
+               width: 225px;
                background: black;
                transition: .3s;
                overflow: hidden;
@@ -504,7 +505,7 @@ gap: 15px;
                }
            }
            .main_content{
-               width: calc(100% - 300px);
+               width: calc(100% - 225px);
                position: relative;
                transition: .3s;
                &.show{

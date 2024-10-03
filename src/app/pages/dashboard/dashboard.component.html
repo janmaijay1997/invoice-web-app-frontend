@@ -26,8 +26,22 @@
                     <input type="text" formControlName="code" placeholder="Cost Center Code" class="small-input">
                   </td>
                   <td>
-                    <button id="save" type="button" class="save-btn small-input"
-                      (click)="saveCostCenter(i)">Save</button>
+                    <button
+                      id="edit"
+                      type="button"
+                      class="edit-btn"
+                      (click)="editCostCenter(costCenter)"
+                    >
+                      <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                    </button>
+                    <button
+                      id="delete"
+                      type="button"
+                      class="delete-btn ml-5"
+                      (click)="deleteCostCenter(costCenter)"
+                    >
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -57,8 +71,23 @@
                   <td>
                     <input type="text" formControlName="expenseCode" placeholder="Code" class="small-input">
                   </td>
-                  <td> <button id="save" type="button" class="save-btn small-input"
-                      (click)="saveExpenseType(i)">Save</button>
+                  <td>
+                    <button
+                      id="edit"
+                      type="button"
+                      class="edit-btn"
+                      (click)="editExpenseCenter(expenseType)"
+                    >
+                      <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                    </button>
+                    <button
+                      id="delete"
+                      type="button"
+                      class="delete-btn ml-5"
+                      (click)="deleteExpenseType(expenseType)"
+                    >
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -73,7 +102,7 @@
   <!-- Modal Popup for Adding New Cost Center -->
   <div *ngIf="showAddCostCenterModel" class="modal">
     <div class="modal-content">
-      <h3>Add New Cost Center</h3>
+      <h3>{{ editCostCenterModel ?'Edit Cost Center' : "Add New Cost Center" }}</h3>
       <form [formGroup]="newCostCenterForm">
         <div>
           <label for="newName">Name:</label>
@@ -83,7 +112,7 @@
           <label for="newCode">Code:</label>
           <input id="newCode" formControlName="code" type="text" placeholder="Cost Center Code">
         </div>
-        <button type="button" (click)="createNewCostCenter()">Create</button>
+        <button type="button" (click)="createNewCostCenter()">{{ editCostCenterModel ?'Update' : "Create" }}</button>
         <button type="button" (click)="closeAddCostCenterModel()">Cancel</button>
       </form>
     </div>
@@ -92,7 +121,7 @@
   <!-- Modal Popup for Adding New Expense Type -->
   <div *ngIf="showAddExpenseTypeModal" class="modal">
     <div class="modal-content">
-      <h3>Add Expense Type</h3>
+      <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
       <form [formGroup]="newExpenseTypeForm">
         <div>
           <label for="expenseName">Type:</label>
@@ -102,7 +131,7 @@
           <label for="expenseCode">Code:</label>
           <input id="expenseCode" formControlName="expenseCode" type="text" placeholder="ExpenseType Code">
         </div>
-        <button type="button" (click)="createExpenseType()">Create</button>
+        <button type="button" (click)="createExpenseType()"> {{ editExpenseTypeModel ? 'Update' : 'Create' }}</button>
         <button type="button" (click)="closeExpenseTypeModal()">Cancel</button>
       </form>
     </div>
@@ -112,7 +141,7 @@
   <!-- Modal Popup for Adding New Department -->
   <div *ngIf="showAddDepartmenteModal" class="modal">
     <div class="modal-content">
-      <h3>Add Departments</h3>
+      <h3>{{editDepartmenteModal ? 'Edit Departments' : 'Add Departments'}}</h3>
       <form [formGroup]="newDepartmentForm">
         <div>
           <label for="departmentName">Name:</label>
@@ -126,7 +155,7 @@
           <label for="submitter">Submitter:</label>
           <input id="submitter" formControlName="submitter" type="text" placeholder="Submitter">
         </div>
-        <button type="button" (click)="createDepartments()">Create</button>
+        <button type="button" (click)="createDepartments()">{{editDepartmenteModal ? 'Update' : 'Create'}}</button>
         <button type="button" (click)="closeDepartmentsModal()">Cancel</button>
       </form>
     </div>
@@ -162,8 +191,23 @@
               <td>
                 <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
               </td>
-              <td> <button id="save" type="button" class="save-btn small-input"
-                  (click)="saveDepartment(i)">Save</button>
+              <td>
+                <button
+                  id="edit"
+                  type="button"
+                  class="edit-btn"
+                  (click)="editDepartment(department)"
+                >
+                  <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                </button>
+                <button
+                  id="delete"
+                  type="button"
+                  class="delete-btn ml-5"
+                  (click)="deleteDepartment(department)"
+                >
+                <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
               </td>
             </tr>
           </tbody>

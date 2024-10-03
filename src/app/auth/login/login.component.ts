@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toaster.service';
 import { UserService } from 'src/app/services/user.service';
+import { extractRolesFromToken } from 'src/app/utils/jwt-util';
 
 @Component({
   selector: 'app-login',
@@ -37,11 +38,15 @@ export class LoginComponent implements OnInit {
               this.toastService.showError(response.body.responseMessage);
             }
           }else{
-            localStorage.setItem('token', response.body.data.token)
-            this.router.navigate(['/dashboard']);
+            localStorage.setItem('token', response.body.data.token);
+            const userRoles = extractRolesFromToken();
+            if(userRoles[0] === 'USER'){
+              this.router.navigate(['/addInvoice']);
+            }else{
+              this.router.navigate(['/dashboard']);
+            }
+           
           }
-          
-         
         },
         error: (e: any) => {
           console.error(e);
