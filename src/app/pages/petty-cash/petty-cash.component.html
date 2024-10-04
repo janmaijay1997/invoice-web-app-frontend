@@ -68,16 +68,7 @@
                             <tr>
                                 <th>Bill To</th>
                                 <td>
-                                    <ng-container *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH' ">
-                                        <p>{{ invoiceCreateFormGroup.get('billTo')?.value }}</p>
-                                    </ng-container>
-                                    <ng-container *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH' ">
-                                    <select formControlName="billTo" class="small-input">
-                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
-                                            {{vendor.vendorName}}
-                                        </option>
-                                    </select>
-                                    </ng-container>
+                                    {{ invoiceCreateFormGroup.get('billTo')?.value }}
                                 </td>
                             </tr>
                             <tr>
@@ -115,7 +106,7 @@
                                 <th style="min-width: 170px">Reccuring</th>
                                 <th style="min-width: 200px">Description</th>
                                 <th style="min-width: 200px">invoiceTotal</th>
-                                <th style="min-width: 170px" *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">Action</th>
+                                <th style="min-width: 170px">Action</th>
                             </tr>
                         </thead>
                         <tbody formArrayName="items">
@@ -191,21 +182,19 @@
                                     <input type="number" formControlName="invoiceTotal" placeholder="Total"
                                         class="small-input" readonly>
                                 </td>
-                                <td *ngIf="checkinvoiceStatus !== 'SUBMITTED' " >
+                                <td>
                                     <button type="button" (click)="removeItem(i)">Remove</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' " >
-                    <button id="addItem" type="button" (click)="addItem()">Add Item</button>
-                </ng-container>
-              
+
+                <button id="addItem" type="button" (click)="addItem()">Add Item</button>
             </div>
 
             <!-- Sub Total -->
-            <div class="table-container mt-5">
+            <div class="table-container">
                 <table>
                     <tbody>
                         <tr>
@@ -227,10 +216,8 @@
                     </tbody>
                 </table>
             </div>
-            <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">
-                <button id="saveInvoice" type="button" (click)="saveInvoice()" >Save Invoice</button>
-                <button id="submitInvoice" class="ml-2" type="button" (click)="submitInvoice()" *ngIf="isViewSubmitButton">Submit Invoice</button>
-            </ng-container>
+
+            <button id="saveInvoice" type="button" (click)="saveInvoice()">Save Invoice</button>
         </div>
     </div>
 </div>

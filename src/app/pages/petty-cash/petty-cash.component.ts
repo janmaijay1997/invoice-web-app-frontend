@@ -1,13 +1,10 @@
-import { SidebarService } from 'src/app/services/sidebar.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InvoiceDataService } from 'src/app/services/invoicedataservice';
-import { Subscription } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 interface Accounts {
   id: string;
@@ -51,20 +48,26 @@ interface Vendor {
   id: string;
   vendorId: string;
   vendorName: string;
+  bankDetails: BankDetails;
 }
 
-@Component({
-  selector: 'app-view-invoice-details',
-  templateUrl: './view-invoice-details.component.html',
-  styleUrls: ['./view-invoice-details.component.scss']
-})
+interface BankDetails {
+  bankName: string;
+  ibanNumber: string;
+  bankAddress: string;
+}
 
-export class ViewInvoiceDetailsComponent implements OnInit {
-  checkinvoiceStatus : any;
-  subscription: Subscription | undefined;
+
+@Component({
+  selector: 'app-petty-cash',
+  templateUrl: './petty-cash.component.html',
+  styleUrls: ['./petty-cash.component.scss']
+})
+export class PettyCashComponent implements OnInit {
+
+  
+
   sidebarActive: boolean = false;
-  isViewSubmitButton: boolean = true;
-  invoiceStatusValue: string = '';
   recurrings = ['Yes', 'No'];
   vendorList: Vendor[] = [];
   expenseTypeList: ExpenseCode[] = [];
@@ -79,20 +82,19 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   invoiceCreateFormGroup: FormGroup;
 
   constructor(private fb: FormBuilder,
-    private route: ActivatedRoute,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
-    private toastr: ToastrService,
     private router: Router,
-    private invoiceDataService: InvoiceDataService,) {
+    private toastr: ToastrService,) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
+      invoiceStatus: [''],
       accountType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentType: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       submitter: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       department: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
 
-      billTo: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
+      billTo: ['PETTY CASH', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       paymentDueDate: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
       vendorBankDetails: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],  // Allow multiple letters in client name
 
@@ -104,81 +106,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const invoiceNumber = params['invoiceNumber'];
-      // Fetch the invoice data using the invoiceId
-      this.viewInvoice(invoiceNumber);
-      
-    });
     this.getCommonDetailsData();
-
-    const invoice = this.invoiceDataService.getInvoice();
-    console.log("Received Invoice:", invoice);
-
-    if (invoice) {
-      this.invoiceCreateFormGroup.get("invoiceNumber")?.setValue(invoice.invoiceNumber);
-      if (invoice.invoiceStatus === 'SUBMITTED') {
-        this.isViewSubmitButton = false;
-        this.invoiceCreateFormGroup.disable();
-      }
-      this.populateForm(invoice);
-    } else {
-      this.addItem();
-    }
-
-  }
-  viewInvoice(invoiceId: string) {
-    this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
-      (response: any) => {
-        const invoice = response;
-        this.checkinvoiceStatus = response.invoiceStatus;
-        this.populateForm(invoice);
-      },
-      (error: any) => {
-        console.error('Error fetching details:', error);
-        this.toastr.error('Something went wrong.', 'Error');
-      }
-    );
-  }
-
-
-
-  private populateForm(invoice: any): void {
-    this.invoiceCreateFormGroup.patchValue({
-      accountType: invoice.accountDetails.accountType,
-      paymentType: invoice.accountDetails.paymentType,
-      submitter: invoice.submitter.submitterName,
-      department: invoice.submitter.department,
-      billTo: invoice.vendorDetails.billTo,
-      paymentDueDate: invoice.vendorDetails.paymentDue,
-      vendorBankDetails: invoice.vendorDetails.vendorBankDetails,
-      invoiceStatus :  invoice.vendorDetails.vendorBankDetails,
-      adjustments: invoice.total.adjustments || '', // Handle optional adjustments
-    });
-
-    this.items.clear();
-
-
-    if (invoice.items) {
-      invoice.items.forEach((item: any) => {
-        const itemGroup = this.itemFormGroup();
-        itemGroup.patchValue({
-          vendorInvoiceRef: item.vendorInvoiceRef,
-          vendorName: item.vendorName,
-          vendorId: item.vendorId,
-          vendorInvoiceDate: item.vendorInvoiceDate,
-          costCode: item.costCode,
-          expenseType: item.expenseType,
-          description: item.description,
-          rateOfSAR: item.rateOfSAR,
-          currency: item.currency,
-          recurring: item.recurring,
-          invoiceAmount: item.invoiceAmount,
-          invoiceTotal: item.invoiceTotal,
-        });
-        this.items.push(itemGroup); // Add the item to the FormArray
-      });
-    }
   }
 
   // Getter for clientName
@@ -215,6 +143,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('invoiceNumber');
   }
 
+  get invoiceStatusValue() {
+    return this.invoiceCreateFormGroup.get('invoiceStatus');
+  }
   // Getter for paymentType
   get paymentType() {
     return this.invoiceCreateFormGroup.get('paymentType');
@@ -355,7 +286,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
-      invoiceNumber: this.invoiceNumber?.value,
+      invoiceNumber: '',
       total: {
         subTotal: totalInvoiceAmount.toString(),
         adjustments: this.adjustments?.value,
@@ -371,7 +302,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       },
 
       vendorDetails: {
-        billTo: this.billTo?.value,
+        billTo: 'PETTY CASH',
         paymentDue: this.paymentDueDate?.value,
         vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
       },
@@ -386,53 +317,10 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         timeOut: 5000, // Optional - already set in forRoot
       });
       this.invoiceCreateFormGroup.reset();
+      this.router.navigate(['/InvoiceView'])
     }, (error: any) => {
       console.error('Error fetching details:', error);
       this.toastr.error('Something went wrong.', 'Error');
-
-    })
-  }
-
-  // Method to submit the invoice form
-  submitInvoice() {
-    const totalInvoiceAmount = this.getTotalInvoiceAmount();
-
-    const requestData = {
-      invoiceNumber: this.invoiceNumber?.value,
-      total: {
-        subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value,
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
-      },
-      accountDetails: {
-        accountType: this.accountType?.value || '',
-        paymentType: this.paymentType?.value || '',
-      },
-      submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
-      },
-
-      vendorDetails: {
-        billTo: this.billTo?.value,
-        paymentDue: this.paymentDueDate?.value,
-        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
-      },
-
-      invoiceStatus: this.invoiceStatus[1],
-      updatedBy: "ADMIN",  // TODO
-      items: this.prepareItemsData(),
-    };
-
-    this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-      this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
-        timeOut: 5000, // Optional - already set in forRoot
-      });
-      this.invoiceCreateFormGroup.reset();
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-
     })
   }
 

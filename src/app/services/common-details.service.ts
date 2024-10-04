@@ -49,21 +49,20 @@ export class CommonDetailsService {
     return this.httpClient.get(environment.GetVendorUrl);
   }
 
-
-
   deleteCostCenter(requetBody: any): any {
-    return this.httpClient.post(environment.deleteCostCentersUrl, requetBody);
+    return this.httpClient.delete(environment.deleteCostCentersUrl + '?id=' + requetBody);
   }
 
-  deleteExpenseType(requetBody: any): any {
-    return this.httpClient.post(environment.deleteExpenseTypesUrl, requetBody);
+  
+  deleteExpenseTypes(requetBody: any): any {
+    return this.httpClient.delete(environment.deleteExpenseTypesUrl+ '?id=' + requetBody);
   }
 
   deleteDepartments(requetBody: any): any {
-    return this.httpClient.post(environment.deleteDepartmentsUrl, requetBody);
+    return this.httpClient.post(environment.deleteDepartmentsUrl+ '?id=' + requetBody,{});
   }
 
   deleteVendor(requetBody: any): any {
-    return this.httpClient.post(environment.deleteVendorUrl, requetBody);
+    return this.httpClient.delete(environment.deleteVendorUrl+ '?id=' + requetBody);
   }
 }

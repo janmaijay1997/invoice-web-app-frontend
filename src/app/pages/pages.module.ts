@@ -20,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice-details.component';
+import { PettyCashComponent } from './petty-cash/petty-cash.component';
 @NgModule({
   declarations: [
     PagesComponent,
@@ -31,6 +32,7 @@ import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice
     ViewInvoiceComponent,
     UserManagmentComponent,
     ViewInvoiceDetailsComponent,
+    PettyCashComponent,
   ],
   imports: [
     CommonModule,

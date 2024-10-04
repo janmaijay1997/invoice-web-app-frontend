@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   showAddDepartmenteModal = false;
   editDepartmenteModal = false;
   showAddVendorModal = false;
-
+  editVendorModal = false;
 
   newExpenseTypeForm: FormGroup;
   expenseTypeForm: FormGroup;
@@ -212,6 +212,7 @@ export class DashboardComponent implements OnInit {
       this.commonDetailsService.createCostCenter(newCostCenter).subscribe(
         (response: any) => {
           this.toastr.success('Cost Center created successfully', 'Success');
+          this.getCostCenterList();
         },
         (error: any) => {
           this.toastr.warning(error.error, 'Error');
@@ -225,11 +226,12 @@ export class DashboardComponent implements OnInit {
   }
 
   editCostCenter(index: any) {
+
     this.editCostCenterModel = true;
     this.newCostCenterForm.setValue({
-      id: index.value.id,
-      name: index.value.name,
-      code: index.value.code,
+      id: index.id,
+      name: index.name,
+      code: index.code,
     });
     this.showAddCostCenterModel = true;
   }
@@ -239,25 +241,12 @@ export class DashboardComponent implements OnInit {
     this.commonDetailsService.getCostCenterList().subscribe(
       (response: any) => {
         this.costCenterList = response;
-        this.populateFormArray();
       },
       (error: any) => {
         console.error('Error fetching Cost Center list:', error);
         this.toastr.error('Failed to fetch Cost Center list.', 'Error');
       }
     );
-  }
-
-  // Populate the form array with existing cost centers
-  populateFormArray() {
-    this.costCenterList.forEach((costCenter: CostCenter) => {
-      const group = this.fb.group({
-        id: [costCenter?.id],
-        name: [costCenter.name],
-        code: [costCenter.code]
-      });
-      this.costCenters.push(group);
-    });
   }
 
   saveCostCenter(index: number) {
@@ -275,15 +264,11 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteCostCenter(index: any) {
-    const updatedCostCenter = index.value;
-
-    const requestData = {
-      name: updatedCostCenter.name
-    }
-
-    this.commonDetailsService.deleteCostCenter(requestData).subscribe((response: any) => {
+    const updatedCostCenter = index.id;
+    
+    this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe((response: any) => {
       this.toastr.success('Cost Center Deleted successfully', 'Success');
-      this.costCenterList[index] = updatedCostCenter;
+      this.getCostCenterList();
     },
       (error: any) => {
         console.error('Error Deleting Cost Center:', error.error);
@@ -334,9 +319,9 @@ export class DashboardComponent implements OnInit {
     this.editExpenseTypeModel = true;
 
     this.newExpenseTypeForm.setValue({
-      id: index.value.id,
-      expenseName: index.value.expenseName,
-      expenseCode: index.value.expenseCode,
+      id: index.id,
+      expenseName: index.expenseName,
+      expenseCode: index.expenseCode,
     });
     this.showAddExpenseTypeModal = true;
   }
@@ -382,13 +367,9 @@ export class DashboardComponent implements OnInit {
 
 
   deleteExpenseType(index: any) {
-    const updatedExpenseType = index.value;
+    const updatedExpenseType = index.id;
 
-    const requestData = {
-      name: updatedExpenseType.expenseName
-    }
-
-    this.commonDetailsService.deleteExpenseType(requestData).subscribe((response: any) => {
+    this.commonDetailsService.deleteExpenseTypes(updatedExpenseType).subscribe((response: any) => {
       this.toastr.success('Expense Type Deleted successfully', 'Success');
       this.expenseTypeList[index] = updatedExpenseType;
     },
@@ -445,10 +426,10 @@ export class DashboardComponent implements OnInit {
     this.editDepartmenteModal = true;
 
     this.newDepartmentForm.setValue({
-      id: index.value.id,
-      departmentName: index.value.departmentName,
-      departmentManager: index.value.departmentManager,
-      submitter: index.value.submitter,
+      id: index.id,
+      departmentName: index.departmentName,
+      departmentManager: index.departmentManager,
+      submitter: index.submitter,
     });
     this.showAddDepartmenteModal = true;
   }
@@ -497,15 +478,11 @@ export class DashboardComponent implements OnInit {
 
 
   deleteDepartment(index: any) {
-    const updatedDepartment = index.value;
+    const updatedDepartment = index.id;
 
-    const requestData = {
-      name: updatedDepartment.departmentName
-    }
-
-    this.commonDetailsService.deleteExpenseType(requestData).subscribe((response: any) => {
+    this.commonDetailsService.deleteDepartments(updatedDepartment).subscribe((response: any) => {
       this.toastr.success('Department Deleted successfully', 'Success');
-      this.departmentList[index] = updatedDepartment;
+      this.getDepartmentsList();
     },
       (error: any) => {
         console.error('Error Deleting Department:', error.error);
@@ -516,7 +493,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  // ----------------------------------------
+  // -----------------vendor API-----------------------
 
   createVendor() {
     if (this.newVendorForm.valid) {
@@ -546,6 +523,20 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  editVendor(index: any) {
+    console.log('..........', index);
+    
+    this.editVendorModal = true;
+
+    this.newVendorForm.setValue({
+      vendorId: index.id,
+      vendorName: index.vendorName,
+      address: index.address,
+      phoneNumber: index.phoneNumber,
+      bankDetails: index.bankDetails,
+    });
+    this.showAddVendorModal = true;
+  }
 
   async getVendorList() {
     this.commonDetailsService.getVendorList().subscribe(
@@ -590,14 +581,10 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  deleteVendor(index: number) {
-    const updatedDepartment = this.costCenters.at(index).value;
+  deleteVendor(index: any) {
+    const updatedDepartment = index.id;
 
-    const requestData = {
-      name: updatedDepartment.departmentName
-    }
-
-    this.commonDetailsService.deleteVendor(requestData).subscribe((response: any) => {
+    this.commonDetailsService.deleteVendor(updatedDepartment).subscribe((response: any) => {
       this.toastr.success('Vendor Deleted successfully', 'Success');
       this.departmentList[index] = updatedDepartment;
     },

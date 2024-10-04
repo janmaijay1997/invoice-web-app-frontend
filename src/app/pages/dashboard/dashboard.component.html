@@ -17,14 +17,10 @@
                   <th style="min-width: 100px">Actions</th>
                 </tr>
               </thead>
-              <tbody formArrayName="costCenters">
-                <tr *ngFor="let costCenter of costCenters.controls; let i = index" [formGroupName]="i">
-                  <td>
-                    <input type="text" formControlName="name" placeholder="Cost Center Name" class="small-input">
-                  </td>
-                  <td>
-                    <input type="text" formControlName="code" placeholder="Cost Center Code" class="small-input">
-                  </td>
+              <tbody>
+                <tr *ngFor="let costCenter of costCenterList; let i = index">
+                  <td>{{ costCenter.name }}</td>
+                  <td>{{ costCenter.code }}</td>
                   <td>
                     <button
                       id="edit"
@@ -40,12 +36,13 @@
                       class="delete-btn ml-5"
                       (click)="deleteCostCenter(costCenter)"
                     >
-                    <i class="fa fa-trash" aria-hidden="true"></i>
+                      <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+            
           </div>
         </form>
       </div>
@@ -63,14 +60,10 @@
                   <th style="min-width: 100px">Actions</th>
                 </tr>
               </thead>
-              <tbody formArrayName="expenseTypes">
-                <tr *ngFor="let expenseType of expenseTypes.controls; let i = index" [formGroupName]="i">
-                  <td>
-                    <input type="text" formControlName="expenseName" placeholder="Name" class="small-input">
-                  </td>
-                  <td>
-                    <input type="text" formControlName="expenseCode" placeholder="Code" class="small-input">
-                  </td>
+              <tbody>
+                <tr *ngFor="let expenseType of expenseTypeList; let i = index">
+                  <td>{{ expenseType.expenseName }}</td>
+                  <td>{{ expenseType.expenseCode }}</td>
                   <td>
                     <button
                       id="edit"
@@ -86,12 +79,13 @@
                       class="delete-btn ml-5"
                       (click)="deleteExpenseType(expenseType)"
                     >
-                    <i class="fa fa-trash" aria-hidden="true"></i>
+                      <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+            
           </div>
         </form>
       </div>
@@ -167,7 +161,6 @@
   <div class="horizontal-item">
     <h3>Departments</h3>
     <button id="departments" (click)="openAddDepartmentsModal()">Add</button>
-    <form [formGroup]="departmentForm">
       <!-- Scrollable container for the table -->
       <div class="table-container">
         <table id="departmentType">
@@ -179,18 +172,11 @@
               <th style="min-width: 100px">Actions</th>
             </tr>
           </thead>
-          <tbody formArrayName="departments">
-            <tr *ngFor="let department of departments.controls; let i = index" [formGroupName]="i">
-              <td>
-                <input type="text" formControlName="departmentName" placeholder="Department Name" class="small-input">
-              </td>
-              <td>
-                <input type="text" formControlName="departmentManager" placeholder="Department Manager"
-                  class="small-input">
-              </td>
-              <td>
-                <input type="text" formControlName="submitter" placeholder="Submitter" class="small-input">
-              </td>
+          <tbody>
+            <tr *ngFor="let department of departmentList; let i = index">
+              <td>{{ department.departmentName }}</td>
+              <td>{{ department.departmentManager }}</td>
+              <td>{{ department.submitter }}</td>
               <td>
                 <button
                   id="edit"
@@ -206,14 +192,67 @@
                   class="delete-btn ml-5"
                   (click)="deleteDepartment(department)"
                 >
-                <i class="fa fa-trash" aria-hidden="true"></i>
+                  <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </form>
+  </div>
+
+  <div class="horizontal-item">
+    <h3>Vendor</h3>
+    <button id="departments" (click)="openAddVendorModal()">Add</button>
+      <!-- Scrollable container for the table -->
+      <div class="table-container">
+        <table id="vendorTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Vendor ID</th>
+              <th>Vendor Name</th>
+              <th>Bank Name</th>
+              <th>IBAN Number</th>
+              <th>Bank Address</th>
+              <th>Address</th>
+              <th>Phone Number</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vendor of vendorList">
+              <td>{{ vendor.id }}</td>
+              <td>{{ vendor.vendorId }}</td>
+              <td>{{ vendor.vendorName }}</td>
+              <td>{{ vendor.bankDetails.bankName }}</td>
+              <td>{{ vendor.bankDetails.ibanNumber }}</td>
+              <td>{{ vendor.bankDetails.bankAddress }}</td>
+              <td>{{ vendor.address }}</td>
+              <td>{{ vendor.phoneNumber }}</td>
+              <td>
+                <button
+                  id="edit"
+                  type="button"
+                  class="edit-btn"
+                  (click)="editVendor(vendor)"
+                >
+                  <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                </button>
+                <button
+                  id="delete"
+                  type="button"
+                  class="delete-btn ml-5"
+                  (click)="deleteVendor(vendor)"
+                >
+                  <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
   </div>
 
 </div>

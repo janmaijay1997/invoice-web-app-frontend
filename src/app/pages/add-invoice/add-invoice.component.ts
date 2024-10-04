@@ -309,7 +309,7 @@ export class AddInvoiceComponent implements OnInit {
 
     this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
       this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
-        timeOut: 300000, // Optional - already set in forRoot
+        timeOut: 5000, // Optional - already set in forRoot
       });
       this.invoiceCreateFormGroup.reset();
     }, (error: any) => {

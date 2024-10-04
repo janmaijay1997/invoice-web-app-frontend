@@ -12,7 +12,8 @@ export class SidebarComponent implements OnInit {
     { label: 'View User', route: '/userView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
     { label: 'Add User', route: '/addUser', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
     { label: 'View Invoice', route: '/InvoiceView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'] },
-    { label: 'Add Invoice', route: '/addInvoice', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'] }
+    { label: 'Add Invoice', route: '/addInvoice', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'] },
+    { label: 'Petty Cash', route: '/pettyCash', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'] }
   ];
 
   submenuActive: boolean[] = [];
