@@ -26,7 +26,7 @@ export const environment = {
   deleteCostCentersUrl: baseUrl + '/invoice/delete-costcenter',
   deleteExpenseTypesUrl: baseUrl + '/invoice/delete-expensetype',
   deleteDepartmentsUrl: baseUrl + '/invoice/delete-department',
-  deleteVendorUrl: baseUrl + '/invoice/delete -vendor',
+  deleteVendorUrl: baseUrl + '/invoice/delete-vendor',
 
 
 

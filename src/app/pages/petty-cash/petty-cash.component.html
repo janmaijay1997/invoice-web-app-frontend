@@ -1,5 +1,5 @@
 <div class="component_body">
-    <h1 class="component_title">Create Invoice</h1>
+    <h1 class="component_title">Petty Cash</h1>
     <div class="inner_body">
         <div [formGroup]="invoiceCreateFormGroup">
             <!-- <label for="client">Client Name</label>
@@ -103,9 +103,7 @@
                                 <th style="min-width: 170px">Rate of SAR</th>
                                 <th style="min-width: 170px">Total</th>
                                 <th style="min-width: 170px">Currency</th>
-                                <th style="min-width: 170px">Reccuring</th>
                                 <th style="min-width: 200px">Description</th>
-                                <th style="min-width: 200px">invoiceTotal</th>
                                 <th style="min-width: 170px">Action</th>
                             </tr>
                         </thead>
@@ -169,18 +167,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select formControlName="recurring" class="small-input">
-                                        <option *ngFor="let recurring of recurrings" [ngValue]="recurring">{{recurring}}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td>
                                     <input type="text" formControlName="description" placeholder="Description">
-                                </td>
-
-                                <td>
-                                    <input type="number" formControlName="invoiceTotal" placeholder="Total"
-                                        class="small-input" readonly>
                                 </td>
                                 <td>
                                     <button type="button" (click)="removeItem(i)">Remove</button>

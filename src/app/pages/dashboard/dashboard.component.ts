@@ -123,8 +123,14 @@ export class DashboardComponent implements OnInit {
 
     this.newVendorForm = this.fb.group({
       vendorId: new FormControl(''),
+      address: new FormControl(''),
       vendorName: new FormControl(''),
-      bankDetails: new FormControl(''),
+      phoneNumber: new FormControl(''),
+      bankDetails: this.fb.group({
+        bankName: new FormControl(''),
+        ibanNumber: new FormControl(''),
+        bankAddress: new FormControl(''),
+      }),
     });
 
   }
@@ -178,6 +184,7 @@ export class DashboardComponent implements OnInit {
   }
   closeDepartmentsModal() {
     this.showAddDepartmenteModal = false;
+
   }
 
 
@@ -186,6 +193,7 @@ export class DashboardComponent implements OnInit {
   }
   closeVendorModal() {
     this.showAddVendorModal = false;
+    this.editVendorModal = false;
   }
 
   // -----------------------------------------Cost Center-------------------------------------------------------
@@ -265,7 +273,7 @@ export class DashboardComponent implements OnInit {
 
   deleteCostCenter(index: any) {
     const updatedCostCenter = index.id;
-    
+
     this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe((response: any) => {
       this.toastr.success('Cost Center Deleted successfully', 'Success');
       this.getCostCenterList();
@@ -391,7 +399,7 @@ export class DashboardComponent implements OnInit {
       if (newDepartmentName.id) {
         // Push the new Department into the form array
         this.costCenters.push(this.fb.group({
-          id:  [newDepartmentName.id],
+          id: [newDepartmentName.id],
           departmentName: [newDepartmentName.departmentName],
           departmentManager: [newDepartmentName.departmentManager],
           submitter: [newDepartmentName.submitter],
@@ -498,19 +506,12 @@ export class DashboardComponent implements OnInit {
   createVendor() {
     if (this.newVendorForm.valid) {
       const newVendor = this.newVendorForm.value;
-
-      // Push the new Department into the form array
-      this.vendors.push(this.fb.group({
-        vendorId: [newVendor.vendorId],
-        vendorName: [newVendor.vendorName],
-        address: [newVendor.address],
-        phoneNumber: [newVendor.phoneNumber],
-        bankDetails: [newVendor.bankDetails],
-      }));
+      console.log(newVendor);
 
       this.commonDetailsService.createVendor(newVendor).subscribe(
         (response: any) => {
           this.toastr.success('Department created successfully', 'Success');
+          this.closeVendorModal(); // Close the modal
         },
         (error: any) => {
           this.toastr.warning(error.error, 'Error');
@@ -525,7 +526,7 @@ export class DashboardComponent implements OnInit {
 
   editVendor(index: any) {
     console.log('..........', index);
-    
+
     this.editVendorModal = true;
 
     this.newVendorForm.setValue({
@@ -533,7 +534,11 @@ export class DashboardComponent implements OnInit {
       vendorName: index.vendorName,
       address: index.address,
       phoneNumber: index.phoneNumber,
-      bankDetails: index.bankDetails,
+      bankDetails: {
+        bankName: index.bankDetails.bankName,
+        ibanNumber: index.bankDetails.ibanNumber,
+        bankAddress: index.bankDetails.bankAddress
+      },
     });
     this.showAddVendorModal = true;
   }
@@ -542,27 +547,12 @@ export class DashboardComponent implements OnInit {
     this.commonDetailsService.getVendorList().subscribe(
       (response: any) => {
         this.vendorList = response;
-        this.populateVendorsFormArray();
       },
       (error: any) => {
         console.error('Error fetching Vendor list:', error);
         this.toastr.error('Failed to fetch Vendor list.', 'Error');
       }
     );
-  }
-
-
-  populateVendorsFormArray() {
-    this.vendorList.forEach((vendor: Vendor) => {
-      const group = this.fb.group({
-        vendorId: [vendor.vendorId],
-        vendorName: [vendor.vendorName],
-        address: [vendor.address],
-        phoneNumber: [vendor.phoneNumber],
-        bankDetails: [vendor.bankDetails],
-      });
-      this.vendors.push(group);
-    });
   }
 
 

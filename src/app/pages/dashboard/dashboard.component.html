@@ -155,6 +155,42 @@
     </div>
   </div>
 
+  <div *ngIf="showAddVendorModal" class="modal">
+    <div class="modal-content">
+      <h3>{{ editVendorModal ? 'Edit Vendor' : 'Add Vendor' }}</h3>
+      <form [formGroup]="newVendorForm">
+        <div>
+          <label for="vendorName">Vendor Name:</label>
+          <input id="vendorName" formControlName="vendorName" type="text" placeholder="Vendor Name">
+        </div>
+        <div>
+          <label for="address">Address:</label>
+          <input id="address" formControlName="address" type="text" placeholder="Address">
+        </div>
+        <div>
+          <label for="phoneNumber">Phone Number:</label>
+          <input id="phoneNumber" formControlName="phoneNumber" type="text" placeholder="Phone Number">
+        </div>
+        <div formGroupName="bankDetails">
+          <div>
+            <label for="bankName">Bank Name:</label>
+            <input id="bankName" formControlName="bankName" type="text" placeholder="Bank Name">
+          </div>
+          <div>
+            <label for="ibanNumber">IBAN Number:</label>
+            <input id="ibanNumber" formControlName="ibanNumber" type="text" placeholder="IBAN Number">
+          </div>
+          <div>
+            <label for="bankAddress">Bank Address:</label>
+            <input id="bankAddress" formControlName="bankAddress" type="text" placeholder="Bank Address">
+          </div>
+        </div>
+        <button type="button" (click)="createVendor()">{{ editVendorModal ? 'Update' : 'Create' }}</button>
+        <button type="button" (click)="closeVendorModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
 
 
   <!-- Row for Departments/Vendors table -->

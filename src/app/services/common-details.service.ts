@@ -63,6 +63,6 @@ export class CommonDetailsService {
   }
 
   deleteVendor(requetBody: any): any {
-    return this.httpClient.delete(environment.deleteVendorUrl+ '?id=' + requetBody);
+    return this.httpClient.delete(environment.deleteVendorUrl+'?id=' + requetBody);
   }
 }
