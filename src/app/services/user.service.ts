@@ -14,4 +14,7 @@ export class UserService {
       observe: 'response',
     });
   }
+  createUser(request:any): any{
+    return this.httpClient.post(environment.addUser,request);
+  }
 }
