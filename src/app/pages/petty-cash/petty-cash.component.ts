@@ -65,8 +65,8 @@ interface BankDetails {
 })
 export class PettyCashComponent implements OnInit {
 
-  
 
+  subTotal: number = 0;
   sidebarActive: boolean = false;
   recurrings = ['Yes', 'No'];
   vendorList: Vendor[] = [];
@@ -169,8 +169,14 @@ export class PettyCashComponent implements OnInit {
       rateOfSAR: ['', Validators.required],
       currency: ['', Validators.required],
       recurring: ['', Validators.required],
-      invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+
+      submitterName: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      itemAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      quantity: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      subTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      ptcAdvance: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      total: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     });
   }
 
@@ -202,35 +208,51 @@ export class PettyCashComponent implements OnInit {
     const items = this.items.value; // Get the array of items
     let total = 0;
 
-    // Loop through each item and add the invoiceTotal value
+    // Loop through each item and add the subTotal value
     items.forEach((item: any) => {
-      const amount = parseFloat(item.invoiceTotal);
-      if (!isNaN(amount)) {
-        total += amount;
-      }
+      const subTotal = parseFloat(item.total) || 0;
+      total += subTotal;
     });
+
+    const adjustments = parseFloat(this.adjustments?.value) || 0; // Get adjustments
+    const grandTotal = total + adjustments; // Calculate grand total
 
     this.subTotalAmount = total;
     this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
+    this.invoiceCreateFormGroup.get('grandTotal')?.setValue(grandTotal); // Set grand total
     return total;
+  }
+
+  getTotalAmountWithAdjustment(): number {
+    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
+    const subTotal = this.getTotalInvoiceAmount();
+
+    // Ensure both values are numbers
+    const totalAdjustments = typeof adjustments === 'number' ? adjustments : parseFloat(adjustments) || 0;
+
+    const grandTotal = subTotal + totalAdjustments;
+    return grandTotal;
   }
 
 
   // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
   getTotalInvoiceAmountForRow(item: AbstractControl): void {
-    const invoiceAmount = parseFloat(item.get('invoiceAmount')?.value) || 0; // Fallback to 0
-    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 0; // Fallback to 0
+    const invoiceAmount = parseFloat(item.get('itemAmount')?.value) || 0;
+    const quantity = parseFloat(item.get('quantity')?.value) || 0;
+    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1;
 
-    if (!isNaN(invoiceAmount) && !isNaN(rateOfSAR)) {
-      const total = invoiceAmount * rateOfSAR;
-      item.get('invoiceTotal')?.setValue(total);
-    } else {
-      console.warn("Invalid values for invoiceAmount or rateOfSAR in row:", item.value);
-    }
+    // Calculate subTotal
+    this.subTotal = invoiceAmount * quantity * rateOfSAR;
+    item.get('subTotal')?.setValue(this.subTotal);
 
-    // Update the overall total whenever an item's total changes
-    this.getTotalInvoiceAmount();
+    const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0;
+    const total = this.subTotal + ptcAdvance;
+    item.get('total')?.setValue(total);
+
+    // Update overall total whenever an item's total changes
+    this.getTotalInvoiceAmount(); // Recalculate the grand total
   }
+
 
 
 
@@ -272,6 +294,14 @@ export class PettyCashComponent implements OnInit {
           invoiceAmount: formGroup.get('invoiceAmount')?.value || '',
           recurring: formGroup.get('recurring')?.value || 'NO',
           invoiceTotal: formGroup.get('invoiceTotal')?.value || 0,
+
+
+          submitterName: formGroup.get('submitterName')?.value || 0,
+          itemAmount: formGroup.get('itemAmount')?.value || 0,
+          quantity: formGroup.get('quantity')?.value || 0,
+          subTotal: formGroup.get('subTotal')?.value || 0,
+          ptcAdvance: formGroup.get('ptcAdvance')?.value || 0,
+          total: formGroup.get('total')?.value || 0,
         };
       } else {
         // Handle the case where formGroup is null, if necessary

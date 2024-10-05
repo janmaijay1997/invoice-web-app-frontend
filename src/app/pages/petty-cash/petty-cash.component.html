@@ -101,9 +101,14 @@
                                 <th style="min-width: 170px">Cost Code</th>
                                 <th style="min-width: 170px">Expense Type</th>
                                 <th style="min-width: 170px">Rate of SAR</th>
-                                <th style="min-width: 170px">Total</th>
                                 <th style="min-width: 170px">Currency</th>
                                 <th style="min-width: 200px">Description</th>
+                                <th style="min-width: 200px">Submitter</th>
+                                <th style="min-width: 200px">ItemAmount</th>
+                                <th style="min-width: 200px">Quantity</th>
+                                <th style="min-width: 200px">SubTotal</th>
+                                <th style="min-width: 200px">PtcAdvance</th>
+                                <th style="min-width: 200px">Total</th>
                                 <th style="min-width: 170px">Action</th>
                             </tr>
                         </thead>
@@ -154,10 +159,7 @@
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
-                                <td>
-                                    <input type="number" formControlName="invoiceAmount" placeholder="total"
-                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
-                                </td>
+                        
                                 <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
@@ -169,6 +171,36 @@
                                 <td>
                                     <input type="text" formControlName="description" placeholder="Description">
                                 </td>
+
+                                <td>
+                                    <input type="text" formControlName="submitterName" placeholder="Description">
+                                </td>
+
+                                 <td>
+                                    <input type="number" formControlName="itemAmount" placeholder="total"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="quantity" placeholder="Quantity"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                 <td>
+                                    <input type="number" formControlName="subTotal" placeholder="subTotal"
+                                        class="small-input"  readonly> 
+                                </td>
+                                
+                                 <td>
+                                    <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)"> 
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="total" placeholder="Total"
+                                        class="small-input"> 
+                                </td>
+
                                 <td>
                                     <button type="button" (click)="removeItem(i)">Remove</button>
                                 </td>
@@ -198,7 +230,7 @@
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td>{{ (getTotalInvoiceAmount() + (adjustments?.value)) }}</td>
+                            <td>{{ (getTotalAmountWithAdjustment()) }}</td>
                         </tr>
                     </tbody>
                 </table>
