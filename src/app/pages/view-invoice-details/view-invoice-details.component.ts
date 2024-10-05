@@ -104,13 +104,13 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCommonDetailsData();
     this.route.queryParams.subscribe(params => {
       const invoiceNumber = params['invoiceNumber'];
       // Fetch the invoice data using the invoiceId
       this.viewInvoice(invoiceNumber);
       
     });
-    this.getCommonDetailsData();
 
     const invoice = this.invoiceDataService.getInvoice();
     console.log("Received Invoice:", invoice);
@@ -178,6 +178,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         });
         this.items.push(itemGroup); // Add the item to the FormArray
       });
+    }
+    if(invoice.invoiceStatus=='SUBMITTED'){
+    this.invoiceCreateFormGroup.disable()
     }
   }
 

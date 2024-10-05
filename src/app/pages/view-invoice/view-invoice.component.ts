@@ -49,6 +49,7 @@ export class ViewInvoiceComponent implements OnInit {
   invoiceList: Invoice[] = [];
   isAdmin: any;
   sidebarActive: boolean = true;
+  filterValue:string="";
   ngOnInit() {
     // Subscribe to the sidebar active state
     console.log(localStorage.getItem("lastname"));
@@ -97,5 +98,12 @@ export class ViewInvoiceComponent implements OnInit {
         this.toastr.error('Something went wrong.', 'Error');
       }
     );
+  }
+  filterInvoice(){
+    if(this.filterValue==null || this.filterValue.trim().length==0){
+      this.getInvoiceList();
+    }else{
+     this.invoiceList= this.invoiceList.filter((invoice=>invoice.invoiceNumber.includes(this.filterValue)));
+    }
   }
 }

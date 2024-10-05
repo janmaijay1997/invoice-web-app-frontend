@@ -1,10 +1,9 @@
 <div class="component_body">
     <h1 class="component_title">Invoices</h1>
     <div class="inner_body">
-        <form class="invoice_form">
-            <input type="text" placeholder="Search by invoice number">
-            <button type="submit">Filter</button>
-        </form>
+        
+            <input type="text" placeholder="Search by invoice number"[(ngModel)]="filterValue">
+            <button type="button" (click)="filterInvoice()">Filter</button>
 
         <div class="table_view">
 
