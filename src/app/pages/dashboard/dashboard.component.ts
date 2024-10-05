@@ -263,6 +263,7 @@ export class DashboardComponent implements OnInit {
     this.commonDetailsService.createCostCenter(updatedCostCenter).subscribe((response: any) => {
       this.toastr.success('Cost Center saved successfully', 'Success');
       this.costCenterList[index] = updatedCostCenter;
+      this.getCostCenterList();
     },
       (error: any) => {
         console.error('Error saving Cost Center:', error.error);
@@ -309,8 +310,8 @@ export class DashboardComponent implements OnInit {
 
       this.commonDetailsService.createExpenseType(newExpenseType).subscribe(
         (response: any) => {
-          this.getExpenseTypeList();
           this.toastr.success('Expense Type created successfully', 'Success');
+          this.getExpenseTypeList();
         },
         (error: any) => {
           this.toastr.warning(error.error, 'Error');
@@ -359,20 +360,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  saveExpenseType(index: number) {
-    const updatedExpenseType = this.expenseTypes.at(index).value;
-
-    this.commonDetailsService.createExpenseType(updatedExpenseType).subscribe((response: any) => {
-      this.toastr.success('Expense Type saved successfully', 'Success');
-      this.costCenterList[index] = updatedExpenseType;
-    },
-      (error: any) => {
-        console.error('Error saving Expense Type:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
-  }
-
 
   deleteExpenseType(index: any) {
     const updatedExpenseType = index.id;
@@ -418,6 +405,7 @@ export class DashboardComponent implements OnInit {
       this.commonDetailsService.createDepartments(newDepartmentName).subscribe(
         (response: any) => {
           this.toastr.success('Department created successfully', 'Success');
+          this.getDepartmentsList();
         },
         (error: any) => {
           this.toastr.warning(error.error, 'Error');
@@ -470,21 +458,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  saveDepartment(index: number) {
-    const updatedDepartments = this.departments.at(index).value;
-
-    this.commonDetailsService.createDepartments(updatedDepartments).subscribe((response: any) => {
-      this.toastr.success('Department saved successfully', 'Success');
-      this.departmentList[index] = updatedDepartments;
-    },
-      (error: any) => {
-        console.error('Error saving Departments:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
-  }
-
-
   deleteDepartment(index: any) {
     const updatedDepartment = index.id;
 
@@ -510,8 +483,9 @@ export class DashboardComponent implements OnInit {
 
       this.commonDetailsService.createVendor(newVendor).subscribe(
         (response: any) => {
-          this.toastr.success('Department created successfully', 'Success');
+          this.toastr.success('Vendor created successfully', 'Success');
           this.closeVendorModal(); // Close the modal
+          this.getVendorList();
         },
         (error: any) => {
           this.toastr.warning(error.error, 'Error');
