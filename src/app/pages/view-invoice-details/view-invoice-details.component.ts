@@ -60,7 +60,8 @@ interface Vendor {
 })
 
 export class ViewInvoiceDetailsComponent implements OnInit {
-  checkinvoiceStatus : any;
+    subTotal: number = 0;
+  checkinvoiceStatus: any;
   subscription: Subscription | undefined;
   sidebarActive: boolean = false;
   isViewSubmitButton: boolean = true;
@@ -153,31 +154,40 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       paymentDueDate: invoice.vendorDetails.paymentDue,
       vendorBankDetails: invoice.vendorDetails.vendorBankDetails,
       invoiceStatus :  invoice.vendorDetails.vendorBankDetails,
-      adjustments: invoice.total.adjustments || '', // Handle optional adjustments
+      adjustments: invoice.total.adjustments || '0', // Handle optional adjustments
     });
 
     this.items.clear();
 
 
     if (invoice.items) {
-      invoice.items.forEach((item: any) => {
-        const itemGroup = this.itemFormGroup();
-        itemGroup.patchValue({
-          vendorInvoiceRef: item.vendorInvoiceRef,
-          vendorName: item.vendorName,
-          vendorId: item.vendorId,
-          vendorInvoiceDate: item.vendorInvoiceDate,
-          costCode: item.costCode,
-          expenseType: item.expenseType,
-          description: item.description,
-          rateOfSAR: item.rateOfSAR,
-          currency: item.currency,
-          recurring: item.recurring,
-          invoiceAmount: item.invoiceAmount,
-          invoiceTotal: item.invoiceTotal,
+        invoice.items.forEach((item: any) => {
+          const itemGroup = this.itemFormGroup();
+          itemGroup.patchValue({
+            vendorInvoiceRef: item.vendorInvoiceRef,
+            vendorName: item.vendorName,
+            vendorId: item.vendorId,
+            vendorInvoiceDate: item.vendorInvoiceDate,
+            costCode: item.costCode,
+            expenseType: item.expenseType,
+            description: item.description,
+            rateOfSAR: item.rateOfSAR,
+            currency: item.currency,
+            recurring: item.recurring,
+            invoiceAmount: item.invoiceAmount,
+            invoiceTotal: item.invoiceTotal,
+
+            submitterName: item.submitterName,
+            itemAmount: item.itemAmount,
+            quantity: item.quantity,
+            subTotal: item.subTotal,
+            ptcAdvance: item.ptcAdvance,
+            total: item.total,
+          });
+          this.items.push(itemGroup); // Add the item to the FormArray
         });
-        this.items.push(itemGroup); // Add the item to the FormArray
-      });
+    
+
     }
     if(invoice.invoiceStatus=='SUBMITTED'){
     this.invoiceCreateFormGroup.disable()
@@ -243,6 +253,14 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+
+      
+      submitterName: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      itemAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      quantity: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      subTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      ptcAdvance: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      total: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     });
   }
 
@@ -317,6 +335,57 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
 
+  // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
+  getTotalInvoiceAmountForRowPettyCash(item: AbstractControl): void {
+    const invoiceAmount = parseFloat(item.get('itemAmount')?.value) || 0;
+    const quantity = parseFloat(item.get('quantity')?.value) || 0;
+    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1;
+
+    // Calculate subTotal
+    this.subTotal = invoiceAmount * quantity * rateOfSAR;
+    item.get('subTotal')?.setValue(this.subTotal);
+
+    const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0;
+    const total = this.subTotal + ptcAdvance;
+    item.get('total')?.setValue(total);
+
+    // Update overall total whenever an item's total changes
+    this.getTotalInvoiceAmountPettyCash(); // Recalculate the grand total
+  }
+
+
+
+   getTotalInvoiceAmountPettyCash(): number {
+    const items = this.items.value; // Get the array of items
+    let total = 0;
+
+    // Loop through each item and add the subTotal value
+    items.forEach((item: any) => {
+      const subTotal = parseFloat(item.total) || 0;
+      total += subTotal;
+    });
+
+    const adjustments = parseFloat(this.adjustments?.value) || 0; // Get adjustments
+    const grandTotal = total + adjustments; // Calculate grand total
+
+    this.subTotalAmount = total;
+    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
+    this.invoiceCreateFormGroup.get('grandTotal')?.setValue(grandTotal); // Set grand total
+    return total;
+  }
+
+  getTotalAmountWithAdjustmentPettyCash(): number {
+    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
+    const subTotal = this.getTotalInvoiceAmount();
+
+    // Ensure both values are numbers
+    const totalAdjustments = typeof adjustments === 'number' ? adjustments : parseFloat(adjustments) || 0;
+
+    const grandTotal = subTotal + totalAdjustments;
+    return grandTotal;
+  }
+
+
 
   // Method to add a new item to the FormArray
   addItem(): void {
@@ -352,10 +421,17 @@ export class ViewInvoiceDetailsComponent implements OnInit {
           expenseType: formGroup.get('expenseType')?.value || '',
           description: formGroup.get('description')?.value || 'test',
           rateOfSAR: formGroup.get('rateOfSAR')?.value || '1.00',
-          currency: formGroup.get('currency')?.value || 'USD',
+          currency: formGroup.get('currency')?.value || '',
           invoiceAmount: formGroup.get('invoiceAmount')?.value || '',
           recurring: formGroup.get('recurring')?.value || 'NO',
           invoiceTotal: formGroup.get('invoiceTotal')?.value || 0,
+
+          submitterName: formGroup.get('submitterName')?.value || 0,
+          itemAmount: formGroup.get('itemAmount')?.value || 0,
+          quantity: formGroup.get('quantity')?.value || 0,
+          subTotal: formGroup.get('subTotal')?.value || 0,
+          ptcAdvance: formGroup.get('ptcAdvance')?.value || 0,
+          total: formGroup.get('total')?.value || 0,
         };
       } else {
         // Handle the case where formGroup is null, if necessary
@@ -373,7 +449,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       invoiceNumber: this.invoiceNumber?.value,
       total: {
         subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value,
+        adjustments: this.adjustments?.value | 0,
         grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
       },
       accountDetails: {

@@ -110,11 +110,17 @@
                                 <th style="min-width: 170px">Cost Code</th>
                                 <th style="min-width: 170px">Expense Type</th>
                                 <th style="min-width: 170px">Rate of SAR</th>
-                                <th style="min-width: 170px">Total</th>
+                                <th style="min-width: 170px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Total</th>
                                 <th style="min-width: 170px">Currency</th>
-                                <th style="min-width: 170px">Reccuring</th>
+                                <th style="min-width: 170px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Reccuring</th>
                                 <th style="min-width: 200px">Description</th>
-                                <th style="min-width: 200px">invoiceTotal</th>
+                                <th style="min-width: 200px" *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">invoiceTotal</th>
+                                 <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Submitter</th>
+                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">ItemAmount</th>
+                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Quantity</th>
+                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">SubTotal</th>
+                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">PtcAdvance</th>
+                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Total</th>
                                 <th style="min-width: 170px" *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">Action</th>
                             </tr>
                         </thead>
@@ -165,11 +171,15 @@
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
-                                <td>
+
+
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">
                                     <input type="number" formControlName="invoiceAmount" placeholder="total"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
-                                <td>
+
+                                
+                                 <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencyName">
@@ -177,7 +187,8 @@
                                         </option>
                                     </select>
                                 </td>
-                                <td>
+                               
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">
                                     <select formControlName="recurring" class="small-input">
                                         <option *ngFor="let recurring of recurrings" [ngValue]="recurring">{{recurring}}
                                         </option>
@@ -187,10 +198,45 @@
                                     <input type="text" formControlName="description" placeholder="Description">
                                 </td>
 
-                                <td>
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">
                                     <input type="number" formControlName="invoiceTotal" placeholder="Total"
                                         class="small-input" readonly>
                                 </td>
+
+
+
+
+
+                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value == 'PETTY CASH'">
+                                    <input type="text" formControlName="submitterName" placeholder="submitterName">
+                                </td>
+
+                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="itemAmount" placeholder="itemAmount"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                </td>
+
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="quantity" placeholder="Quantity"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                </td>
+
+                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="subTotal" placeholder="subTotal"
+                                        class="small-input"  readonly> 
+                                </td>
+                                
+                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
+                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)"> 
+                                </td>
+
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="total" placeholder="Total"
+                                        class="small-input" readonly> 
+                                </td>
+                                
+                                
                                 <td *ngIf="checkinvoiceStatus !== 'SUBMITTED' " >
                                     <button type="button" (click)="removeItem(i)">Remove</button>
                                 </td>
@@ -222,7 +268,7 @@
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td>{{ (getTotalAmountWithAdjustment()) }}</td>
+                            <td>{{ (getTotalAmountWithAdjustmentPettyCash()) }}</td>
                         </tr>
                     </tbody>
                 </table>
