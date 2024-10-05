@@ -1,45 +1,47 @@
-
-
-
 <div class="component_body">
-        <h1 class="component_title">User Management</h1> 
-        <div class="inner_body">
-             
-                    <div class="table_view">
-            
-                            <p-table
-                            [value]="users"
-                            [paginator]="true"
-                            [rows]="10"
-                            [tableStyle]="{ 'min-width': '50rem' }"
-                           
-                        >
-                            <ng-template pTemplate="header">
-                                <tr>
-                                        <th style="min-width:50px">User ID</th>
-                                        <th style="min-width:150px">Name</th>
-                                        <th style="min-width:150px">Email</th>
-                                        <th style="min-width:100px">Role</th>
-                                        <th style="min-width:150px">Status</th>
-                                        <th style="min-width:100px">Actions</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-user>
-                                <tr>
-                                        <td style="min-width:50px">{{ user.id }}</td>
-                                        <td style="min-width:150px">{{ user.name }}</td>
-                                        <td style="min-width:150px">{{ user.email }}</td>
-                                        <td style="min-width:100px">{{ user.role }}</td>
-                                        <td style="min-width:150px">{{ user.status }}</td>
-                                        <td style="min-width:100px" >
-                                            <div class="btn_group">
-                                                <button (click)="editUser(user.id)">Edit</button>
-                                                <button (click)="deactivateUser(user.id)">Deactivate</button>
-                                            </div>
-                                        </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                        </div>
-        </div>
+    <h1 class="component_title">User Management</h1>
+    <div class="inner_body">
+      <div class="table_view">
+        <p-table
+          [value]="users"
+          [paginator]="true"
+          [rows]="rows"
+          [totalRecords]="totalRecords"
+          [loading]="loading"
+          [lazy]="true"
+          (onLazyLoad)="onPageChange($event)"
+          [tableStyle]="{ 'min-width': '50rem' }">
+          
+          <!-- Table header -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="min-width:100px">User ID</th>
+              <th style="min-width:150px">Name</th>
+              <th style="min-width:200px; word-wrap: break-word;">Email</th>
+              <th style="min-width:120px">Role</th>
+              <th style="min-width:100px">Status</th>
+              <th style="min-width:150px">Actions</th>
+            </tr>
+          </ng-template>
+  
+          <!-- Table body -->
+          <ng-template pTemplate="body" let-user>
+            <tr>
+              <td style="min-width:100px">{{ user.id }}</td>
+              <td style="min-width:150px">{{ user.name }}</td>
+              <td style="min-width:200px; word-wrap: break-word;">{{ user.email }}</td>
+              <td style="min-width:120px">{{ user.role }}</td>
+              <td style="min-width:100px">{{ user.status }}</td>
+              <td style="min-width:150px">
+                <div class="btn_group">
+                  <button (click)="editUser(user.id)">Edit</button>
+                  <button (click)="deactivateUser(user.id)">Deactivate</button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
+  </div>
+  

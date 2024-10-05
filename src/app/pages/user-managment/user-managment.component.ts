@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-managment',
@@ -7,7 +9,15 @@ import { SidebarService } from 'src/app/services/sidebar.service';
   styleUrls: ['./user-managment.component.scss']
 })
 export class UserManagmentComponent implements OnInit {
-  constructor(private sidebarService: SidebarService) { }
+  users: any[] = [];        // Users to display in the table
+  totalRecords: number = 0; // Total records for pagination
+  loading: boolean = true;  // To show loading spinner
+
+  // Pagination variables
+  page: number = 0;
+  rows: number = 10; // Number of rows per page
+
+  constructor(private sidebarService: SidebarService,private userService:UserService,private toastr:ToastrService) { }
 
   sidebarActive: boolean = false;
   ngOnInit() {
@@ -20,40 +30,49 @@ export class UserManagmentComponent implements OnInit {
         this.sidebarActive = true;
       }
     });
+    this.loadUsers(this.page, this.rows);
 
   } 
-  deactivateUser(val: any) {
-
+  loadUsers(page: number, size: number) {
+    this.loading = true;
+    this.userService.getUsers(page, size).subscribe({
+      next: (response: any) => {
+        // Map the API response to users list
+        this.users = response.data.content.map((user: any) => ({
+          id: user.userDetails.phoneNumber, // Assuming phone number is used as ID, adjust as needed
+          name: `${user.userDetails.name} ${user.userDetails.surname}`,
+          email: user.userDetails.email,
+          role: user.userDetails.roles[0] || 'N/A', // Display first role
+          status: 'Active' // Placeholder for status, adjust as needed
+        }));
+        this.totalRecords = response.data.totalElements; // Total records for pagination
+        this.loading = false;
+      },
+      error: (err) => {
+        this.toastr.error('Failed to load users');
+        console.error('Error fetching users:', err);
+        this.loading = false;
+      }
+    });
   }
-  editUser(val: any) {
 
+  // Placeholder method for deactivating a user
+  deactivateUser(userId: string) {
+    this.toastr.warning(`Deactivate user with ID: ${userId}`);
+    // Logic for deactivating user
   }
-  createUser() {
 
+  // Placeholder method for editing a user
+  editUser(userId: string) {
+    this.toastr.info(`Edit user with ID: ${userId}`);
+    // Logic for editing user
   }
 
-  users: any = [
-    {id:1,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:2,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:3,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:4,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:5,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:6,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:7,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:8,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:9,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:10,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:11,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:12,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:13,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:14,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:15,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:16,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:17,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:18,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:19,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-    {id:20,name:'abc',email:'abc@gmail.com',role:'Admin',status:'Active'},
-  
-  ]
+  // Method to handle page changes (pagination)
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.rows = event.rows;
+    this.loadUsers(this.page, this.rows); // Fetch users for the new page
+  }
 
 }

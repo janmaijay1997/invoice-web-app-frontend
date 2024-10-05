@@ -27,7 +27,8 @@ export const environment = {
   deleteExpenseTypesUrl: baseUrl + '/invoice/delete-expensetype',
   deleteDepartmentsUrl: baseUrl + '/invoice/delete-department',
   deleteVendorUrl: baseUrl + '/invoice/delete-vendor',
-  addUser: baseUrl +'/admin/user'
+  addUser: baseUrl +'/admin/user',
+  getUsersList: baseUrl +'/admin/users'
 
 
 
