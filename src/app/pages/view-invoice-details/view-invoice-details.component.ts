@@ -287,6 +287,18 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return total;
   }
 
+  getTotalAmountWithAdjustment(): number {
+    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
+    const subTotal = this.getTotalInvoiceAmount();
+
+    // Ensure both values are numbers
+    const totalAdjustments = typeof adjustments === 'number' ? adjustments : parseFloat(adjustments) || 0;
+
+    const grandTotal = subTotal + totalAdjustments;
+    return grandTotal;
+  }
+
+
 
   // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
   getTotalInvoiceAmountForRow(item: AbstractControl): void {
