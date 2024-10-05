@@ -1,10 +1,10 @@
 <div class="component_body">
     <h1 class="component_title">Invoices</h1>
     <div class="inner_body">
-        
+            <div class="invoice_form">
             <input type="text" placeholder="Search by invoice number"[(ngModel)]="filterValue">
             <button type="button" (click)="filterInvoice()">Filter</button>
-
+                    </div>
         <div class="table_view">
 
             <p-table [value]="invoiceList" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
