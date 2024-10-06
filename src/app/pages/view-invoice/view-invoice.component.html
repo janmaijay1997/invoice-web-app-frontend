@@ -21,7 +21,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-invoice>
                     <tr>
-                        <td style="min-width:150px" (click)="viewInvoice(invoice.invoiceNumber)">{{ invoice.invoiceNumber }}</td>
+                        <td style="min-width:150px" (click)="viewInvoice(invoice.invoiceNumber)">{{
+                            invoice.invoiceNumber }}</td>
                         <td style="min-width:150px">{{ trimDate(invoice.invoiceCreatedDate) }}</td>
                         <td style="min-width:100px">{{ invoice.vendorDetails.billTo }}</td>
                         <td style="min-width:150px">{{ invoice.total.grandTotal }}</td>
@@ -29,7 +30,12 @@
                         <td style="min-width:150px">{{ invoice.invoiceStatus }}</td>
                         <td style="min-width:100px">
                             <button id="view" (click)="viewInvoice(invoice.invoiceNumber)">View</button>
-                            <button id="invoice" *ngIf="invoice.invoiceStatus == 'SUBMITTED'" (click)="editInvoice(invoice.invoiceNumber)">Invoice</button>
+                            <button id="invoice" *ngIf="invoice.invoiceStatus == 'SUBMITTED'"
+                                (click)="editInvoice(invoice.invoiceNumber)">Invoice</button>
+                            <button id="delete" type="button" class="delete-btn ml-5"
+                                (click)="deleteInvoice(invoice.invoiceNumber)">
+                                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                            </button>
                         </td>
                     </tr>
                 </ng-template>

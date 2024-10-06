@@ -20,4 +20,8 @@ export class InvoiceService {
   getInvoiceDetails(invoiceId: string): any {
     return this.httpClient.get(environment.invoiceDetailsUrl + invoiceId);
   }
+
+  deleteInvoice(invoiceId: string): any {
+    return this.httpClient.delete(environment.deleteInvoiceUrl + '?id=' + invoiceId);
+  }
 }

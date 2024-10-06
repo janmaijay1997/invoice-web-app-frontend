@@ -83,6 +83,21 @@ export class ViewInvoiceComponent implements OnInit {
     );
   }
 
+
+  deleteInvoice(invoiceId: string) {
+    this.invoiceService.deleteInvoice(invoiceId).subscribe(
+      (response: any) => {
+       this.toastr.success('Invoice Deleted successfully', 'Success');
+      this.getInvoiceList();
+    },
+      (error: any) => {
+        console.error('Error Deleting Invoice:', error.error);
+        this.toastr.warning(error.error, 'Error');
+      }
+    );
+  }
+
+
   trimDate(dateString: string): string {
     return dateString.split('T')[0]; // Split by 'T' and return the date part
   }

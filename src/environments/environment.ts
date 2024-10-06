@@ -12,6 +12,9 @@ export const environment = {
   otherDetailsUrl: baseUrl + '/invoice/otherdetails',
   invoiceListUrl: baseUrl + '/invoice/invoices',
   invoiceDetailsUrl: baseUrl + '/invoice/invoiceDetails/',
+  deleteInvoiceUrl: baseUrl + '/invoice/delete-invoice',
+
+
   createCostCenterUrl: baseUrl + '/invoice/create-costcenter',
   createExpenseTypeUrl: baseUrl + '/invoice/create-expensetype',
   createDepartmentUrl: baseUrl + '/invoice/create-department',

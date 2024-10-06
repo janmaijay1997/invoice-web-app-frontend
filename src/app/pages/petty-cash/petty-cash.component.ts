@@ -319,7 +319,7 @@ export class PettyCashComponent implements OnInit {
       invoiceNumber: '',
       total: {
         subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value,
+        adjustments: this.adjustments?.value || 0,
         grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
       },
       accountDetails: {
