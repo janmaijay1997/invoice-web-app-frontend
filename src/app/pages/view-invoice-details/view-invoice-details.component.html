@@ -48,7 +48,8 @@
                                 <th>Department</th>
                                 <td>
                                     <select formControlName="department" class="small-input">
-                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.departmentName">
                                             {{department.departmentName}}
                                         </option>
                                     </select>
@@ -72,11 +73,11 @@
                                         <p>{{ invoiceCreateFormGroup.get('billTo')?.value }}</p>
                                     </ng-container>
                                     <ng-container *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH' ">
-                                    <select formControlName="billTo" class="small-input">
-                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
-                                            {{vendor.vendorName}}
-                                        </option>
-                                    </select>
+                                        <select formControlName="billTo" class="small-input">
+                                            <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
+                                                {{vendor.vendorName}}
+                                            </option>
+                                        </select>
                                     </ng-container>
                                 </td>
                             </tr>
@@ -110,17 +111,27 @@
                                 <th style="min-width: 170px">Cost Code</th>
                                 <th style="min-width: 170px">Expense Type</th>
                                 <th style="min-width: 170px">Rate of SAR</th>
-                                <th style="min-width: 170px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Total</th>
+                                <th style="min-width: 170px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Total</th>
                                 <th style="min-width: 170px">Currency</th>
-                                <th style="min-width: 170px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Reccuring</th>
+                                <th style="min-width: 170px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">Reccuring</th>
                                 <th style="min-width: 200px">Description</th>
-                                <th style="min-width: 200px" *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">invoiceTotal</th>
-                                 <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Submitter</th>
-                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">ItemAmount</th>
-                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Quantity</th>
-                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">SubTotal</th>
-                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">PtcAdvance</th>
-                                <th style="min-width: 200px"  *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Total</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">invoiceTotal
+                                </th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Submitter</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">ItemAmount</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Quantity</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">SubTotal</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">PtcAdvance</th>
+                                <th style="min-width: 200px"
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Total</th>
                                 <th style="min-width: 170px" *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">Action</th>
                             </tr>
                         </thead>
@@ -141,6 +152,11 @@
                                         <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
                                             {{vendor.vendorName}}
                                         </option>
+
+                                         <option *ngIf="isVendorCustom(i)"
+                                            [ngValue]="items.at(i)?.get('vendorName')?.value || ''">
+                                            {{ items.at(i)?.get('vendorName')?.value }}
+                                        </option>
                                     </select>
                                 </td>
 
@@ -154,10 +170,17 @@
                                 <td>
                                     <select formControlName="costCode" class="small-input">
                                         <option *ngFor="let costCenter of costCenterList" [ngValue]="costCenter.code">
-                                            {{costCenter.code}}
+                                            {{ costCenter.code }}
+                                        </option>
+
+                                        <option *ngIf="isCostCodeCustom(i)"
+                                            [ngValue]="items.at(i)?.get('costCode')?.value || ''">
+                                            {{ items.at(i)?.get('costCode')?.value || 'Custom' }}
                                         </option>
                                     </select>
                                 </td>
+
+
 
                                 <!-- Expense Code Dropdown -->
                                 <td>
@@ -165,11 +188,17 @@
                                         <option *ngFor="let expenseType of expenseTypeList"
                                             [ngValue]="expenseType.expenseCode">
                                             {{expenseType.expenseCode}}</option>
+
+                                        <option *ngIf="isExpenseTypeCustom(i)"
+                                            [ngValue]="items.at(i)?.get('expenseType')?.value || ''">
+                                            {{ items.at(i)?.get('expenseType')?.value }}
+                                        </option>
                                     </select>
                                 </td>
                                 <td>
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
-                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)" (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)"
+                                        (change)="getTotalInvoiceAmountForRowPettyCash(item)">
                                 </td>
 
 
@@ -178,16 +207,20 @@
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
 
-                                
-                                 <td>
+
+                                <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencyName">
                                             {{ currencyValue.currencyName}}
                                         </option>
+                                        <option *ngIf="isCurrencyCustom(i)"
+                                            [ngValue]="items.at(i)?.get('currency')?.value || ''">
+                                            {{ items.at(i)?.get('currency')?.value }}
+                                        </option>
                                     </select>
                                 </td>
-                               
+
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">
                                     <select formControlName="recurring" class="small-input">
                                         <option *ngFor="let recurring of recurrings" [ngValue]="recurring">{{recurring}}
@@ -207,47 +240,47 @@
 
 
 
-                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value == 'PETTY CASH'">
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value == 'PETTY CASH'">
                                     <input type="text" formControlName="submitterName" placeholder="submitterName">
                                 </td>
 
-                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
                                     <input type="number" formControlName="itemAmount" placeholder="itemAmount"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                        class="small-input" (change)="getTotalInvoiceAmountForRowPettyCash(item)">
                                 </td>
 
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
                                     <input type="number" formControlName="quantity" placeholder="Quantity"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)">
-                                </td>
-
-                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
-                                    <input type="number" formControlName="subTotal" placeholder="subTotal"
-                                        class="small-input"  readonly> 
-                                </td>
-                                
-                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
-                                    <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRowPettyCash(item)"> 
+                                        class="small-input" (change)="getTotalInvoiceAmountForRowPettyCash(item)">
                                 </td>
 
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
-                                    <input type="number" formControlName="total" placeholder="Total"
-                                        class="small-input" readonly> 
+                                    <input type="number" formControlName="subTotal" placeholder="subTotal"
+                                        class="small-input" readonly>
                                 </td>
-                                
-                                
-                                <td *ngIf="checkinvoiceStatus !== 'SUBMITTED' " >
+
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                </td>
+
+                                <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
+                                    <input type="number" formControlName="total" placeholder="Total" class="small-input"
+                                        readonly>
+                                </td>
+
+
+                                <td *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">
                                     <button type="button" (click)="removeItem(i)">Remove</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' " >
+                <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">
                     <button id="addItem" type="button" (click)="addItem()">Add Item</button>
                 </ng-container>
-              
+
             </div>
 
             <!-- Sub Total -->
@@ -274,8 +307,9 @@
                 </table>
             </div>
             <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">
-                <button id="saveInvoice" type="button" (click)="saveInvoice()" >Save Invoice</button>
-                <button id="submitInvoice" class="ml-2" type="button" (click)="submitInvoice()" *ngIf="isViewSubmitButton">Submit Invoice</button>
+                <button id="saveInvoice" type="button" (click)="saveInvoice()">Save Invoice</button>
+                <button id="submitInvoice" class="ml-2" type="button" (click)="submitInvoice()"
+                    *ngIf="isViewSubmitButton">Submit Invoice</button>
             </ng-container>
         </div>
     </div>

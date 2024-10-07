@@ -60,7 +60,7 @@ interface Vendor {
 })
 
 export class ViewInvoiceDetailsComponent implements OnInit {
-    subTotal: number = 0;
+  subTotal: number = 0;
   checkinvoiceStatus: any;
   subscription: Subscription | undefined;
   sidebarActive: boolean = false;
@@ -110,7 +110,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       const invoiceNumber = params['invoiceNumber'];
       // Fetch the invoice data using the invoiceId
       this.viewInvoice(invoiceNumber);
-      
+
     });
 
     const invoice = this.invoiceDataService.getInvoice();
@@ -143,6 +143,28 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
 
+  // Inside your component class
+  isCostCodeCustom(index: number): boolean {
+    const item = this.items.at(index).value;
+    return !this.costCenterList.some(center => center.code === item.costCode);
+  }
+
+  isExpenseTypeCustom(index: number): boolean {
+    const item = this.items.at(index).value;
+    return !this.expenseTypeList.some(center => center.expenseCode === item.expenseType);
+  }
+
+  isVendorCustom(index: number): boolean {
+    const item = this.items.at(index).value;
+    return !this.vendorList.some(center => center.vendorName === item.vendorName);
+  }
+
+  isCurrencyCustom(index: number): boolean {
+    const item = this.items.at(index).value;
+    return !this.currenciesList.some(center => center.currencyName === item.currency);
+  }
+  
+
 
   private populateForm(invoice: any): void {
     this.invoiceCreateFormGroup.patchValue({
@@ -153,7 +175,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       billTo: invoice.vendorDetails.billTo,
       paymentDueDate: invoice.vendorDetails.paymentDue,
       vendorBankDetails: invoice.vendorDetails.vendorBankDetails,
-      invoiceStatus :  invoice.vendorDetails.vendorBankDetails,
+      invoiceStatus: invoice.vendorDetails.vendorBankDetails,
       adjustments: invoice.total.adjustments || '0', // Handle optional adjustments
     });
 
@@ -161,36 +183,43 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
 
     if (invoice.items) {
-        invoice.items.forEach((item: any) => {
-          const itemGroup = this.itemFormGroup();
-          itemGroup.patchValue({
-            vendorInvoiceRef: item.vendorInvoiceRef,
-            vendorName: item.vendorName,
-            vendorId: item.vendorId,
-            vendorInvoiceDate: item.vendorInvoiceDate,
-            costCode: item.costCode,
-            expenseType: item.expenseType,
-            description: item.description,
-            rateOfSAR: item.rateOfSAR,
-            currency: item.currency,
-            recurring: item.recurring,
-            invoiceAmount: item.invoiceAmount,
-            invoiceTotal: item.invoiceTotal,
+      invoice.items.forEach((item: any) => {
+        const itemGroup = this.itemFormGroup();
+        itemGroup.patchValue({
+          vendorInvoiceRef: item.vendorInvoiceRef,
+          vendorName: item.vendorName,
+          vendorId: item.vendorId,
+          vendorInvoiceDate: item.vendorInvoiceDate,
+          costCode: item.costCode,
+          expenseType: item.expenseType,
+          description: item.description,
+          rateOfSAR: item.rateOfSAR,
+          currency: item.currency,
+          recurring: item.recurring,
+          invoiceAmount: item.invoiceAmount,
+          invoiceTotal: item.invoiceTotal,
 
-            submitterName: item.submitterName,
-            itemAmount: item.itemAmount,
-            quantity: item.quantity,
-            subTotal: item.subTotal,
-            ptcAdvance: item.ptcAdvance,
-            total: item.total,
-          });
-          this.items.push(itemGroup); // Add the item to the FormArray
+          submitterName: item.submitterName,
+          itemAmount: item.itemAmount,
+          quantity: item.quantity,
+          subTotal: item.subTotal,
+          ptcAdvance: item.ptcAdvance,
+          total: item.total,
+
         });
-    
+        const costCodeExists = this.costCenterList.some(center => center.code === item.costCode);
+        if (!costCodeExists) {
+          itemGroup.get('costCode')?.setValue(item.costCode);
+        }
+
+        this.items.push(itemGroup); // Add the item to the FormArray
+      });
+
+
 
     }
-    if(invoice.invoiceStatus=='SUBMITTED'){
-    this.invoiceCreateFormGroup.disable()
+    if (invoice.invoiceStatus == 'SUBMITTED') {
+      this.invoiceCreateFormGroup.disable()
     }
   }
 
@@ -254,7 +283,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
 
-      
+
       submitterName: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       itemAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       quantity: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
@@ -355,7 +384,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
 
 
-   getTotalInvoiceAmountPettyCash(): number {
+  getTotalInvoiceAmountPettyCash(): number {
     const items = this.items.value; // Get the array of items
     let total = 0;
 
