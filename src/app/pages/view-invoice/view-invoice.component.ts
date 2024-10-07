@@ -121,4 +121,14 @@ export class ViewInvoiceComponent implements OnInit {
      this.invoiceList= this.invoiceList.filter((invoice=>invoice.invoiceNumber.includes(this.filterValue)));
     }
   }
+  downloadPdf(invoiceId:any) {
+    this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: string) => {
+      const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf;
+
+      const link = document.createElement('a');
+      link.href = pdfDataUrl;
+      link.download = invoiceId+'.pdf';  // File name for download
+      link.click();
+    });
+  }
 }

@@ -24,4 +24,9 @@ export class InvoiceService {
   deleteInvoice(invoiceId: string): any {
     return this.httpClient.delete(environment.deleteInvoiceUrl + '?id=' + invoiceId);
   }
+  generatePdf(invoiceId: string): any {
+    return this.httpClient.get<any>(`${environment.getInvoicePdfUrl}/${invoiceId}`);
+
+
+  }
 }

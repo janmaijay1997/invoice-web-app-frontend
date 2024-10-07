@@ -36,6 +36,8 @@
                                 (click)="deleteInvoice(invoice.invoiceNumber)">
                                 <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                             </button>
+                            <button id="pdfDownload"
+                            (click)="downloadPdf(invoice.invoiceNumber)">Invoice Pdf</button>
                         </td>
                     </tr>
                 </ng-template>

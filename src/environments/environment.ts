@@ -13,6 +13,7 @@ export const environment = {
   invoiceListUrl: baseUrl + '/invoice/invoices',
   invoiceDetailsUrl: baseUrl + '/invoice/invoiceDetails/',
   deleteInvoiceUrl: baseUrl + '/invoice/delete-invoice',
+  getInvoicePdfUrl: baseUrl + '/invoice/generateinvoice',
 
 
   createCostCenterUrl: baseUrl + '/invoice/create-costcenter',
