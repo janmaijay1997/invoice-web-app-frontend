@@ -122,8 +122,8 @@ export class ViewInvoiceComponent implements OnInit {
     }
   }
   downloadPdf(invoiceId:any) {
-    this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: string) => {
-      const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf;
+    this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: any) => {
+      const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf.pdfData;
 
       const link = document.createElement('a');
       link.href = pdfDataUrl;
