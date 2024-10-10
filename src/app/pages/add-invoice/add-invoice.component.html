@@ -187,7 +187,11 @@
                                         class="small-input" readonly>
                                 </td>
                                 <td>
-                                    <button type="button" (click)="removeItem(i)">Remove</button>
+                                    <!-- <button type="button" (click)="removeItem(i)">Remove</button> -->
+                                    <button id="delete" type="button" class="delete-btn ml-5"
+                                (click)="removeItem(i)">
+                                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                            </button>
                                 </td>
                             </tr>
                         </tbody>

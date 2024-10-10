@@ -9,6 +9,7 @@ interface CostCenter {
   id: number,
   name: string;
   code: string;
+  description: string;
 }
 
 interface ExpenseType {
@@ -92,6 +93,7 @@ export class DashboardComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       code: ['', Validators.required],
+      description: ['',Validators.required],
     });
 
 
@@ -209,11 +211,13 @@ export class DashboardComponent implements OnInit {
           id: [newCostCenter.id],
           name: [newCostCenter.name],
           code: [newCostCenter.code],
+          description: [newCostCenter.description]
         }));
       } else {
         this.costCenters.push(this.fb.group({
           name: [newCostCenter.name],
           code: [newCostCenter.code],
+          description: [newCostCenter.description],
         }));
       }
 
@@ -240,6 +244,7 @@ export class DashboardComponent implements OnInit {
       id: index.id,
       name: index.name,
       code: index.code,
+      description: index.description,
     });
     this.showAddCostCenterModel = true;
   }

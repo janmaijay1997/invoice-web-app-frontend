@@ -48,7 +48,8 @@
                                 <th>Department</th>
                                 <td>
                                     <select formControlName="department" class="small-input">
-                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.departmentName">
                                             {{department.departmentName}}
                                         </option>
                                     </select>
@@ -159,7 +160,7 @@
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
-                        
+
                                 <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
@@ -176,33 +177,36 @@
                                     <input type="text" formControlName="submitterName" placeholder="Description">
                                 </td>
 
-                                 <td>
+                                <td>
                                     <input type="number" formControlName="itemAmount" placeholder="total"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)">
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
 
                                 <td>
                                     <input type="number" formControlName="quantity" placeholder="Quantity"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)">
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
 
-                                 <td>
+                                <td>
                                     <input type="number" formControlName="subTotal" placeholder="subTotal"
-                                        class="small-input"  readonly> 
+                                        class="small-input" readonly>
                                 </td>
-                                
-                                 <td>
+
+                                <td>
                                     <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
-                                        class="small-input"  (change)="getTotalInvoiceAmountForRow(item)"> 
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
 
                                 <td>
-                                    <input type="number" formControlName="total" placeholder="Total"
-                                        class="small-input" readonly> 
+                                    <input type="number" formControlName="total" placeholder="Total" class="small-input"
+                                        readonly>
                                 </td>
 
                                 <td>
-                                    <button type="button" (click)="removeItem(i)">Remove</button>
+                                    <!-- <button type="button" (click)="removeItem(i)">Remove</button> -->
+                                    <button id="delete" type="button" class="delete-btn ml-5" (click)="removeItem(i)">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

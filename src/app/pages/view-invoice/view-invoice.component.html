@@ -31,13 +31,11 @@
                         <td style="min-width:100px">
                             <button id="view" (click)="viewInvoice(invoice.invoiceNumber)">View</button>
                             <button id="invoice" *ngIf="invoice.invoiceStatus == 'SUBMITTED'"
-                                (click)="editInvoice(invoice.invoiceNumber)">Invoice</button>
+                               (click)="downloadPdf(invoice.invoiceNumber)">Invoice</button>
                             <button id="delete" type="button" class="delete-btn ml-5"
                                 (click)="deleteInvoice(invoice.invoiceNumber)">
                                 <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                             </button>
-                            <button id="pdfDownload"
-                            (click)="downloadPdf(invoice.invoiceNumber)">Invoice Pdf</button>
                         </td>
                     </tr>
                 </ng-template>

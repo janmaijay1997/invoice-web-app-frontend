@@ -55,6 +55,15 @@ td {
     margin-bottom: 10px;    /* Space between button and items table */
 }
 
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
 .addItem:hover {
     background-color: #0056b3; /* Darken color on hover */
 }
