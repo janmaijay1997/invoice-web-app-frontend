@@ -76,7 +76,7 @@ export class AddInvoiceComponent implements OnInit {
   invoiceStatus: string[] = [];
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
-
+  selectedVendorBankDetails:any;
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
@@ -336,5 +336,11 @@ export class AddInvoiceComponent implements OnInit {
         console.error('Error fetching details:', error);
       }
     );
+  }
+
+  onVendorChangeEvent(e:any){
+    this.selectedVendorBankDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
+    console.log(this.selectedVendorBankDetails);
+    
   }
 }

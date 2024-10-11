@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     console.log("User logged out");
     localStorage.clear();
+    localStorage.removeItem('token')
     this.router.navigate(['/login'])
     // You can add actual logout logic here, like redirecting to a login page or clearing session data
   }

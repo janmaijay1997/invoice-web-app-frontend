@@ -19,6 +19,9 @@ table th, table td {
   padding: 10px; /* Reduce the padding to make the row height smaller */
 }
 
+.edit-cust-btn{
+  color: #fff;
+}
 
 .delete-btn {
   background-color: red;
@@ -144,4 +147,30 @@ button {
   to {
     transform: translateY(0);
   }
+}
+
+.accordian-btn-postion{
+  position: relative;
+}
+
+.dashboard-accordian{
+  margin: 0 25px !important;
+}
+
+.accordion-button {
+  background-color: transparent !important; /* Remove background color */
+  color: inherit !important;                /* Keep the text color same */
+  box-shadow: none !important;              /* Remove any shadow effects */
+}
+
+.custom-padding{
+  padding: 5px !important;
+}
+
+.accordian-btn-postion {
+  margin-right: 10px; /* Adjust margin to position button */
+}
+
+.custom-padding {
+  padding-right: 0.75rem; /* Adjust if needed */
 }

@@ -68,8 +68,8 @@
                             <tr>
                                 <th>Bill To</th>
                                 <td>
-                                    <select formControlName="billTo" class="small-input">
-                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
+                                    <select formControlName="billTo" class="small-input" (change)="onVendorChangeEvent($event)">
+                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName" >
                                             {{vendor.vendorName}}
                                         </option>
                                     </select>
@@ -84,8 +84,16 @@
                             </tr>
                             <tr>
                                 <th>Vendor Bank Details</th>
-                                <td>Dropdown</td>
-                            </tr>
+                                <td>
+                                  <ng-container *ngIf="selectedVendorBankDetails">
+                                    <div class="bank-detail-container mt-3">
+                                      <label class="bank-name">{{ selectedVendorBankDetails.bankName }}</label>
+                                      <label class="bank-detail">{{ selectedVendorBankDetails.ibanNumber }}</label>
+                                      <label class="bank-detail">{{ selectedVendorBankDetails.bankAddress }}</label>
+                                    </div>
+                                  </ng-container>
+                                </td>
+                              </tr>
                         </tbody>
                     </table>
                 </div>

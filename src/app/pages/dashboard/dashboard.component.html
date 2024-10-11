@@ -1,264 +1,327 @@
 <div class="component_body">
   <h1 class="component_title">Dashboard</h1>
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h3>Cost Center</h3>
-        <button id="AddCostCenter" (click)="openAddCostCenterModal()">Add</button>
-        <form [formGroup]="costCenterForm">
-          <!-- Scrollable container for the table -->
+
+  <div class="accordion dashboard-accordian" id="accordionExample">
+   
+    <div class="accordion-item">
+      <h2 class="accordion-header mb-0" id="headingOne">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <!-- Accordion Button (Left Side) -->
+          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            <h1 class="mb-0 ml-5">  Cost Center </h1>
+          </button>
+          <!-- Add Button (Right Side) -->
+          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddCostCenterModal($event)">
+            Add
+          </button>
+        </div>
+      </h2>
+    
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="card-body">
+            <form [formGroup]="costCenterForm">
+              <!-- Scrollable container for the table -->
+              <div class="table-container table-responsive">
+                <table id="costCenterTable">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th style="min-width: 170px">Cost Center Name</th>
+                      <th style="min-width: 170px">Cost Center Code</th>
+                      <th style="min-width: 170px">Description</th>
+                      <th style="min-width: 100px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let costCenter of costCenterList; let i = index">
+                      <td>{{ costCenter.name }}</td>
+                      <td>{{ costCenter.code }}</td>
+                      <td>{{ costCenter.description }}</td>
+                      <td>
+                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editCostCenter(costCenter)">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button id="delete" type="button" class="btn btn-sm btn-danger ml-5" (click)="deleteCostCenter(costCenter)">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header mb-0" id="headingOne">
+      <div class="d-flex w-100 justify-content-between align-items-center">
+        <!-- Accordion Button (Left Side) -->
+        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+          aria-expanded="true" aria-controls="collapseTwo">
+          <h1 class="mb-0 ml-5">  Expense Type </h1>
+        </button>
+        <!-- Add Button (Right Side) -->
+        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddExpenseTypeModal($event)">
+          Add
+        </button>
+      </div>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <div class="card-body">
+          <form [formGroup]="expenseTypeForm">
+            <!-- Scrollable container for the table -->
+            <div class="table-container">
+              <table id="expenseTypeTable">
+                <thead>
+                  <tr>
+                    <th style="min-width: 170px">Name of Chart of Account</th>
+                    <th style="min-width: 170px">Code (6-8 digits only)</th>
+                    <th style="min-width: 100px">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let expenseType of expenseTypeList; let i = index">
+                    <td>{{ expenseType.expenseName }}</td>
+                    <td>{{ expenseType.expenseCode }}</td>
+                    <td>
+                      <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editExpenseCenter(expenseType)">
+                        <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                      </button>
+                      <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteExpenseType(expenseType)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+  
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header mb-0" id="headingOne">
+      <div class="d-flex w-100 justify-content-between align-items-center">
+        <!-- Accordion Button (Left Side) -->
+        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+          aria-expanded="true" aria-controls="collapseThree">
+          <h1 class="mb-0 ml-5">  Departments </h1>
+        </button>
+        <!-- Add Button (Right Side) -->
+        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddDepartmentsModal($event)">
+          Add
+        </button>
+      </div>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <div class="card-body">
           <div class="table-container">
-            <table id="costCenterTable">
+            <table id="departmentType">
               <thead>
                 <tr>
-                  <th style="min-width: 170px">Cost Center Name</th>
-                  <th style="min-width: 170px">Cost Center Code</th>
-                  <th style="min-width: 170px">Description</th>
+                  <th style="min-width: 170px">Department Name</th>
+                  <th style="min-width: 170px">Manager</th>
+                  <th style="min-width: 170px">Submitter</th>
                   <th style="min-width: 100px">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let costCenter of costCenterList; let i = index">
-                  <td>{{ costCenter.name }}</td>
-                  <td>{{ costCenter.code }}</td>
-                  <td>{{costCenter.description}}</td>
+                <tr *ngFor="let department of departmentList; let i = index">
+                  <td>{{ department.departmentName }}</td>
+                  <td>{{ department.departmentManager }}</td>
+                  <td>{{ department.submitter }}</td>
                   <td>
-                    <button id="edit" type="button" class="edit-btn" (click)="editCostCenter(costCenter)">
+                    <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn " (click)="editDepartment(department)">
                       <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
                     </button>
-                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteCostCenter(costCenter)">
-                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteDepartment(department)">
+                      <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-
           </div>
-        </form>
+          </div>
       </div>
-      <div class="col">
-        <h3>Expense Type</h3>
-        <button id="expenseType" (click)="openAddExpenseTypeModal()">Add</button>
-        <form [formGroup]="expenseTypeForm">
-          <!-- Scrollable container for the table -->
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header mb-0" id="headingOne">
+      <div class="d-flex w-100 justify-content-between align-items-center">
+        <!-- Accordion Button (Left Side) -->
+        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+          aria-expanded="true" aria-controls="collapseFour">
+          <h1 class="mb-0 ml-5">  Vendor </h1>
+        </button>
+        <!-- Add Button (Right Side) -->
+        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddVendorModal($event)">
+          Add
+        </button>
+      </div>
+    </h2>
+    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <div class="card-body">
           <div class="table-container">
-            <table id="expenseTypeTable">
+            <table id="vendorTable">
               <thead>
                 <tr>
-                  <th style="min-width: 170px">Name of Chart of Account</th>
-                  <th style="min-width: 170px">Code (6-8 digits only)</th>
-                  <th style="min-width: 100px">Actions</th>
+                  <th>ID</th>
+                  <th>Vendor ID</th>
+                  <th>Vendor Name</th>
+                  <th>Bank Name</th>
+                  <th>IBAN Number</th>
+                  <th>Bank Address</th>
+                  <th>Address</th>
+                  <th>Phone Number</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let expenseType of expenseTypeList; let i = index">
-                  <td>{{ expenseType.expenseName }}</td>
-                  <td>{{ expenseType.expenseCode }}</td>
+                <tr *ngFor="let vendor of vendorList">
+                  <td>{{ vendor.id }}</td>
+                  <td>{{ vendor.vendorId }}</td>
+                  <td>{{ vendor.vendorName }}</td>
+                  <td>{{ vendor.bankDetails.bankName }}</td>
+                  <td>{{ vendor.bankDetails.ibanNumber }}</td>
+                  <td>{{ vendor.bankDetails.bankAddress }}</td>
+                  <td>{{ vendor.address }}</td>
+                  <td>{{ vendor.phoneNumber }}</td>
                   <td>
-                    <button id="edit" type="button" class="edit-btn" (click)="editExpenseCenter(expenseType)">
+                    <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editVendor(vendor)">
                       <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
                     </button>
-                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteExpenseType(expenseType)">
-                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteVendor(vendor)">
+                      <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-
           </div>
-        </form>
+          </div>
       </div>
     </div>
   </div>
+</div>
+</div>
 
+<!-- All model codes-->
 
-  <!-- Modal Popup for Adding New Cost Center -->
-  <div *ngIf="showAddCostCenterModel" class="modal">
-    <div class="modal-content">
-      <h3>{{ editCostCenterModel ?'Edit Cost Center' : "Add New Cost Center" }}</h3>
-      <form [formGroup]="newCostCenterForm">
-        <div>
-          <label for="newName">Name:</label>
-          <input id="newName" formControlName="name" type="text" placeholder="Cost Center Name">
-        </div>
-        <div>
-          <label for="newCode">Code:</label>
-          <input id="newCode" formControlName="code" type="text" placeholder="Cost Center Code">
-        </div>
-        <div>
-          <label for="newDescription">Description:</label>
-          <input id="newDescription" formControlName="description" type="text" placeholder="Cost Center Decription">
-        </div>
-        <button type="button" (click)="createNewCostCenter()">{{ editCostCenterModel ?'Update' : "Create" }}</button>
-        <button type="button" (click)="closeAddCostCenterModel()">Cancel</button>
-      </form>
-    </div>
+<!-- Modal Popup for Adding New Cost Center -->
+<div *ngIf="showAddCostCenterModel" class="modal">
+  <div class="modal-content">
+    <h3>{{ editCostCenterModel ?'Edit Cost Center' : "Add New Cost Center" }}</h3>
+    <form [formGroup]="newCostCenterForm">
+      <div>
+        <label for="newName">Name:</label>
+        <input id="newName" formControlName="name" type="text" placeholder="Cost Center Name">
+      </div>
+      <div>
+        <label for="newCode">Code:</label>
+        <input id="newCode" formControlName="code" type="text" placeholder="Cost Center Code">
+      </div>
+      <div>
+        <label for="newDescription">Description:</label>
+        <input id="newDescription" formControlName="description" type="text" placeholder="Cost Center Decription">
+      </div>
+      <button type="button" (click)="createNewCostCenter()">{{ editCostCenterModel ?'Update' : "Create" }}</button>
+      <button type="button" (click)="closeAddCostCenterModel()">Cancel</button>
+    </form>
   </div>
+</div>
 
-  <!-- Modal Popup for Adding New Expense Type -->
-  <div *ngIf="showAddExpenseTypeModal" class="modal">
-    <div class="modal-content">
-      <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
-      <form [formGroup]="newExpenseTypeForm">
-        <div>
-          <label for="expenseName">Type:</label>
-          <input id="expenseName" formControlName="expenseName" type="text" placeholder="ExpenseType Name">
-        </div>
-        <div>
-          <label for="expenseCode">Code:</label>
-          <input id="expenseCode" formControlName="expenseCode" type="text" placeholder="ExpenseType Code">
-        </div>
-        <button type="button" (click)="createExpenseType()"> {{ editExpenseTypeModel ? 'Update' : 'Create' }}</button>
-        <button type="button" (click)="closeExpenseTypeModal()">Cancel</button>
-      </form>
-    </div>
+<!-- Modal Popup for Adding New Expense Type -->
+<div *ngIf="showAddExpenseTypeModal" class="modal">
+  <div class="modal-content">
+    <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
+    <form [formGroup]="newExpenseTypeForm">
+      <div>
+        <label for="expenseName">Type:</label>
+        <input id="expenseName" formControlName="expenseName" type="text" placeholder="ExpenseType Name">
+      </div>
+      <div>
+        <label for="expenseCode">Code:</label>
+        <input id="expenseCode" formControlName="expenseCode" type="text" placeholder="ExpenseType Code">
+      </div>
+      <button type="button" (click)="createExpenseType()"> {{ editExpenseTypeModel ? 'Update' : 'Create' }}</button>
+      <button type="button" (click)="closeExpenseTypeModal()">Cancel</button>
+    </form>
   </div>
+</div>
 
 
-  <!-- Modal Popup for Adding New Department -->
-  <div *ngIf="showAddDepartmenteModal" class="modal">
-    <div class="modal-content">
-      <h3>{{editDepartmenteModal ? 'Edit Departments' : 'Add Departments'}}</h3>
-      <form [formGroup]="newDepartmentForm">
-        <div>
-          <label for="departmentName">Name:</label>
-          <input id="departmentName" formControlName="departmentName" type="text" placeholder="Name">
-        </div>
-        <div>
-          <label for="departmentManager">Code:</label>
-          <input id="departmentManager" formControlName="departmentManager" type="text" placeholder="Manager">
-        </div>
-        <div>
-          <label for="submitter">Submitter:</label>
-          <input id="submitter" formControlName="submitter" type="text" placeholder="Submitter">
-        </div>
-        <button type="button" (click)="createDepartments()">{{editDepartmenteModal ? 'Update' : 'Create'}}</button>
-        <button type="button" (click)="closeDepartmentsModal()">Cancel</button>
-      </form>
-    </div>
+<!-- Modal Popup for Adding New Department -->
+<div *ngIf="showAddDepartmenteModal" class="modal">
+  <div class="modal-content">
+    <h3>{{editDepartmenteModal ? 'Edit Departments' : 'Add Departments'}}</h3>
+    <form [formGroup]="newDepartmentForm">
+      <div>
+        <label for="departmentName">Name:</label>
+        <input id="departmentName" formControlName="departmentName" type="text" placeholder="Name">
+      </div>
+      <div>
+        <label for="departmentManager">Code:</label>
+        <input id="departmentManager" formControlName="departmentManager" type="text" placeholder="Manager">
+      </div>
+      <div>
+        <label for="submitter">Submitter:</label>
+        <input id="submitter" formControlName="submitter" type="text" placeholder="Submitter">
+      </div>
+      <button type="button" (click)="createDepartments()">{{editDepartmenteModal ? 'Update' : 'Create'}}</button>
+      <button type="button" (click)="closeDepartmentsModal()">Cancel</button>
+    </form>
   </div>
+</div>
 
-  <div *ngIf="showAddVendorModal" class="modal">
-    <div class="modal-content">
-      <h3>{{ editVendorModal ? 'Edit Vendor' : 'Add Vendor' }}</h3>
-      <form [formGroup]="newVendorForm">
+<!-- Modal Popup for Adding New vendor -->
+<div *ngIf="showAddVendorModal" class="modal">
+  <div class="modal-content">
+    <h3>{{ editVendorModal ? 'Edit Vendor' : 'Add Vendor' }}</h3>
+    <form [formGroup]="newVendorForm">
+      <div>
+        <label for="vendorName">Vendor Name:</label>
+        <input id="vendorName" formControlName="vendorName" type="text" placeholder="Vendor Name">
+      </div>
+      <div>
+        <label for="vendorName">Vendor Id:</label>
+        <input id="vendorName" formControlName="vendorId" type="text" placeholder="Vendor Id">
+      </div>
+      <div>
+        <label for="address">Address:</label>
+        <input id="address" formControlName="address" type="text" placeholder="Address">
+      </div>
+      <div>
+        <label for="phoneNumber">Phone Number:</label>
+        <input id="phoneNumber" formControlName="phoneNumber" type="text" placeholder="Phone Number">
+      </div>
+      <div formGroupName="bankDetails">
         <div>
-          <label for="vendorName">Vendor Name:</label>
-          <input id="vendorName" formControlName="vendorName" type="text" placeholder="Vendor Name">
+          <label for="bankName">Bank Name:</label>
+          <input id="bankName" formControlName="bankName" type="text" placeholder="Bank Name">
         </div>
         <div>
-          <label for="vendorName">Vendor Id:</label>
-          <input id="vendorName" formControlName="vendorId" type="text" placeholder="Vendor Id">
+          <label for="ibanNumber">IBAN Number:</label>
+          <input id="ibanNumber" formControlName="ibanNumber" type="text" placeholder="IBAN Number">
         </div>
         <div>
-          <label for="address">Address:</label>
-          <input id="address" formControlName="address" type="text" placeholder="Address">
+          <label for="bankAddress">Bank Address:</label>
+          <input id="bankAddress" formControlName="bankAddress" type="text" placeholder="Bank Address">
         </div>
-        <div>
-          <label for="phoneNumber">Phone Number:</label>
-          <input id="phoneNumber" formControlName="phoneNumber" type="text" placeholder="Phone Number">
-        </div>
-        <div formGroupName="bankDetails">
-          <div>
-            <label for="bankName">Bank Name:</label>
-            <input id="bankName" formControlName="bankName" type="text" placeholder="Bank Name">
-          </div>
-          <div>
-            <label for="ibanNumber">IBAN Number:</label>
-            <input id="ibanNumber" formControlName="ibanNumber" type="text" placeholder="IBAN Number">
-          </div>
-          <div>
-            <label for="bankAddress">Bank Address:</label>
-            <input id="bankAddress" formControlName="bankAddress" type="text" placeholder="Bank Address">
-          </div>
-        </div>
-        <button type="button" (click)="createVendor()">{{ editVendorModal ? 'Update' : 'Create' }}</button>
-        <button type="button" (click)="closeVendorModal()">Cancel</button>
-      </form>
-    </div>
+      </div>
+      <button type="button" (click)="createVendor()">{{ editVendorModal ? 'Update' : 'Create' }}</button>
+      <button type="button" (click)="closeVendorModal()">Cancel</button>
+    </form>
   </div>
-
-
-
-  <!-- Row for Departments/Vendors table -->
-  <div class="horizontal-item">
-    <h3>Departments</h3>
-    <button id="departments" (click)="openAddDepartmentsModal()">Add</button>
-    <!-- Scrollable container for the table -->
-    <div class="table-container">
-      <table id="departmentType">
-        <thead>
-          <tr>
-            <th style="min-width: 170px">Department Name</th>
-            <th style="min-width: 170px">Manager</th>
-            <th style="min-width: 170px">Submitter</th>
-            <th style="min-width: 100px">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let department of departmentList; let i = index">
-            <td>{{ department.departmentName }}</td>
-            <td>{{ department.departmentManager }}</td>
-            <td>{{ department.submitter }}</td>
-            <td>
-              <button id="edit" type="button" class="edit-btn" (click)="editDepartment(department)">
-                <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-              </button>
-              <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteDepartment(department)">
-                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="horizontal-item">
-    <h3>Vendor</h3>
-    <button id="departments" (click)="openAddVendorModal()">Add</button>
-    <!-- Scrollable container for the table -->
-    <div class="table-container">
-      <table id="vendorTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Vendor ID</th>
-            <th>Vendor Name</th>
-            <th>Bank Name</th>
-            <th>IBAN Number</th>
-            <th>Bank Address</th>
-            <th>Address</th>
-            <th>Phone Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let vendor of vendorList">
-            <td>{{ vendor.id }}</td>
-            <td>{{ vendor.vendorId }}</td>
-            <td>{{ vendor.vendorName }}</td>
-            <td>{{ vendor.bankDetails.bankName }}</td>
-            <td>{{ vendor.bankDetails.ibanNumber }}</td>
-            <td>{{ vendor.bankDetails.bankAddress }}</td>
-            <td>{{ vendor.address }}</td>
-            <td>{{ vendor.phoneNumber }}</td>
-            <td>
-              <button id="edit" type="button" class="edit-btn" (click)="editVendor(vendor)">
-                <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-              </button>
-              <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteVendor(vendor)">
-                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-  </div>
-
 </div>

@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       code: ['', Validators.required],
-      description: ['',Validators.required],
+      description: ['', Validators.required],
     });
 
 
@@ -138,6 +138,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.sidebarService.sidebarActive$.subscribe((state: any) => {
       console.log(state);
       this.sidebarActive = !state;
@@ -166,7 +167,8 @@ export class DashboardComponent implements OnInit {
     return this.departmentForm.get('vendors') as FormArray;
   }
 
-  openAddCostCenterModal() {
+  openAddCostCenterModal(event: Event) {
+    event.stopPropagation(); // Prevent the accordion toggle
     this.showAddCostCenterModel = true;
   }
   closeAddCostCenterModel() {
@@ -174,14 +176,16 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  openAddExpenseTypeModal() {
+  openAddExpenseTypeModal(event: Event) {
+    event.stopPropagation(); // Prevent the accordion toggle
     this.showAddExpenseTypeModal = true;
   }
   closeExpenseTypeModal() {
     this.showAddExpenseTypeModal = false;
   }
 
-  openAddDepartmentsModal() {
+  openAddDepartmentsModal(event: Event) {
+    event.stopPropagation(); // Prevent the accordion toggle
     this.showAddDepartmenteModal = true;
   }
   closeDepartmentsModal() {
@@ -190,7 +194,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  openAddVendorModal() {
+  openAddVendorModal(event: Event) {
+    event.stopPropagation(); // Prevent the accordion toggle
     this.showAddVendorModal = true;
   }
   closeVendorModal() {
@@ -278,18 +283,22 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteCostCenter(index: any) {
-    const updatedCostCenter = index.id;
+    const confirmed = window.confirm('Are you sure you want to delete this Cost Center?');
 
-    this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe((response: any) => {
-      this.toastr.success('Cost Center Deleted successfully', 'Success');
-      this.getCostCenterList();
-    },
-      (error: any) => {
-        console.error('Error Deleting Cost Center:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
+    if (confirmed) {
+      const updatedCostCenter = index.id;
+
+      this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe((response: any) => {
+        this.toastr.success('Cost Center Deleted successfully', 'Success');
+        this.getCostCenterList();
+      },
+        (error: any) => {
+          console.error('Error Deleting Cost Center:', error.error);
+          this.toastr.warning(error.error, 'Error');
+        });
+    }
   }
+
 
   // -----------------------------------------ExpenseType-------------------------------------------------------
 
@@ -367,17 +376,21 @@ export class DashboardComponent implements OnInit {
 
 
   deleteExpenseType(index: any) {
-    const updatedExpenseType = index.id;
+    const confirmed = window.confirm('Are you sure you want to delete this expense type?');
 
-    this.commonDetailsService.deleteExpenseTypes(updatedExpenseType).subscribe((response: any) => {
-      this.toastr.success('Expense Type Deleted successfully', 'Success');
-      this.expenseTypeList[index] = updatedExpenseType;
-    },
-      (error: any) => {
-        console.error('Error Deleting Expense Type:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
+    if (confirmed) {
+      const updatedExpenseType = index.id;
+
+      this.commonDetailsService.deleteExpenseTypes(updatedExpenseType).subscribe((response: any) => {
+        this.toastr.success('Expense Type Deleted successfully', 'Success');
+        this.expenseTypeList[index] = updatedExpenseType;
+      },
+        (error: any) => {
+          console.error('Error Deleting Expense Type:', error.error);
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+    }
   }
 
 
@@ -464,17 +477,21 @@ export class DashboardComponent implements OnInit {
 
 
   deleteDepartment(index: any) {
-    const updatedDepartment = index.id;
+    const confirmed = window.confirm('Are you sure you want to delete this department?');
 
-    this.commonDetailsService.deleteDepartments(updatedDepartment).subscribe((response: any) => {
-      this.toastr.success('Department Deleted successfully', 'Success');
-      this.getDepartmentsList();
-    },
-      (error: any) => {
-        console.error('Error Deleting Department:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
+    if (confirmed) {
+      const updatedDepartment = index.id;
+
+      this.commonDetailsService.deleteDepartments(updatedDepartment).subscribe((response: any) => {
+        this.toastr.success('Department Deleted successfully', 'Success');
+        this.getDepartmentsList();
+      },
+        (error: any) => {
+          console.error('Error Deleting Department:', error.error);
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+    }
   }
 
 
@@ -551,17 +568,20 @@ export class DashboardComponent implements OnInit {
 
 
   deleteVendor(index: any) {
-    const updatedDepartment = index.id;
+    const confirmed = window.confirm('Are you sure you want to delete this vendor?');
+    if (confirmed) {
+      const updatedDepartment = index.id;
 
-    this.commonDetailsService.deleteVendor(updatedDepartment).subscribe((response: any) => {
-      this.toastr.success('Vendor Deleted successfully', 'Success');
-      this.departmentList[index] = updatedDepartment;
-    },
-      (error: any) => {
-        console.error('Error Deleting Vendor:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
+      this.commonDetailsService.deleteVendor(updatedDepartment).subscribe((response: any) => {
+        this.toastr.success('Vendor Deleted successfully', 'Success');
+        this.departmentList[index] = updatedDepartment;
+      },
+        (error: any) => {
+          console.error('Error Deleting Vendor:', error.error);
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+    }
   }
 
 }
