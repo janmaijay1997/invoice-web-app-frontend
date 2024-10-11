@@ -24,6 +24,11 @@ export class DefaultRequestOptions implements HttpInterceptor {
         const clone = options.clone({ setHeaders: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
         return next.handle(clone).pipe( tap(() => {},
           (err: any) => {
+            if(err.status === 403){
+              localStorage.clear();
+              localStorage.removeItem('token');
+              this.router.navigate(['/login']);
+            }
             if (err instanceof HttpErrorResponse) {
               if (err.status !== 401) {
                 return;

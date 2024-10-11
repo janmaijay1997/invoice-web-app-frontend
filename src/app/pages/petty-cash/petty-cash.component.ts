@@ -373,4 +373,10 @@ export class PettyCashComponent implements OnInit {
       }
     );
   }
+
+  selectSubmitter(e:any){
+    const data = this.departmentList.find(data => data.submitter === e.target.value)?.departmentName;
+    this.departmentName?.setValue(data)
+  }
+
 }

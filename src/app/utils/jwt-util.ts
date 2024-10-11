@@ -7,3 +7,11 @@ export function extractRolesFromToken() {
      return decodedToken.roles ? decodedToken.roles.map((data: any) => data.authority) : [];
   }
 }
+
+export function getLoginUserEmail() {
+  const token = localStorage.getItem('token'); // Assuming JWT token is stored in local storage
+  if (token) {
+     const decodedToken :any = jwtDecode(token);
+     return decodedToken.sub;
+  }
+}

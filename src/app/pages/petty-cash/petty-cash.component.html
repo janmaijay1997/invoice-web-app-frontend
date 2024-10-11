@@ -37,7 +37,7 @@
                             <tr>
                                 <th>Submitter</th>
                                 <td>
-                                    <select formControlName="submitter" class="small-input">
+                                    <select formControlName="submitter" class="small-input" (change)="selectSubmitter($event)">
                                         <option *ngFor="let submitter of submitterList" [value]="submitter.name">
                                             {{submitter.name}}
                                         </option>
@@ -47,12 +47,13 @@
                             <tr>
                                 <th>Department</th>
                                 <td>
-                                    <select formControlName="department" class="small-input">
+                                   <label class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label> 
+                                    <!-- <select formControlName="department" class="small-input">
                                         <option *ngFor="let department of departmentList"
                                             [value]="department.departmentName">
                                             {{department.departmentName}}
                                         </option>
-                                    </select>
+                                    </select> -->
                                 </td>
                             </tr>
                         </tbody>

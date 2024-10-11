@@ -1,0 +1,40 @@
+.sidebar {
+    width: 250px; /* Set a fixed width for the sidebar */
+    background-color: #343a40; /* Dark background color */
+    color: white; /* Text color */
+    height: 100vh; /* Full height */
+    padding: 15px; /* Padding for the sidebar */
+    position: fixed; /* Keep it fixed on the left side */
+    overflow-y: auto; /* Enable scrolling for overflowing content */
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.sidebar ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.sidebar li {
+    padding: 10px 15px; /* Padding for each item */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center align the items */
+    transition: background-color 0.3s; /* Smooth transition for hover */
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.sidebar li:hover {
+    background-color: #495057; /* Background color on hover */
+}
+
+.sidebar li.active {
+    background-color: #007bff; /* Highlight active item */
+    font-weight: bold; /* Make active item bold */
+}
+
+.sidebar li i {
+    margin-right: 10px; /* Space between icon and text */
+}

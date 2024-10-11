@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 
 interface Accounts {
   id: string;
@@ -163,7 +164,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const item = this.items.at(index).value;
     return !this.currenciesList.some(center => center.currencyName === item.currency);
   }
-  
+
 
 
   private populateForm(invoice: any): void {
@@ -403,7 +404,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return total;
   }
 
-  getTotalAmountWithAdjustmentPettyCash(): number {
+  getTotalAmountWithOutPettyCash(): number {
     const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
     const subTotal = this.getTotalInvoiceAmount();
 
@@ -414,6 +415,16 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return grandTotal;
   }
 
+  getTotalAmountWithAdjustmentPettyCash() {
+    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
+    const subTotal = this.getTotalInvoiceAmountPettyCash();
+
+    // Ensure both values are numbers
+    const totalAdjustments = typeof adjustments === 'number' ? adjustments : parseFloat(adjustments) || 0;
+
+    const grandTotal = subTotal + totalAdjustments;
+    return grandTotal;
+  }
 
 
   // Method to add a new item to the FormArray
@@ -497,7 +508,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       },
 
       invoiceStatus: this.invoiceStatus[0],
-      createdBy: "ADMIN",  // TODO pass value from session name
+      createdBy: getLoginUserEmail(),  // TODO pass value from session name
       items: this.prepareItemsData(),
     };
 
@@ -514,46 +525,51 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   // Method to submit the invoice form
-  submitInvoice() {
-    const totalInvoiceAmount = this.getTotalInvoiceAmount();
+  submitInvoice(type: any) {
 
-    const requestData = {
-      invoiceNumber: this.invoiceNumber?.value,
-      total: {
-        subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value,
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
-      },
-      accountDetails: {
-        accountType: this.accountType?.value || '',
-        paymentType: this.paymentType?.value || '',
-      },
-      submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
-      },
+    const confirmed = window.confirm(`Are you sure you want to ${type === 'SUBMITTED' ? 'submit' : 'reject'} this invoice?`);
 
-      vendorDetails: {
-        billTo: this.billTo?.value,
-        paymentDue: this.paymentDueDate?.value,
-        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
-      },
+    if (confirmed) {
+      const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
-      invoiceStatus: this.invoiceStatus[1],
-      updatedBy: "ADMIN",  // TODO
-      items: this.prepareItemsData(),
-    };
+      const requestData = {
+        invoiceNumber: this.invoiceNumber?.value,
+        total: {
+          subTotal: totalInvoiceAmount.toString(),
+          adjustments: this.adjustments?.value,
+          grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+        },
+        accountDetails: {
+          accountType: this.accountType?.value || '',
+          paymentType: this.paymentType?.value || '',
+        },
+        submitter: {
+          submitterName: this.submitterName?.value,
+          department: this.departmentName?.value,
+        },
 
-    this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-      this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
-        timeOut: 5000, // Optional - already set in forRoot
-      });
-      this.invoiceCreateFormGroup.reset();
-    }, (error: any) => {
-      console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
+        vendorDetails: {
+          billTo: this.billTo?.value,
+          paymentDue: this.paymentDueDate?.value,
+          vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+        },
 
-    })
+        invoiceStatus: type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2],
+        updatedBy: getLoginUserEmail(),  // TODO
+        items: this.prepareItemsData(),
+      };
+
+      this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
+        this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
+          timeOut: 5000, // Optional - already set in forRoot
+        });
+        this.invoiceCreateFormGroup.reset();
+      }, (error: any) => {
+        console.error('Error fetching details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+
+      })
+    }
   }
 
   getCommonDetailsData() {

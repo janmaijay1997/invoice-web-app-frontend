@@ -1,10 +1,12 @@
 <div class="component_body">
     <h1 class="component_title">Invoices</h1>
     <div class="inner_body">
-            <div class="invoice_form">
-            <input type="text" placeholder="Search by invoice number"[(ngModel)]="filterValue">
-            <button type="button" (click)="filterInvoice()">Filter</button>
-                    </div>
+        <div class="invoice_form mb-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="Search by invoice number" [(ngModel)]="filterValue" aria-label="Search by invoice number">
+              </div>
+            <button type="button" class="btn btn-primary" (click)="filterInvoice()">Filter</button>
+        </div>
         <div class="table_view">
 
             <p-table [value]="invoiceList" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
@@ -29,12 +31,17 @@
                         <td style="min-width:150px">{{ invoice.submitter.submitterName }}</td>
                         <td style="min-width:150px">{{ invoice.invoiceStatus }}</td>
                         <td style="min-width:100px">
-                            <button id="view" (click)="viewInvoice(invoice.invoiceNumber)">View</button>
-                            <button id="invoice" *ngIf="invoice.invoiceStatus == 'SUBMITTED'"
-                               (click)="downloadPdf(invoice.invoiceNumber)">Invoice</button>
-                            <button id="delete" type="button" class="delete-btn ml-5"
+                            <button id="view" (click)="viewInvoice(invoice.invoiceNumber)" title="View"
+                                class="me-2 btn btn-primary action-btn">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                            <button id="invoice" *ngIf="invoice.invoiceStatus == 'SUBMITTED'" title="DownloadPdf"
+                                class="me-2 action-btn" (click)="downloadPdf(invoice.invoiceNumber)">
+                                <i class="fa fa-newspaper" aria-hidden="true"></i>
+                            </button>
+                            <button id="delete" type="button" class="delete-btn action-btn" title="Delete"
                                 (click)="deleteInvoice(invoice.invoiceNumber)">
-                                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                                <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </td>
                     </tr>

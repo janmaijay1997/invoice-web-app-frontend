@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
+import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 
 interface Accounts {
   id: string;
@@ -77,6 +78,7 @@ export class AddInvoiceComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
   selectedVendorBankDetails:any;
+  
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
@@ -278,6 +280,8 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   saveInvoice() {
+  
+
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
@@ -303,7 +307,7 @@ export class AddInvoiceComponent implements OnInit {
       },
 
       invoiceStatus: this.invoiceStatus[0],
-      createdBy: "ADMIN",  // TODO pass value from session name
+      createdBy: getLoginUserEmail(),  // TODO pass value from session name
       items: this.prepareItemsData(),
     };
 
@@ -342,5 +346,10 @@ export class AddInvoiceComponent implements OnInit {
     this.selectedVendorBankDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
     console.log(this.selectedVendorBankDetails);
     
+  }
+
+  selectSubmitter(e:any){
+    const data = this.departmentList.find(data => data.submitter === e.target.value)?.departmentName;
+    this.departmentName?.setValue(data)
   }
 }

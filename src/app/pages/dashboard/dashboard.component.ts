@@ -169,6 +169,7 @@ export class DashboardComponent implements OnInit {
 
   openAddCostCenterModal(event: Event) {
     event.stopPropagation(); // Prevent the accordion toggle
+    this.newCostCenterForm.reset();
     this.showAddCostCenterModel = true;
   }
   closeAddCostCenterModel() {
@@ -178,6 +179,7 @@ export class DashboardComponent implements OnInit {
 
   openAddExpenseTypeModal(event: Event) {
     event.stopPropagation(); // Prevent the accordion toggle
+    this.newExpenseTypeForm.reset();
     this.showAddExpenseTypeModal = true;
   }
   closeExpenseTypeModal() {
@@ -186,16 +188,16 @@ export class DashboardComponent implements OnInit {
 
   openAddDepartmentsModal(event: Event) {
     event.stopPropagation(); // Prevent the accordion toggle
+    this.newDepartmentForm.reset();
     this.showAddDepartmenteModal = true;
   }
   closeDepartmentsModal() {
     this.showAddDepartmenteModal = false;
-
   }
-
 
   openAddVendorModal(event: Event) {
     event.stopPropagation(); // Prevent the accordion toggle
+    this.newVendorForm.reset();
     this.showAddVendorModal = true;
   }
   closeVendorModal() {
