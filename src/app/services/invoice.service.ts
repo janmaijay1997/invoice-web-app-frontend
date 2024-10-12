@@ -17,6 +17,10 @@ export class InvoiceService {
     return this.httpClient.get(environment.invoiceListUrl);
   }
 
+   getInvoiceListOfParticularUser(createdBy : string): any {
+    return this.httpClient.get(environment.invoiceListForCreatedUserUrl + '?createdBy=' + createdBy);
+  }
+
   getInvoiceDetails(invoiceId: string): any {
     return this.httpClient.get(environment.invoiceDetailsUrl + invoiceId);
   }

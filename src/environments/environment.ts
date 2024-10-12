@@ -11,6 +11,7 @@ export const environment = {
   createInvoiceUrl: baseUrl + '/invoice/createinvoice',
   otherDetailsUrl: baseUrl + '/invoice/otherdetails',
   invoiceListUrl: baseUrl + '/invoice/invoices',
+  invoiceListForCreatedUserUrl: baseUrl + '/invoice/invoices-by-users',
   invoiceDetailsUrl: baseUrl + '/invoice/invoiceDetails/',
   deleteInvoiceUrl: baseUrl + '/invoice/delete-invoice',
   getInvoicePdfUrl: baseUrl + '/invoice/generateinvoice',
@@ -31,8 +32,8 @@ export const environment = {
   deleteExpenseTypesUrl: baseUrl + '/invoice/delete-expensetype',
   deleteDepartmentsUrl: baseUrl + '/invoice/delete-department',
   deleteVendorUrl: baseUrl + '/invoice/delete-vendor',
-  addUser: baseUrl +'/admin/user',
-  getUsersList: baseUrl +'/admin/users'
+  addUser: baseUrl + '/admin/user',
+  getUsersList: baseUrl + '/admin/users'
 
 
 

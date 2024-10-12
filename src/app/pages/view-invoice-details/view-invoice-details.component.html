@@ -329,9 +329,9 @@
             <ng-container *ngIf="checkinvoiceStatus !== 'SUBMITTED' ">
                 <button id="saveInvoice" class="btn btn-warning save-btn" type="button" (click)="saveInvoice()">Save Invoice</button>
                 <button id="submitInvoice" class="ml-2 btn btn-primary" type="button" (click)="submitInvoice('SUBMITTED')"
-                    *ngIf="isViewSubmitButton">Submit Invoice</button>
+                    *ngIf="isViewSubmitButton && userRole !== 'USER'">Submit Invoice</button>
                     <button id="rejectedInvoice" class="ml-2 btn btn-danger"
-                     type="button" (click)="submitInvoice('REJECTED')">Rejected Invoice</button>
+                     type="button" (click)="submitInvoice('REJECTED')"  *ngIf="userRole !== 'USER'">Rejected Invoice</button>
             </ng-container>
         </div>
     </div>

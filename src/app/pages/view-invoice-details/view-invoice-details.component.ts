@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { getLoginUserEmail } from 'src/app/utils/jwt-util';
+import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util';
 
 interface Accounts {
   id: string;
@@ -79,6 +79,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   invoiceStatus: string[] = [];
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
+  userRole : any;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -106,6 +107,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userRole = extractRolesFromToken()[0];
     this.getCommonDetailsData();
     this.route.queryParams.subscribe(params => {
       const invoiceNumber = params['invoiceNumber'];

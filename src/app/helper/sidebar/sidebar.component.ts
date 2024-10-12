@@ -11,7 +11,7 @@ export class SidebarComponent implements OnInit {
     { label: 'Dashboard', route: '/dashboard', active: false, roles: ['ADMIN', 'SUPER_ADMIN'], icon: 'fa-tachometer-alt' },
     { label: 'View User', route: '/userView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'], icon: 'fa-users' },
     { label: 'Add User', route: '/addUser', active: false, roles: ['ADMIN', 'SUPER_ADMIN'], icon: 'fa-user-plus' },
-    { label: 'View Invoice', route: '/InvoiceView', active: false, roles: ['ADMIN', 'SUPER_ADMIN'], icon: 'fa-file-invoice' },
+    { label: 'View Invoice', route: '/InvoiceView', active: false, roles: ['ADMIN', 'SUPER_ADMIN','USER'], icon: 'fa-file-invoice' },
     { label: 'Add Invoice', route: '/addInvoice', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'], icon: 'fa-file-invoice-dollar' },
     { label: 'Petty Cash', route: '/pettyCash', active: false, roles: ['ADMIN', 'SUPER_ADMIN', 'USER'], icon: 'fa-wallet' }
   ];

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util';
 
 
 
@@ -44,12 +45,12 @@ export class ViewInvoiceComponent implements OnInit {
     private invoiceService: InvoiceService,
     private toastr: ToastrService,
     private router: Router,
-    private invoiceDataService:InvoiceDataService) { }
+    private invoiceDataService: InvoiceDataService) { }
 
   invoiceList: Invoice[] = [];
   isAdmin: any;
   sidebarActive: boolean = true;
-  filterValue:string="";
+  filterValue: string = "";
   ngOnInit() {
     // Subscribe to the sidebar active state
     console.log(localStorage.getItem("lastname"));
@@ -66,6 +67,7 @@ export class ViewInvoiceComponent implements OnInit {
 
 
   viewInvoice(invoiceId: string) {
+    const userRoles = extractRolesFromToken();
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
       (response: any) => {
         const invoice = response;
@@ -87,9 +89,9 @@ export class ViewInvoiceComponent implements OnInit {
   deleteInvoice(invoiceId: string) {
     this.invoiceService.deleteInvoice(invoiceId).subscribe(
       (response: any) => {
-       this.toastr.success('Invoice Deleted successfully', 'Success');
-      this.getInvoiceList();
-    },
+        this.toastr.success('Invoice Deleted successfully', 'Success');
+        this.getInvoiceList();
+      },
       (error: any) => {
         console.error('Error Deleting Invoice:', error.error);
         this.toastr.warning(error.error, 'Error');
@@ -103,31 +105,48 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   getInvoiceList() {
-    this.invoiceService.getInvoiceList().subscribe(
-      (response: any) => {
-        this.invoiceList = response || [];
-        console.log("Invoice List:", this.invoiceList);
-      },
-      (error: any) => {
-        console.error('Error fetching details:', error);
-        this.toastr.error('Something went wrong.', 'Error');
-      }
-    );
+    const userRoles = extractRolesFromToken();
+    if (userRoles[0] === 'USER') {
+      var createdBy = getLoginUserEmail();
+      this.invoiceService.getInvoiceListOfParticularUser(createdBy).subscribe(
+        (response: any) => {
+          this.invoiceList = response || [];
+          console.log("Invoice List:", this.invoiceList);
+        },
+        (error: any) => {
+          console.error('Error fetching details:', error);
+          this.toastr.error('Something went wrong.', 'Error');
+        }
+      );
+
+    } else {
+      this.invoiceService.getInvoiceList().subscribe(
+        (response: any) => {
+          this.invoiceList = response || [];
+          console.log("Invoice List:", this.invoiceList);
+        },
+        (error: any) => {
+          console.error('Error fetching details:', error);
+          this.toastr.error('Something went wrong.', 'Error');
+        }
+      );
+    }
+
   }
-  filterInvoice(){
-    if(this.filterValue==null || this.filterValue.trim().length==0){
+  filterInvoice() {
+    if (this.filterValue == null || this.filterValue.trim().length == 0) {
       this.getInvoiceList();
-    }else{
-     this.invoiceList= this.invoiceList.filter((invoice=>invoice.invoiceNumber.includes(this.filterValue)));
+    } else {
+      this.invoiceList = this.invoiceList.filter((invoice => invoice.invoiceNumber.includes(this.filterValue)));
     }
   }
-  downloadPdf(invoiceId:any) {
+  downloadPdf(invoiceId: any) {
     this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: any) => {
       const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf.pdfData;
 
       const link = document.createElement('a');
       link.href = pdfDataUrl;
-      link.download = invoiceId+'.pdf';  // File name for download
+      link.download = invoiceId + '.pdf';  // File name for download
       link.click();
     });
   }
