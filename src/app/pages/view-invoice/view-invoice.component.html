@@ -3,8 +3,9 @@
     <div class="inner_body">
         <div class="invoice_form mb-3">
             <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Search by invoice number" [(ngModel)]="filterValue" aria-label="Search by invoice number">
-              </div>
+                <input type="text" class="form-control" placeholder="Search by invoice number" [(ngModel)]="filterValue"
+                    aria-label="Search by invoice number">
+            </div>
             <button type="button" class="btn btn-primary" (click)="filterInvoice()">Filter</button>
         </div>
         <div class="table_view">
@@ -29,7 +30,25 @@
                         <td style="min-width:100px">{{ invoice.vendorDetails.billTo }}</td>
                         <td style="min-width:150px">{{ invoice.total.grandTotal }}</td>
                         <td style="min-width:150px">{{ invoice.submitter.submitterName }}</td>
-                        <td style="min-width:150px">{{ invoice.invoiceStatus }}</td>
+                        <td style="min-width:150px">
+                            <span *ngIf="invoice.invoiceStatus === 'REJECTED'" class="px-2 py-1 fw-bold text-white"
+                                style="background-color: rgb(255, 0, 0); border-radius: 0.45rem; display: inline-block; width: 70%; text-align: center;">
+                                {{ invoice.invoiceStatus }}
+                            </span>
+                            <span *ngIf="invoice.invoiceStatus === 'PENDING'" class="px-2 py-1 fw-bold text-white"
+                                style="background-color: rgb(0, 123, 255); border-radius: 0.45rem; display: inline-block; width: 70%; text-align: center;">
+                                {{ invoice.invoiceStatus }}
+                            </span>
+                            <span *ngIf="invoice.invoiceStatus === 'SUBMITTED'" class="px-2 py-1 fw-bold text-white"
+                                style="background-color: rgb(40, 167, 69); border-radius: 0.45rem; display: inline-block; width: 70%; text-align: center;">
+                                {{ invoice.invoiceStatus }}
+                            </span>
+                            <span
+                                *ngIf="invoice.invoiceStatus !== 'REJECTED' && invoice.invoiceStatus !== 'PENDING' && invoice.invoiceStatus !== 'SUBMITTED'">
+                                {{ invoice.invoiceStatus }}
+                            </span>
+                        </td>
+
                         <td style="min-width:100px">
                             <button id="view" (click)="viewInvoice(invoice.invoiceNumber)" title="View"
                                 class="me-2 btn btn-primary action-btn">
