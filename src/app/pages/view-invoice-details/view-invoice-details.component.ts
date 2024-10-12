@@ -171,6 +171,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
   private populateForm(invoice: any): void {
     this.invoiceCreateFormGroup.patchValue({
+      invoiceNumber: invoice.invoiceNumber,
       accountType: invoice.accountDetails.accountType,
       paymentType: invoice.accountDetails.paymentType,
       submitter: invoice.submitter.submitterName,

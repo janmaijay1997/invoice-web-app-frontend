@@ -225,17 +225,17 @@
                             <th>Subtotal</th>
                             <td>
                                 <input type="text" formControlName="subTotalAmount" placeholder="Total"
-                                    class="small-input" readonly>
+                                    class="small-input text-center" readonly>
                             </td>
                         </tr>
                         <tr>
                             <th>Adjustment</th>
                             <input type="number" formControlName="adjustments" placeholder="adjustments"
-                                class="small-input">
+                                class="small-input text-center">
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td>{{ (getTotalAmountWithAdjustment()) }}</td>
+                            <td class="text-primary fw-bold">{{ (getTotalAmountWithAdjustment()) }}</td>
                         </tr>
                     </tbody>
                 </table>
