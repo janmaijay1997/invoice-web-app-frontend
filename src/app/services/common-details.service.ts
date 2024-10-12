@@ -41,6 +41,10 @@ export class CommonDetailsService {
     return this.httpClient.get(environment.GetExpenseTypesUrl);
   }
 
+  getExpenseTypeListByCategory() {
+    return this.httpClient.get(environment.GetExpenseTypesUrl);
+  }
+
   getDepartmentsList() {
     return this.httpClient.get(environment.GetDepartmentsUrl);
   }

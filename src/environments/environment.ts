@@ -25,6 +25,7 @@ export const environment = {
 
   GetCostCentersUrl: baseUrl + '/invoice/costcenters',
   GetExpenseTypesUrl: baseUrl + '/invoice/expensetypes',
+  GetExpenseTypesByCategoryUrl: baseUrl + '/invoice/expensetypes-by-category',
   GetDepartmentsUrl: baseUrl + '/invoice/departments',
   GetVendorUrl: baseUrl + '/invoice/vendors',
 
