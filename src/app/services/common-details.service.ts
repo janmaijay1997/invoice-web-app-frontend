@@ -59,7 +59,7 @@ export class CommonDetailsService {
   }
 
   deleteDepartments(requetBody: any): any {
-    return this.httpClient.post(environment.deleteDepartmentsUrl+ '?id=' + requetBody,{});
+    return this.httpClient.delete(environment.deleteDepartmentsUrl+ '?id=' + requetBody,{});
   }
 
   deleteVendor(requetBody: any): any {

@@ -5,6 +5,8 @@ import { InvoiceService } from 'src/app/services/invoice.service';
 import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -87,18 +89,33 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
 
-  deleteInvoice(invoiceId: string) {
-    this.invoiceService.deleteInvoice(invoiceId).subscribe(
-      (response: any) => {
-        this.toastr.success('Invoice Deleted successfully', 'Success');
-        this.getInvoiceList();
-      },
-      (error: any) => {
-        console.error('Error Deleting Invoice:', error.error);
-        this.toastr.warning(error.error, 'Error');
-      }
-    );
-  }
+ deleteInvoice(invoiceId: string) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, cancel!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // If the user confirms, call the delete API
+      this.invoiceService.deleteInvoice(invoiceId).subscribe(
+        (response: any) => {
+          this.toastr.success('Invoice Deleted successfully', 'Success');
+          this.getInvoiceList();
+        },
+        (error: any) => {
+          console.error('Error Deleting Invoice:', error.error);
+          this.toastr.warning(error.error, 'Error');
+        }
+      );
+    }
+  });
+}
+
 
 
   trimDate(dateString: string): string {

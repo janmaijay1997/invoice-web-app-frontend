@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ToastrService } from 'ngx-toastr';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { SidebarService } from 'src/app/services/sidebar.service';
+import Swal from 'sweetalert2';
 
 
 interface CostCenter {
@@ -285,21 +286,33 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteCostCenter(index: any) {
-    const confirmed = window.confirm('Are you sure you want to delete this Cost Center?');
+    Swal.fire({
+      title: 'Do you want to delete Cost Center?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCostCenter = index.id;
 
-    if (confirmed) {
-      const updatedCostCenter = index.id;
-
-      this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe((response: any) => {
-        this.toastr.success('Cost Center Deleted successfully', 'Success');
-        this.getCostCenterList();
-      },
-        (error: any) => {
-          console.error('Error Deleting Cost Center:', error.error);
-          this.toastr.warning(error.error, 'Error');
-        });
-    }
+        this.commonDetailsService.deleteCostCenter(updatedCostCenter).subscribe(
+          (response: any) => {
+            this.toastr.success('Cost Center Deleted successfully', 'Success');
+            this.getCostCenterList();
+          },
+          (error: any) => {
+            console.error('Error Deleting Cost Center:', error.error);
+            this.toastr.warning(error.error, 'Error');
+          }
+        );
+      }
+    });
   }
+
 
 
   // -----------------------------------------ExpenseType-------------------------------------------------------
@@ -377,24 +390,34 @@ export class DashboardComponent implements OnInit {
   }
 
 
+
   deleteExpenseType(index: any) {
-    const confirmed = window.confirm('Are you sure you want to delete this expense type?');
+    Swal.fire({
+      title: 'Do you want to delete Expense Type?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedExpenseType = index.id;
 
-    if (confirmed) {
-      const updatedExpenseType = index.id;
-
-      this.commonDetailsService.deleteExpenseTypes(updatedExpenseType).subscribe((response: any) => {
-        this.toastr.success('Expense Type Deleted successfully', 'Success');
-        this.expenseTypeList[index] = updatedExpenseType;
-      },
-        (error: any) => {
-          console.error('Error Deleting Expense Type:', error.error);
-          this.toastr.warning(error.error, 'Error');
-        }
-      );
-    }
+        this.commonDetailsService.deleteExpenseTypes(updatedExpenseType).subscribe((response: any) => {
+          this.toastr.success('Expense Type Deleted successfully', 'Success');
+          this.expenseTypeList[index] = updatedExpenseType;
+          this.getExpenseTypeList();
+        },
+          (error: any) => {
+            console.error('Error Deleting Expense Type:', error.error);
+            this.toastr.warning(error.error, 'Error');
+          }
+        );
+      }
+    });
   }
-
 
   // ------------------------Department------------------------------//
 
@@ -479,23 +502,31 @@ export class DashboardComponent implements OnInit {
 
 
   deleteDepartment(index: any) {
-    const confirmed = window.confirm('Are you sure you want to delete this department?');
+    Swal.fire({
+      title: 'Do you want to delete Department ?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedDepartment = index.id;
 
-    if (confirmed) {
-      const updatedDepartment = index.id;
-
-      this.commonDetailsService.deleteDepartments(updatedDepartment).subscribe((response: any) => {
-        this.toastr.success('Department Deleted successfully', 'Success');
-        this.getDepartmentsList();
-      },
-        (error: any) => {
-          console.error('Error Deleting Department:', error.error);
-          this.toastr.warning(error.error, 'Error');
-        }
-      );
-    }
+        this.commonDetailsService.deleteDepartments(updatedDepartment).subscribe((response: any) => {
+          this.toastr.success('Department Deleted successfully', 'Success');
+          this.getDepartmentsList();
+        },
+          (error: any) => {
+            console.error('Error Deleting Department:', error.error);
+            this.toastr.warning(error.error, 'Error');
+          }
+        );
+      }
+    });
   }
-
 
 
   // -----------------vendor API-----------------------
@@ -570,20 +601,31 @@ export class DashboardComponent implements OnInit {
 
 
   deleteVendor(index: any) {
-    const confirmed = window.confirm('Are you sure you want to delete this vendor?');
-    if (confirmed) {
-      const updatedDepartment = index.id;
+    Swal.fire({
+      title: 'Do you want to delete Vendor ?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedDepartment = index.id;
 
-      this.commonDetailsService.deleteVendor(updatedDepartment).subscribe((response: any) => {
-        this.toastr.success('Vendor Deleted successfully', 'Success');
-        this.departmentList[index] = updatedDepartment;
-      },
-        (error: any) => {
-          console.error('Error Deleting Vendor:', error.error);
-          this.toastr.warning(error.error, 'Error');
-        }
-      );
-    }
+        this.commonDetailsService.deleteVendor(updatedDepartment).subscribe((response: any) => {
+          this.toastr.success('Vendor Deleted successfully', 'Success');
+          this.departmentList[index] = updatedDepartment;
+          this.getVendorList();
+        },
+          (error: any) => {
+            console.error('Error Deleting Vendor:', error.error);
+            this.toastr.warning(error.error, 'Error');
+          }
+        );
+      }
+    });
   }
 
 }
