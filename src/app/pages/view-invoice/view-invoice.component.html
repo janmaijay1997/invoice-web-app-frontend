@@ -3,16 +3,21 @@
     <div class="inner_body">
         <div class="invoice_form mb-3">
             <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Search by invoice number" [(ngModel)]="filterValue"
-                    aria-label="Search by invoice number">
+                <input type="text" class="form-control" placeholder="Search by invoice number"
+                    [(ngModel)]="filter.invoiceNumber" aria-label="Search by invoice number" (input)="filterInvoice()">
             </div>
-            <button type="button" class="btn btn-primary" (click)="filterInvoice()">Filter</button>
+            <div class="col-md-3">
+                <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterInvoice()">
+                    <option value="" disabled selected>Select Status</option>
+                    <option value="All">ALL</option> <!-- Added All option -->
+                    <option *ngFor="let value of dropdownValues" [value]="value">{{ value }}</option>
+                </select>
+            </div>
         </div>
         <div class="table_view">
-
-            <p-table [value]="invoiceList" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table [value]="filteredInvoices" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
-                    <tr class="custom-heder">
+                    <tr class="custom-header">
                         <th style="min-width:150px">Invoice Number</th>
                         <th style="min-width:150px">Date</th>
                         <th style="min-width:100px">Vendor Name</th>

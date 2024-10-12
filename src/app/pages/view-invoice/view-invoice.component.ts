@@ -59,6 +59,7 @@ export class ViewInvoiceComponent implements OnInit {
     this.sidebarService.sidebarActive$.subscribe((state: any) => {
     });
     this.getInvoiceList();
+    this.filterInvoice();
   } users: any = [];
 
   editInvoice(val: any) {
@@ -111,6 +112,7 @@ export class ViewInvoiceComponent implements OnInit {
       this.invoiceService.getInvoiceListOfParticularUser(createdBy).subscribe(
         (response: any) => {
           this.invoiceList = response || [];
+          this.filteredInvoices = [...this.invoiceList]; // Set filteredInvoices to all invoices
           console.log("Invoice List:", this.invoiceList);
         },
         (error: any) => {
@@ -123,6 +125,7 @@ export class ViewInvoiceComponent implements OnInit {
       this.invoiceService.getInvoiceList().subscribe(
         (response: any) => {
           this.invoiceList = response || [];
+          this.filteredInvoices = [...this.invoiceList]; // Set filteredInvoices to all invoices
           console.log("Invoice List:", this.invoiceList);
         },
         (error: any) => {
@@ -133,13 +136,35 @@ export class ViewInvoiceComponent implements OnInit {
     }
 
   }
+
+  filter = {
+    invoiceNumber: '',
+    invoiceDate: '',
+    vendorName: '',
+    amount: '',
+    submitter: '',
+    status: ''
+  };
+  filteredInvoices: Invoice[] = []; // <-- Add this line
+  dropdownValues: string[] = ['PENDING', 'SUBMITTED', 'REJECTED']; // Sample status values
+  selectedStatus: string = 'All'; // Set default to 'ALL'
+
+
   filterInvoice() {
-    if (this.filterValue == null || this.filterValue.trim().length == 0) {
-      this.getInvoiceList();
-    } else {
-      this.invoiceList = this.invoiceList.filter((invoice => invoice.invoiceNumber.includes(this.filterValue)));
-    }
+    this.filteredInvoices = this.invoiceList.filter(invoice => {
+      return (
+        (this.filter.invoiceNumber ? invoice.invoiceNumber.includes(this.filter.invoiceNumber) : true) &&
+        (this.filter.invoiceDate ? this.trimDate(invoice.invoiceCreatedDate).includes(this.filter.invoiceDate) : true) &&
+        (this.filter.vendorName ? invoice.vendorDetails.billTo.includes(this.filter.vendorName) : true) &&
+        (this.filter.amount ? invoice.total.grandTotal.toString().includes(this.filter.amount) : true) &&
+        (this.filter.submitter ? invoice.submitter.name.includes(this.filter.submitter) : true) &&
+        // Check if selectedStatus is "All" or filter by invoice status
+        (this.selectedStatus === 'All' || invoice.invoiceStatus === this.selectedStatus)
+      );
+    });
   }
+
+
   downloadPdf(invoiceId: any) {
     this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: any) => {
       const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf.pdfData;
