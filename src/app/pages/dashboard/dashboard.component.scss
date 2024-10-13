@@ -174,3 +174,42 @@ button {
 .custom-padding {
   padding-right: 0.75rem; /* Adjust if needed */
 }
+
+
+.table-container {
+  overflow-y: auto; /* Allows vertical scrolling */
+  max-height: 400px; /* You can adjust this value as needed */
+}
+
+.table-header th {
+  position: sticky;
+  top: 0;
+  background-color: rgb(0, 123, 255); /* Bootstrap primary color */
+  z-index: 10;
+  border-bottom: 2px solid #dee2e6;
+  color: white; /* Change text color to white */
+  font-size: 1.1rem; /* Slightly bigger font size */
+  padding: 12px; /* Optional: Adjust padding for better spacing */
+  text-align: center; /* Center-align text */
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.accordion-button {
+  width: 100%;
+  text-align: left;
+}
+
+.accordion-button i {
+  float: right;
+}
+
+.btn-link {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+

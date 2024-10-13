@@ -3,23 +3,25 @@
 
 
   <div class="accordion dashboard-accordian" id="accordionExample">
-   
+
     <div class="accordion-item">
       <h2 class="accordion-header mb-0" id="headingOne">
         <div class="d-flex w-100 justify-content-between align-items-center">
           <!-- Accordion Button (Left Side) -->
-          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-            aria-expanded="true" aria-controls="collapseOne">
-            <h1 class="mb-0 ml-5">  Cost Center </h1>
+          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <h1 class="mb-0 ml-5"> Cost Center </h1>
           </button>
           <!-- Add Button (Right Side) -->
-          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddCostCenterModal($event)">
+          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3"
+            (click)="openAddCostCenterModal($event)">
             Add
           </button>
         </div>
       </h2>
-    
-      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+        data-bs-parent="#accordionExample">
         <div class="accordion-body">
           <div class="card-body">
             <form [formGroup]="costCenterForm">
@@ -81,38 +83,59 @@
             <form [formGroup]="expenseTypeForm">
               <!-- Scrollable container for the table -->
               <div class="table-container">
-                <table id="expenseTypeTable">
-                  <thead>
+                <table id="expenseTypeTable" class="table table-bordered">
+                  <thead class="table-header">
                     <tr>
+                      <th style="min-width: 170px">Category</th>
                       <th style="min-width: 170px">Expense Type</th>
                       <th style="min-width: 170px">Code (6-8 digits only)</th>
                       <th style="min-width: 100px">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let expenseType of expenseTypeList; let i = index">
-                      <td>{{ expenseType.expenseName }}</td>
-                      <td>{{ expenseType.expenseCode }}</td>
-                      <td>
-                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
-                          (click)="editExpenseCenter(expenseType)">
-                          <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-                        </button>
-                        <button id="delete" type="button" class="delete-btn ml-5"
-                          (click)="deleteExpenseType(expenseType)">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
+                    <!-- Loop through categories -->
+                    <ng-container *ngFor="let category of expenseTypeCategories">
+                      <!-- Category Row (Full-width collapsible button) -->
+                      <tr>
+                        <td colspan="100%">
+                          <button class="btn btn-link w-100 text-start" type="button" data-bs-toggle="collapse"
+                            [attr.data-bs-target]="'#category_' + category" aria-expanded="false"
+                            [attr.aria-controls]="'category_' + category">
+                            <strong>{{ category }}</strong> <i class="fa fa-chevron-down float-end"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <!-- Expense Types in Category (collapsible rows) -->
+                      <ng-container *ngFor="let expenseType of expenseTypeByCategory.get(category)">
+                        <tr id="{{ 'category_' + category }}" class="collapse">
+                          <td></td> <!-- Empty to offset for category -->
+                          <td>{{ expenseType.expenseName }}</td>
+                          <td>{{ expenseType.expenseCode }}</td>
+                          <td>
+                            <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                              (click)="editExpenseCenter(expenseType)">
+                              <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                            </button>
+                            <button id="delete" type="button" class="delete-btn ml-5"
+                              (click)="deleteExpenseType(expenseType)">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
                   </tbody>
                 </table>
-
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
+
+
+
 
     <div class="accordion-item">
       <h2 class="accordion-header mb-0" id="headingOne">
@@ -165,6 +188,7 @@
         </div>
       </div>
     </div>
+
     <div class="accordion-item">
       <h2 class="accordion-header mb-0" id="headingOne">
         <div class="d-flex w-100 justify-content-between align-items-center">
@@ -260,9 +284,8 @@
     <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
     <form [formGroup]="newExpenseTypeForm">
       <div>
-        <label for="Category">Category:</label>
         <select formControlName="category" class="small-input">
-          <option *ngFor="let category of categoryList" [value]="category">
+          <option *ngFor="let category of expenseTypeCategories" [value]="category">
             {{category}}
           </option>
         </select>

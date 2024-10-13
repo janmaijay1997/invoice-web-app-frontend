@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit {
   vendorList: Vendor[] = [];
 
   expenseTypeByCategory: Map<string, ExpenseType[]> = new Map();
-  categoryList = ['COMMUNICATIONS', 'EMPLOYEES', 'MEMBERSHIP AND DESCRIPTION', 'OFFICE SUPPLIES', 'OTHERS'];
+  expenseTypeCategories: string[] = [];
 
 
   constructor(private sidebarService: SidebarService,
@@ -107,6 +107,7 @@ export class DashboardComponent implements OnInit {
 
     this.newExpenseTypeForm = this.fb.group({
       id: [''],
+      category: ['',Validators.required],
       expenseName: ['', Validators.required],
       expenseCode: ['', Validators.required],
     });
@@ -149,9 +150,10 @@ export class DashboardComponent implements OnInit {
     });
 
     this.getCostCenterList();
-    this.getExpenseTypeList();
+    // this.getExpenseTypeList();
     this.getDepartmentsList();
     this.getVendorList();
+    this.getExpenseTypeListByCategory();
 
   }
 
@@ -376,6 +378,7 @@ export class DashboardComponent implements OnInit {
       (response: any) => {
         this.expenseTypeList = response;
         this.populateExpenseTypeFormArray();
+        this.getExpenseTypeListByCategory();
       },
       (error: any) => {
         console.error('Error fetching Cost Center list:', error);
@@ -384,17 +387,54 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  populateExpenseTypeFormArray() {
-    this.expenseTypeList.forEach((expenseType: ExpenseType) => {
-      const group = this.fb.group({
-        id: [expenseType.id],
-        category: [expenseType.category],
-        expenseName: [expenseType.expenseName],
-        expenseCode: [expenseType.expenseCode]
-      });
-      this.expenseTypes.push(group);
+
+  getExpenseTypeListByCategory() {
+    this.commonDetailsService.getExpenseTypeListByCategory().subscribe((response: any) => {
+      // Convert to map and fetch categories
+      this.expenseTypeByCategory = new Map<string, ExpenseType[]>(
+        Object.entries(response)
+      );
+      console.log("============= : ",this.expenseTypeByCategory);
+      this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
+    
+    }, (error: any) => {
+      console.error('Error fetching Expense Type list:', error);
+      this.toastr.error('Failed to fetch Expense Type list.', 'Error');
     });
   }
+
+
+  populateExpenseTypeFormArray() {
+    // Clear existing form array (optional, depending on your logic)
+    this.expenseTypes.clear();
+
+    // Iterate over the Map to populate the form array
+    this.expenseTypeByCategory.forEach((expenseTypes: ExpenseType[], category: string) => {
+      expenseTypes.forEach((expenseType: ExpenseType) => {
+        const group = this.fb.group({
+          id: [expenseType.id],
+          category: [expenseType.category], // This will be the same as the category from the Map key
+          expenseName: [expenseType.expenseName],
+          expenseCode: [expenseType.expenseCode]
+        });
+        this.expenseTypes.push(group);
+      });
+    });
+  }
+
+
+
+  // populateExpenseTypeFormArray() {
+  //   this.expenseTypeList.forEach((expenseType: ExpenseType) => {
+  //     const group = this.fb.group({
+  //       id: [expenseType.id],
+  //       category: [expenseType.category],
+  //       expenseName: [expenseType.expenseName],
+  //       expenseCode: [expenseType.expenseCode]
+  //     });
+  //     this.expenseTypes.push(group);
+  //   });
+  // }
 
 
 
