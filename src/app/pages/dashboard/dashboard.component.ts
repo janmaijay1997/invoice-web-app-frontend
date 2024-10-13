@@ -394,7 +394,6 @@ export class DashboardComponent implements OnInit {
       this.expenseTypeByCategory = new Map<string, ExpenseType[]>(
         Object.entries(response)
       );
-      console.log("============= : ",this.expenseTypeByCategory);
       this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
     
     }, (error: any) => {

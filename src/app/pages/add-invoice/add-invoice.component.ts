@@ -19,6 +19,7 @@ interface Currency {
 
 interface ExpenseCode {
   id: string;
+  category: string;
   expenseCode: string;
   expenseName: string;
 }
@@ -77,8 +78,10 @@ export class AddInvoiceComponent implements OnInit {
   invoiceStatus: string[] = [];
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
-  selectedVendorBankDetails:any;
-  
+  selectedVendorBankDetails: any;
+
+  expenseTypeCategories: string[] = []; // List of categories
+  expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map(); // Category-ExpenseType Map
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
@@ -280,7 +283,7 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   saveInvoice() {
-  
+
 
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
@@ -334,7 +337,11 @@ export class AddInvoiceComponent implements OnInit {
         this.invoiceStatus = response.invoiceStatus;
         this.submitterList = response.submitterList;
         this.vendorList = response.vendorList;
-
+        this.expenseTypeByCategory = new Map<string, ExpenseCode[]>(
+          Object.entries(response.expenseTypeByCategory)
+        );
+        console.log("============= : ", this.expenseTypeByCategory);
+        this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
       },
       (error: any) => {
         console.error('Error fetching details:', error);
@@ -342,13 +349,13 @@ export class AddInvoiceComponent implements OnInit {
     );
   }
 
-  onVendorChangeEvent(e:any){
+  onVendorChangeEvent(e: any) {
     this.selectedVendorBankDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
     console.log(this.selectedVendorBankDetails);
-    
+
   }
 
-  selectSubmitter(e:any){
+  selectSubmitter(e: any) {
     const data = this.departmentList.find(data => data.submitter === e.target.value)?.departmentName;
     this.departmentName?.setValue(data)
   }
