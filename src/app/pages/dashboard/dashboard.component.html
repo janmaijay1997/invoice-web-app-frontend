@@ -40,10 +40,12 @@
                       <td>{{ costCenter.code }}</td>
                       <td>{{ costCenter.description }}</td>
                       <td>
-                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editCostCenter(costCenter)">
+                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                          (click)="editCostCenter(costCenter)">
                           <i class="fa fa-edit"></i>
                         </button>
-                        <button id="delete" type="button" class="btn btn-sm btn-danger ml-5" (click)="deleteCostCenter(costCenter)">
+                        <button id="delete" type="button" class="btn btn-sm btn-danger ml-5"
+                          (click)="deleteCostCenter(costCenter)">
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                       </td>
@@ -57,164 +59,174 @@
       </div>
     </div>
 
-  <div class="accordion-item">
-    <h2 class="accordion-header mb-0" id="headingOne">
-      <div class="d-flex w-100 justify-content-between align-items-center">
-        <!-- Accordion Button (Left Side) -->
-        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-          aria-expanded="true" aria-controls="collapseTwo">
-          <h1 class="mb-0 ml-5">  Expense Type </h1>
-        </button>
-        <!-- Add Button (Right Side) -->
-        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddExpenseTypeModal($event)">
-          Add
-        </button>
+    <div class="accordion-item">
+      <h2 class="accordion-header mb-0" id="headingOne">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <!-- Accordion Button (Left Side) -->
+          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <h1 class="mb-0 ml-5"> Expense Type </h1>
+          </button>
+          <!-- Add Button (Right Side) -->
+          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3"
+            (click)="openAddExpenseTypeModal($event)">
+            Add
+          </button>
+        </div>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+        data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="card-body">
+            <form [formGroup]="expenseTypeForm">
+              <!-- Scrollable container for the table -->
+              <div class="table-container">
+                <table id="expenseTypeTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 170px">Expense Type</th>
+                      <th style="min-width: 170px">Code (6-8 digits only)</th>
+                      <th style="min-width: 100px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let expenseType of expenseTypeList; let i = index">
+                      <td>{{ expenseType.expenseName }}</td>
+                      <td>{{ expenseType.expenseCode }}</td>
+                      <td>
+                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                          (click)="editExpenseCenter(expenseType)">
+                          <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                        </button>
+                        <button id="delete" type="button" class="delete-btn ml-5"
+                          (click)="deleteExpenseType(expenseType)">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <div class="card-body">
-          <form [formGroup]="expenseTypeForm">
-            <!-- Scrollable container for the table -->
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header mb-0" id="headingOne">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <!-- Accordion Button (Left Side) -->
+          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+            <h1 class="mb-0 ml-5"> Departments </h1>
+          </button>
+          <!-- Add Button (Right Side) -->
+          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3"
+            (click)="openAddDepartmentsModal($event)">
+            Add
+          </button>
+        </div>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+        data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="card-body">
             <div class="table-container">
-              <table id="expenseTypeTable">
+              <table id="departmentType">
                 <thead>
                   <tr>
-                    <th style="min-width: 170px">Name of Chart of Account</th>
-                    <th style="min-width: 170px">Code (6-8 digits only)</th>
+                    <th style="min-width: 170px">Department Name</th>
+                    <th style="min-width: 170px">Manager</th>
+                    <th style="min-width: 170px">Submitter</th>
                     <th style="min-width: 100px">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let expenseType of expenseTypeList; let i = index">
-                    <td>{{ expenseType.expenseName }}</td>
-                    <td>{{ expenseType.expenseCode }}</td>
+                  <tr *ngFor="let department of departmentList; let i = index">
+                    <td>{{ department.departmentName }}</td>
+                    <td>{{ department.departmentManager }}</td>
+                    <td>{{ department.submitter }}</td>
                     <td>
-                      <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editExpenseCenter(expenseType)">
+                      <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn "
+                        (click)="editDepartment(department)">
                         <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
                       </button>
-                      <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteExpenseType(expenseType)">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteDepartment(department)">
+                        <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                       </button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-  
             </div>
-          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header mb-0" id="headingOne">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <!-- Accordion Button (Left Side) -->
+          <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+            <h1 class="mb-0 ml-5"> Vendor </h1>
+          </button>
+          <!-- Add Button (Right Side) -->
+          <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3"
+            (click)="openAddVendorModal($event)">
+            Add
+          </button>
+        </div>
+      </h2>
+      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree"
+        data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="card-body">
+            <div class="table-container">
+              <table id="vendorTable">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Vendor ID</th>
+                    <th>Vendor Name</th>
+                    <th>Bank Name</th>
+                    <th>IBAN Number</th>
+                    <th>Bank Address</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vendor of vendorList">
+                    <td>{{ vendor.id }}</td>
+                    <td>{{ vendor.vendorId }}</td>
+                    <td>{{ vendor.vendorName }}</td>
+                    <td>{{ vendor.bankDetails.bankName }}</td>
+                    <td>{{ vendor.bankDetails.ibanNumber }}</td>
+                    <td>{{ vendor.bankDetails.bankAddress }}</td>
+                    <td>{{ vendor.address }}</td>
+                    <td>{{ vendor.phoneNumber }}</td>
+                    <td>
+                      <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                        (click)="editVendor(vendor)">
+                        <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                      </button>
+                      <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteVendor(vendor)">
+                        <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="accordion-item">
-    <h2 class="accordion-header mb-0" id="headingOne">
-      <div class="d-flex w-100 justify-content-between align-items-center">
-        <!-- Accordion Button (Left Side) -->
-        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-          aria-expanded="true" aria-controls="collapseThree">
-          <h1 class="mb-0 ml-5">  Departments </h1>
-        </button>
-        <!-- Add Button (Right Side) -->
-        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddDepartmentsModal($event)">
-          Add
-        </button>
-      </div>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <div class="card-body">
-          <div class="table-container">
-            <table id="departmentType">
-              <thead>
-                <tr>
-                  <th style="min-width: 170px">Department Name</th>
-                  <th style="min-width: 170px">Manager</th>
-                  <th style="min-width: 170px">Submitter</th>
-                  <th style="min-width: 100px">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let department of departmentList; let i = index">
-                  <td>{{ department.departmentName }}</td>
-                  <td>{{ department.departmentManager }}</td>
-                  <td>{{ department.submitter }}</td>
-                  <td>
-                    <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn " (click)="editDepartment(department)">
-                      <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-                    </button>
-                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteDepartment(department)">
-                      <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          </div>
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header mb-0" id="headingOne">
-      <div class="d-flex w-100 justify-content-between align-items-center">
-        <!-- Accordion Button (Left Side) -->
-        <button class="accordion-button collapsed custom-padding" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
-          aria-expanded="true" aria-controls="collapseFour">
-          <h1 class="mb-0 ml-5">  Vendor </h1>
-        </button>
-        <!-- Add Button (Right Side) -->
-        <button id="AddCostCenter" class="btn btn-primary accordian-btn-postion ms-3" (click)="openAddVendorModal($event)">
-          Add
-        </button>
-      </div>
-    </h2>
-    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <div class="card-body">
-          <div class="table-container">
-            <table id="vendorTable">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Vendor ID</th>
-                  <th>Vendor Name</th>
-                  <th>Bank Name</th>
-                  <th>IBAN Number</th>
-                  <th>Bank Address</th>
-                  <th>Address</th>
-                  <th>Phone Number</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let vendor of vendorList">
-                  <td>{{ vendor.id }}</td>
-                  <td>{{ vendor.vendorId }}</td>
-                  <td>{{ vendor.vendorName }}</td>
-                  <td>{{ vendor.bankDetails.bankName }}</td>
-                  <td>{{ vendor.bankDetails.ibanNumber }}</td>
-                  <td>{{ vendor.bankDetails.bankAddress }}</td>
-                  <td>{{ vendor.address }}</td>
-                  <td>{{ vendor.phoneNumber }}</td>
-                  <td>
-                    <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn" (click)="editVendor(vendor)">
-                      <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-                    </button>
-                    <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteVendor(vendor)">
-                      <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
 </div>
 
 <!-- All model codes-->
@@ -247,6 +259,14 @@
   <div class="modal-content">
     <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
     <form [formGroup]="newExpenseTypeForm">
+      <div>
+        <label for="Category">Category:</label>
+        <select formControlName="category" class="small-input">
+          <option *ngFor="let category of categoryList" [value]="category">
+            {{category}}
+          </option>
+        </select>
+      </div>
       <div>
         <label for="expenseName">Type:</label>
         <input id="expenseName" formControlName="expenseName" type="text" placeholder="ExpenseType Name">

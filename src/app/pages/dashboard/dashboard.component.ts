@@ -15,6 +15,7 @@ interface CostCenter {
 
 interface ExpenseType {
   id: number,
+  category: string;
   expenseName: string;
   expenseCode: string;
 }
@@ -78,6 +79,8 @@ export class DashboardComponent implements OnInit {
   departmentList: Department[] = [];
   vendorList: Vendor[] = [];
 
+  expenseTypeByCategory: Map<string, ExpenseType[]> = new Map();
+  categoryList = ['COMMUNICATIONS', 'EMPLOYEES', 'MEMBERSHIP AND DESCRIPTION', 'OFFICE SUPPLIES', 'OTHERS'];
 
 
   constructor(private sidebarService: SidebarService,
@@ -325,6 +328,7 @@ export class DashboardComponent implements OnInit {
         // Push the new cost center into the form array
         this.expenseTypes.push(this.fb.group({
           id: [newExpenseType.id],
+          category: [newExpenseType.category],
           expenseName: [newExpenseType.type],
           expenseCode: [newExpenseType.code],
         }));
@@ -332,6 +336,7 @@ export class DashboardComponent implements OnInit {
       } else {
         // Push the new cost center into the form array
         this.expenseTypes.push(this.fb.group({
+          category: [newExpenseType.category],
           expenseName: [newExpenseType.type],
           expenseCode: [newExpenseType.code],
         }));
@@ -358,6 +363,7 @@ export class DashboardComponent implements OnInit {
 
     this.newExpenseTypeForm.setValue({
       id: index.id,
+      category: index.category,
       expenseName: index.expenseName,
       expenseCode: index.expenseCode,
     });
@@ -382,6 +388,7 @@ export class DashboardComponent implements OnInit {
     this.expenseTypeList.forEach((expenseType: ExpenseType) => {
       const group = this.fb.group({
         id: [expenseType.id],
+        category: [expenseType.category],
         expenseName: [expenseType.expenseName],
         expenseCode: [expenseType.expenseCode]
       });
