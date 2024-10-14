@@ -204,16 +204,9 @@
 
                                 <!-- Expense Code Dropdown -->
                                 <td>
-                                    <select formControlName="expenseType" class="small-input">
-                                        <option *ngFor="let expenseType of expenseTypeList"
-                                            [ngValue]="expenseType.expenseCode">
-                                            {{expenseType.expenseCode}}</option>
-
-                                        <option *ngIf="isExpenseTypeCustom(i)"
-                                            [ngValue]="items.at(i)?.get('expenseType')?.value || ''">
-                                            {{ items.at(i)?.get('expenseType')?.value }}
-                                        </option>
-                                    </select>
+                                    <input type="text" formControlName="expenseType" class="small-input"
+                                        placeholder="Select Expense Type" readonly [value]="getExpenseTypeLabel(i)"
+                                        (click)="openExpenseTypeDialog(items.at(i))">
                                 </td>
                                 <td>
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"

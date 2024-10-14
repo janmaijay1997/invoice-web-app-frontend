@@ -9,6 +9,8 @@ import { InvoiceDataService } from 'src/app/services/invoicedataservice';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util';
+import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Accounts {
   id: string;
@@ -81,12 +83,15 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   invoiceCreateFormGroup: FormGroup;
   userRole: any;
 
+  expenseTypeCategories: string[] = [];
+  expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map();
+
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
     private toastr: ToastrService,
-    private router: Router,
+    public dialog: MatDialog,
     private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
@@ -145,6 +150,22 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     );
   }
 
+  openExpenseTypeDialog(item: any): void {
+    const dialogRef = this.dialog.open(ExpenseTypeModalComponent, {
+      width: '400px',
+      data: {
+        categories: this.expenseTypeCategories,
+        expenseTypeByCategory: this.expenseTypeByCategory
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Set the selected expense code into the form control
+        item.get('expenseType').setValue(result.expenseCode);
+      }
+    });
+  }
 
   // Inside your component class
   isCostCodeCustom(index: number): boolean {
@@ -310,6 +331,17 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       total: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     });
   }
+
+  getExpenseTypeLabel(i: number): string {
+    const expenseTypeControl = this.items.at(i)?.get('expenseType');
+    if (this.isExpenseTypeCustom(i)) {
+        return expenseTypeControl?.value || 'Select Expense Type';
+    } else {
+        const expenseType = this.expenseTypeList.find(exp => exp.expenseCode === expenseTypeControl?.value);
+        return expenseType ? expenseType.expenseCode : 'Select Expense Type';
+    }
+}
+
 
 
   onVendorChange(event: Event, item: AbstractControl): void {
@@ -601,6 +633,10 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         this.invoiceStatus = response.invoiceStatus;
         this.submitterList = response.submitterList;
         this.vendorList = response.vendorList;
+        this.expenseTypeByCategory = new Map<string, ExpenseCode[]>(
+          Object.entries(response.expenseTypeByCategory)
+        );
+        this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
 
       },
       (error: any) => {
