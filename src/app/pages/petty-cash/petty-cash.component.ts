@@ -4,6 +4,8 @@ import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 interface Accounts {
@@ -81,11 +83,15 @@ export class PettyCashComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
 
+  expenseTypeCategories: string[] = [];
+  expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map();
+
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
     private router: Router,
-    private toastr: ToastrService,) {
+    private toastr: ToastrService,
+    public dialog: MatDialog) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
       invoiceStatus: [''],
@@ -109,6 +115,23 @@ export class PettyCashComponent implements OnInit {
     this.getCommonDetailsData();
   }
 
+
+  openExpenseTypeDialog(item: any): void {
+    const dialogRef = this.dialog.open(ExpenseTypeModalComponent, {
+      width: '400px',
+      data: {
+        categories: this.expenseTypeCategories,
+        expenseTypeByCategory: this.expenseTypeByCategory
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Set the selected expense code into the form control
+        item.get('expenseType').setValue(result.expenseCode);
+      }
+    });
+  }
   // Getter for clientName
   get clientName() {
     return this.invoiceCreateFormGroup.get('clientName');
@@ -366,6 +389,10 @@ export class PettyCashComponent implements OnInit {
         this.invoiceStatus = response.invoiceStatus;
         this.submitterList = response.submitterList;
         this.vendorList = response.vendorList;
+        this.expenseTypeByCategory = new Map<string, ExpenseCode[]>(
+          Object.entries(response.expenseTypeByCategory)
+        );
+        this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
 
       },
       (error: any) => {
@@ -374,7 +401,7 @@ export class PettyCashComponent implements OnInit {
     );
   }
 
-  selectSubmitter(e:any){
+  selectSubmitter(e: any) {
     const data = this.departmentList.find(data => data.submitter === e.target.value)?.departmentName;
     this.departmentName?.setValue(data)
   }

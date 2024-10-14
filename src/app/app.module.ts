@@ -14,6 +14,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DefaultRequestOptions } from './services/interceptor';
+import { ExpenseTypeModalComponent } from './components/expense-type-modal/expense-type-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // import {TableModule} from 'primeng/table';
 
@@ -29,7 +31,8 @@ import { DefaultRequestOptions } from './services/interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent, 
+    LoginComponent,
+    ExpenseTypeModalComponent, 
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { DefaultRequestOptions } from './services/interceptor';
     FormsModule,
     PagesModule ,
     RouterModule,
+    MatDialogModule,
     // TableModule
     // SidebarModule,
     // TreeModule,
