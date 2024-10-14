@@ -1,6 +1,7 @@
 <div class="component_body">
     <h1 class="component_title">View Invoice Details</h1>
-    <h4 class="component_title text-center fs-6">INVOICE NO : {{invoiceCreateFormGroup.get('invoiceNumber')?.value}}</h4>
+    <h4 class="component_title text-center fs-6">INVOICE NO : {{invoiceCreateFormGroup.get('invoiceNumber')?.value}}
+    </h4>
     <div class="inner_body">
         <div [formGroup]="invoiceCreateFormGroup">
             <!-- <label for="client">Client Name</label>
@@ -22,6 +23,11 @@
                                         <option *ngFor="let accountType of accountsList" [value]="accountType.name">
                                             {{accountType.name}}
                                         </option>
+
+                                        <option *ngIf="isAccountTypeCustom()"
+                                            [ngValue]="invoiceCreateFormGroup.get('accountType')?.value || ''">
+                                            {{ invoiceCreateFormGroup.get('accountType')?.value }}
+                                        </option>
                                     </select>
                                 </td>
                             </tr>
@@ -38,22 +44,30 @@
                             <tr>
                                 <th>Submitter</th>
                                 <td>
-                                    <select formControlName="submitter" class="small-input">
-                                        <option *ngFor="let submitter of submitterList" [value]="submitter.name">
-                                            {{submitter.name}}
+                                    <select formControlName="submitter" class="small-input"
+                                        (change)="onSubmitterChangeEvent($event)">
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.submitter">
+                                            {{department.submitter}}
                                         </option>
+
+                                        <option *ngIf="isSubmitterCustom()"
+                                            [ngValue]="invoiceCreateFormGroup.get('submitter')?.value || ''">
+                                            {{ invoiceCreateFormGroup.get('submitter')?.value }}
+                                        </option>
+
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Department</th>
-                                <td>
-                                    <select formControlName="department" class="small-input">
-                                        <option *ngFor="let department of departmentList"
-                                            [value]="department.departmentName">
+                                <td> <label
+                                        class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
+                                    <!-- <select formControlName="department" class="small-input" [disabled]=true>
+                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
                                             {{department.departmentName}}
                                         </option>
-                                    </select>
+                                    </select> -->
                                 </td>
                             </tr>
                         </tbody>
@@ -78,6 +92,11 @@
                                             <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
                                                 {{vendor.vendorName}}
                                             </option>
+
+                                            <option *ngIf="isBillToCustom()"
+                                                [ngValue]="invoiceCreateFormGroup.get('billTo')?.value || ''">
+                                                {{ invoiceCreateFormGroup.get('billTo')?.value }}
+                                            </option>
                                         </select>
                                     </ng-container>
                                 </td>
@@ -85,7 +104,7 @@
                             <tr>
                                 <th>Payment Due date</th>
                                 <td>
-                                    <input type="date" formControlName="paymentDueDate" class="small-input"
+                                    <input type="date" formControlName="paymentDueDate" class="small-input  fw-bold"
                                         (change)="paymentDueDateType($event)">
                                 </td>
                             </tr>
@@ -293,7 +312,7 @@
                                 <th>Subtotal</th>
                                 <td>
                                     <input type="text" formControlName="subTotalAmount" placeholder="Total"
-                                        class="small-input  text-center" >
+                                        class="small-input  text-center">
                                 </td>
                             </tr>
                             <tr>
@@ -311,17 +330,17 @@
                                 <th>Subtotal</th>
                                 <td>
                                     <input type="text" formControlName="subTotalAmount" placeholder="Total"
-                                        class="small-input" readonly>
+                                        class="small-input text-center" readonly>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Adjustment</th>
                                 <input type="number" formControlName="adjustments" placeholder="adjustments"
-                                    class="small-input">
+                                    class="small-input text-center">
                             </tr>
                             <tr>
                                 <th>Grand Total</th>
-                                <td>{{ (getTotalAmountWithAdjustmentPettyCash()) }}</td>
+                                <td class="text-primary fw-bold">{{ (getTotalAmountWithAdjustmentPettyCash()) }}</td>
                             </tr>
                         </ng-container>
                     </tbody>

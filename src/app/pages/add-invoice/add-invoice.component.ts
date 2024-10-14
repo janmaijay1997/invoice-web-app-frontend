@@ -340,7 +340,7 @@ export class AddInvoiceComponent implements OnInit {
         this.expenseTypeByCategory = new Map<string, ExpenseCode[]>(
           Object.entries(response.expenseTypeByCategory)
         );
-        console.log("============= : ", this.expenseTypeByCategory);
+        console.log("============= : ", this.departmentList);
         this.expenseTypeCategories = Array.from(this.expenseTypeByCategory.keys());
       },
       (error: any) => {

@@ -38,8 +38,8 @@
                                 <th>Submitter</th>
                                 <td>
                                     <select formControlName="submitter" class="small-input" (change)="selectSubmitter($event)">
-                                        <option *ngFor="let submitter of submitterList" [value]="submitter.name">
-                                            {{submitter.name}}
+                                        <option *ngFor="let department of departmentList" [value]="department.submitter">
+                                            {{department.submitter}}
                                         </option>
                                     </select>
                                 </td>
@@ -78,7 +78,7 @@
                             <tr>
                                 <th>Payment Due date</th>
                                 <td>
-                                    <input type="date" formControlName="paymentDueDate" class="small-input"
+                                    <input type="date" formControlName="paymentDueDate" class="small-input  fw-bold"
                                         (change)="paymentDueDateType($event)">
                                 </td>
                             </tr>

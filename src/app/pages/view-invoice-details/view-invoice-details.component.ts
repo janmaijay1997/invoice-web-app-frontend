@@ -79,7 +79,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   invoiceStatus: string[] = [];
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
-  userRole : any;
+  userRole: any;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -167,6 +167,20 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     return !this.currenciesList.some(center => center.currencyName === item.currency);
   }
 
+  isAccountTypeCustom(): boolean {
+    const accountType = this.accountType?.value;
+    return accountType && !this.accountsList.some(dept => dept.name === accountType);
+  }
+
+  isBillToCustom(): boolean {
+    const billTo = this.billTo?.value;
+    return billTo && !this.vendorList.some(dept => dept.vendorName === billTo);
+  }
+
+  isSubmitterCustom(): boolean {
+    const submitter = this.invoiceCreateFormGroup.get('submitter')?.value;
+    return submitter && !this.departmentList.some(dept => dept.submitter === submitter);
+  }
 
 
   private populateForm(invoice: any): void {
@@ -594,4 +608,14 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       }
     );
   }
+
+  onSubmitterChangeEvent(event: any) {
+    const selectedSubmitter = event.target.value; // Get the value of the selected submitter
+    const department = this.departmentList.find(dept => dept.submitter === selectedSubmitter)?.departmentName;
+
+    if (department) {
+      this.invoiceCreateFormGroup.get('department')?.setValue(department);
+    }
+  }
+
 }
