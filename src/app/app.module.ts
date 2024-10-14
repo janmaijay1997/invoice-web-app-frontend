@@ -16,6 +16,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DefaultRequestOptions } from './services/interceptor';
 import { ExpenseTypeModalComponent } from './components/expense-type-modal/expense-type-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { UpdateUserPasswordComponent } from './pages/update-user-password/update-user-password.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
 
 // import {TableModule} from 'primeng/table';
 
@@ -45,6 +51,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     PagesModule ,
     RouterModule,
     MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
     // TableModule
     // SidebarModule,
     // TreeModule,
@@ -65,6 +75,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     },
   ],
   bootstrap: [AppComponent],
+  entryComponents: [UpdateUserPasswordComponent] ,
+
   schemas:[CUSTOM_ELEMENTS_SCHEMA,NO_ERRORS_SCHEMA],
 })
 export class AppModule { }

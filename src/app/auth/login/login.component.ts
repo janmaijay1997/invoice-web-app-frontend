@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toaster.service';
 import { UserService } from 'src/app/services/user.service';
 import { extractRolesFromToken } from 'src/app/utils/jwt-util';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateUserPasswordComponent } from 'src/app/pages/update-user-password/update-user-password.component';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private userService: UserService,
     private toastService : ToastService,
+    private dialog: MatDialog,
     private router: Router) { }
   loginData = {
     email: "",
@@ -58,5 +61,20 @@ export class LoginComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
+  }
+  openForgotPasswordDialog(): void {
+    const dialogRef = this.dialog.open(UpdateUserPasswordComponent, {
+      width: '400px',
+      data: {
+        isAdmin: false  // This is the "User" mode for resetting password
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the result here, e.g., send form data to backend to update password
+        console.log('Password Change Data:', result);
+      }
+    });
   }
 }

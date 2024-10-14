@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
+import { UpdateUserPasswordComponent } from '../update-user-password/update-user-password.component';
 
 @Component({
   selector: 'app-user-managment',
@@ -17,7 +19,7 @@ export class UserManagmentComponent implements OnInit {
   page: number = 0;
   rows: number = 10; // Number of rows per page
 
-  constructor(private sidebarService: SidebarService,private userService:UserService,private toastr:ToastrService) { }
+  constructor(private sidebarService: SidebarService,private userService:UserService,private toastr:ToastrService,private dialog: MatDialog) { }
 
   sidebarActive: boolean = false;
   ngOnInit() {
@@ -73,6 +75,24 @@ export class UserManagmentComponent implements OnInit {
     this.page = event.page;
     this.rows = event.rows;
     this.loadUsers(this.page, this.rows); // Fetch users for the new page
+  }
+  changePassword(userEmailId: string): void {
+    // Fetch the user email based on the userId (you can adjust this according to your logic)
+    const userEmail = userEmailId
+    const dialogRef = this.dialog.open(UpdateUserPasswordComponent, {
+      width: '400px',
+      data: {
+        email: userEmail,  // Pre-fill with user's email if needed
+        isAdmin: true      // This indicates that the admin is changing the password
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the result here, e.g., send form data to backend to update password
+        console.log('Password Change Data:', result);
+      }
+    });
   }
 
 }

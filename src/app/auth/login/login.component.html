@@ -23,6 +23,10 @@
         OTP is required
       </div>
     </ng-container>
+     <!-- Add the Forgot Password Link -->
+     <div class="forgot-password">
+      <a href="javascript:void(0)" (click)="openForgotPasswordDialog()">Forgot Password?</a>
+    </div>
     <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">Login</button>
   </form>
 </div>

@@ -25,4 +25,17 @@ export class UserService {
 
     return this.httpClient.get<any>(environment.getUsersList, { params });
   }
-}
+  changePassword(changePasswordRequest: any): Observable<any> {
+    return this.httpClient.put(environment.changePassword, changePasswordRequest, {
+      observe: 'response',
+    });
+  }
+    adminChangePassword(changePasswordRequest: any){
+      const email = changePasswordRequest.email;  // Extract email from request body
+    const url = `${environment.changePassword}/${email}`;  // Construct URL with email as path variable
+    return this.httpClient.put(url, changePasswordRequest, {
+      observe: 'response'
+    });
+  }
+    
+} 

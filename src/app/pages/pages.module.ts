@@ -21,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice-details.component';
 import { PettyCashComponent } from './petty-cash/petty-cash.component';
+import { UpdateUserPasswordComponent } from './update-user-password/update-user-password.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PettyCashComponent } from './petty-cash/petty-cash.component';
     UserManagmentComponent,
     ViewInvoiceDetailsComponent,
     PettyCashComponent,
+    UpdateUserPasswordComponent,
   ],
   imports: [
     CommonModule,
