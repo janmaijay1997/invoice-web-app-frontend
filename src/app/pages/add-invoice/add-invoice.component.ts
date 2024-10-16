@@ -342,7 +342,10 @@ export class AddInvoiceComponent implements OnInit {
       this.invoiceCreateFormGroup.reset();
     }, (error: any) => {
       console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
+      this.toastr.error(error.error, 'VALIDATION', {
+        timeOut: 5000,
+      });
+
     })
   }
 

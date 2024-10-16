@@ -335,12 +335,12 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   getExpenseTypeLabel(i: number): string {
     const expenseTypeControl = this.items.at(i)?.get('expenseType');
     if (this.isExpenseTypeCustom(i)) {
-        return expenseTypeControl?.value || 'Select Expense Type';
+      return expenseTypeControl?.value || 'Select Expense Type';
     } else {
-        const expenseType = this.expenseTypeList.find(exp => exp.expenseCode === expenseTypeControl?.value);
-        return expenseType ? expenseType.expenseCode : 'Select Expense Type';
+      const expenseType = this.expenseTypeList.find(exp => exp.expenseCode === expenseTypeControl?.value);
+      return expenseType ? expenseType.expenseCode : 'Select Expense Type';
     }
-}
+  }
 
 
 
@@ -568,8 +568,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       this.invoiceCreateFormGroup.reset();
     }, (error: any) => {
       console.error('Error fetching details:', error);
-      this.toastr.error('Something went wrong.', 'Error');
-
+      this.toastr.error(error.error, 'VALIDATION', {
+        timeOut: 5000,
+      });
     })
   }
 
@@ -615,8 +616,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         this.invoiceCreateFormGroup.reset();
       }, (error: any) => {
         console.error('Error fetching details:', error);
-        this.toastr.error('Something went wrong.', 'Error');
-
+        this.toastr.error(error.error, 'VALIDATION', {
+          timeOut: 5000,
+        });
       })
     }
   }
