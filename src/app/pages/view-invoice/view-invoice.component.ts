@@ -130,7 +130,6 @@ export class ViewInvoiceComponent implements OnInit {
         (response: any) => {
           this.invoiceList = response || [];
           this.filteredInvoices = [...this.invoiceList]; // Set filteredInvoices to all invoices
-          console.log("Invoice List:", this.invoiceList);
         },
         (error: any) => {
           console.error('Error fetching details:', error);
@@ -143,7 +142,6 @@ export class ViewInvoiceComponent implements OnInit {
         (response: any) => {
           this.invoiceList = response || [];
           this.filteredInvoices = [...this.invoiceList]; // Set filteredInvoices to all invoices
-          console.log("Invoice List:", this.invoiceList);
         },
         (error: any) => {
           console.error('Error fetching details:', error);
@@ -175,7 +173,6 @@ export class ViewInvoiceComponent implements OnInit {
         (this.filter.vendorName ? invoice.vendorDetails.billTo.includes(this.filter.vendorName) : true) &&
         (this.filter.amount ? invoice.total.grandTotal.toString().includes(this.filter.amount) : true) &&
         (this.filter.submitter ? invoice.submitter.name.includes(this.filter.submitter) : true) &&
-        // Check if selectedStatus is "All" or filter by invoice status
         (this.selectedStatus === 'All' || invoice.invoiceStatus === this.selectedStatus)
       );
     });

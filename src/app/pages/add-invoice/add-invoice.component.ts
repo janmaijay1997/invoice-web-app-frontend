@@ -349,6 +349,16 @@ export class AddInvoiceComponent implements OnInit {
     })
   }
 
+  isVendorInvoiceRefAlreadyExistMessage = "";
+  isVendorInvoiceRefAlreadyExist(e: any) {
+    let vendorInvoiceRef = e.target.value;
+    if (vendorInvoiceRef !== "") {
+      this.invoiceService.isVendorInvoiceRefAlreadyExist(vendorInvoiceRef).subscribe((response: any) => {
+        this.isVendorInvoiceRefAlreadyExistMessage = response.response;
+      })
+    }
+  }
+
   getCommonDetailsData() {
     this.commonService.getAllOtherDetails().subscribe(
       (response: any) => {

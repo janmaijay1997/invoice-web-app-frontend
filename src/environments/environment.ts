@@ -13,6 +13,7 @@ export const environment = {
   invoiceListUrl: baseUrl + '/invoice/invoices',
   invoiceListForCreatedUserUrl: baseUrl + '/invoice/invoices-by-users',
   invoiceDetailsUrl: baseUrl + '/invoice/invoiceDetails/',
+  vendorInvoiceRefAlreadyExistUrl: baseUrl + '/invoice/is-vendor-invoiceRef-exists/',
   deleteInvoiceUrl: baseUrl + '/invoice/delete-invoice',
   getInvoicePdfUrl: baseUrl + '/invoice/generateinvoice',
 
@@ -35,8 +36,8 @@ export const environment = {
   deleteVendorUrl: baseUrl + '/invoice/delete-vendor',
   addUser: baseUrl + '/admin/user',
   getUsersList: baseUrl + '/admin/users',
-  changePassword: baseUrl +'/user/change-password',
-  changePasswordAdmin: baseUrl +'/admin/change-password'
+  changePassword: baseUrl + '/user/change-password',
+  changePasswordAdmin: baseUrl + '/admin/change-password'
 
 
 

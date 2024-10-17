@@ -37,7 +37,8 @@
                             <tr>
                                 <th>Submitter</th>
                                 <td>
-                                    <select formControlName="submitter" class="small-input" (change)="selectSubmitter($event)">
+                                    <select formControlName="submitter" class="small-input"
+                                        (change)="selectSubmitter($event)">
                                         <option *ngFor="let submitter of submitterList" [value]="submitter.name">
                                             {{submitter.name}}
                                         </option>
@@ -47,7 +48,8 @@
                             <tr>
                                 <th>Department</th>
                                 <td>
-                                   <label class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label> 
+                                    <label
+                                        class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
                                     <!-- <select formControlName="department" class="small-input">
                                         <option *ngFor="let department of departmentList"
                                             [value]="department.departmentName">
@@ -122,7 +124,7 @@
 
                                 <td style="min-width: 170px">
                                     <input type="text" formControlName="vendorInvoiceRef" placeholder="vendorInvoiceRef"
-                                        class="small-input">
+                                        class="small-input" (input)="isVendorInvoiceRefAlreadyExist($event)">
                                 </td>
 
                                 <!-- Vendor Name Dropdown -->
@@ -150,7 +152,7 @@
                                 </td>
 
                                 <!-- Expense Code Dropdown -->
-                                 <td>
+                                <td>
                                     <input type="text" formControlName="expenseType" class="small-input"
                                         placeholder="Select Expense Type" readonly
                                         (click)="openExpenseTypeDialog(item)">
@@ -210,6 +212,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <h3 class="text-danger">{{isVendorInvoiceRefAlreadyExistMessage}}</h3>
                 </div>
 
                 <button id="addItem" type="button" (click)="addItem()">Add Item</button>

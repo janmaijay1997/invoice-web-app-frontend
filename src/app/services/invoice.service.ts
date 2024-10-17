@@ -13,11 +13,15 @@ export class InvoiceService {
     return this.httpClient.post(environment.createInvoiceUrl, createInvoiceRequestData);
   }
 
+  isVendorInvoiceRefAlreadyExist(vendorInvoiceRef: string): any {
+    return this.httpClient.get(environment.vendorInvoiceRefAlreadyExistUrl + vendorInvoiceRef);
+  }
+
   getInvoiceList(): any {
     return this.httpClient.get(environment.invoiceListUrl);
   }
 
-   getInvoiceListOfParticularUser(createdBy : string): any {
+  getInvoiceListOfParticularUser(createdBy: string): any {
     return this.httpClient.get(environment.invoiceListForCreatedUserUrl + '?createdBy=' + createdBy);
   }
 

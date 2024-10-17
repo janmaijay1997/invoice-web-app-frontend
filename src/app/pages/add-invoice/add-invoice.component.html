@@ -37,8 +37,10 @@
                             <tr>
                                 <th>Submitter</th>
                                 <td>
-                                    <select formControlName="submitter" class="small-input" (change)="selectSubmitter($event)">
-                                        <option *ngFor="let department of departmentList" [value]="department.submitter">
+                                    <select formControlName="submitter" class="small-input"
+                                        (change)="selectSubmitter($event)">
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.submitter">
                                             {{department.submitter}}
                                         </option>
                                     </select>
@@ -46,7 +48,8 @@
                             </tr>
                             <tr>
                                 <th>Department</th>
-                                <td> <label class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
+                                <td> <label
+                                        class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
                                     <!-- <select formControlName="department" class="small-input" [disabled]=true>
                                         <option *ngFor="let department of departmentList" [value]="department.departmentName">
                                             {{department.departmentName}}
@@ -68,8 +71,9 @@
                             <tr>
                                 <th>Bill To</th>
                                 <td>
-                                    <select formControlName="billTo" class="small-input" (change)="onVendorChangeEvent($event)">
-                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName" >
+                                    <select formControlName="billTo" class="small-input"
+                                        (change)="onVendorChangeEvent($event)">
+                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
                                             {{vendor.vendorName}}
                                         </option>
                                     </select>
@@ -85,15 +89,17 @@
                             <tr>
                                 <th>Vendor Bank Details</th>
                                 <td>
-                                  <ng-container *ngIf="selectedVendorBankDetails">
-                                    <div class="bank-detail-container mt-3">
-                                      <label class="bank-name">{{ selectedVendorBankDetails.bankName }}</label>
-                                      <label class="bank-detail">{{ selectedVendorBankDetails.ibanNumber }}</label>
-                                      <label class="bank-detail">{{ selectedVendorBankDetails.bankAddress }}</label>
-                                    </div>
-                                  </ng-container>
+                                    <ng-container *ngIf="selectedVendorBankDetails">
+                                        <div class="bank-detail-container mt-3">
+                                            <label class="bank-name">{{ selectedVendorBankDetails.bankName }}</label>
+                                            <label class="bank-detail">{{ selectedVendorBankDetails.ibanNumber
+                                                }}</label>
+                                            <label class="bank-detail">{{ selectedVendorBankDetails.bankAddress
+                                                }}</label>
+                                        </div>
+                                    </ng-container>
                                 </td>
-                              </tr>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -129,7 +135,7 @@
 
                                 <td style="min-width: 170px">
                                     <input type="text" formControlName="vendorInvoiceRef" placeholder="vendorInvoiceRef"
-                                        class="small-input">
+                                        class="small-input" (input)="isVendorInvoiceRefAlreadyExist($event)">
                                 </td>
 
                                 <!-- Vendor Name Dropdown -->
@@ -195,14 +201,14 @@
                                 </td>
                                 <td>
                                     <!-- <button type="button" (click)="removeItem(i)">Remove</button> -->
-                                    <button id="delete" type="button" class="delete-btn ml-5"
-                                (click)="removeItem(i)">
-                                <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
-                            </button>
+                                    <button id="delete" type="button" class="delete-btn ml-5" (click)="removeItem(i)">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <h3 class="text-danger">{{isVendorInvoiceRefAlreadyExistMessage}}</h3>
                 </div>
 
                 <button id="addItem" type="button" (click)="addItem()">Add Item</button>
