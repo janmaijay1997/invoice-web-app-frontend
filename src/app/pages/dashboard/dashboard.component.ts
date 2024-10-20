@@ -178,6 +178,17 @@ export class DashboardComponent implements OnInit {
     this.newCostCenterForm.reset();
     this.showAddCostCenterModel = true;
   }
+
+  activeTable: string | null = 'costCenter'; // To keep track of the currently active table
+
+  // Method to open the clicked table and close others
+  openTable(tableName: string) {
+    if (this.activeTable === tableName) {
+      this.activeTable = null; // Close the table if it's already open
+    } else {
+      this.activeTable = tableName; // Open the selected table
+    }
+  }
   closeAddCostCenterModel() {
     this.showAddCostCenterModel = false;
   }
