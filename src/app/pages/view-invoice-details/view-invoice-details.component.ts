@@ -54,6 +54,13 @@ interface Vendor {
   id: string;
   vendorId: string;
   vendorName: string;
+  bankDetails: BankDetails;
+}
+
+interface BankDetails {
+  bankName: string;
+  ibanNumber: string;
+  bankAddress: string;
 }
 
 @Component({
@@ -214,12 +221,12 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       billTo: invoice.vendorDetails.billTo,
       paymentDueDate: invoice.vendorDetails.paymentDue,
       vendorBankDetails: invoice.vendorDetails.vendorBankDetails,
-      invoiceStatus: invoice.vendorDetails.vendorBankDetails,
+      invoiceStatus: invoice.invoiceStatus,
       adjustments: invoice.total.adjustments || '0', // Handle optional adjustments
     });
 
+    this.selectedVendorBankDetails = this.invoiceCreateFormGroup.get('vendorBankDetails')?.value;
     this.items.clear();
-
 
     if (invoice.items) {
       invoice.items.forEach((item: any) => {
@@ -553,7 +560,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       vendorDetails: {
         billTo: this.billTo?.value,
         paymentDue: this.paymentDueDate?.value,
-        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+        vendorBankDetails: this.selectedVendorBankDetails,
       },
 
       invoiceStatus: this.invoiceStatus[0],
@@ -601,7 +608,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         vendorDetails: {
           billTo: this.billTo?.value,
           paymentDue: this.paymentDueDate?.value,
-          vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+          vendorBankDetails: this.selectedVendorBankDetails,
         },
 
         invoiceStatus: type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2],
@@ -666,5 +673,24 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       })
     }
   }
+
+  defaultBankDetails: BankDetails = {
+    bankName: '', 
+    ibanNumber: '',
+    bankAddress: ''
+  };
+
+  selectedVendorBankDetails: BankDetails = this.defaultBankDetails;
+
+ onVendorChangeEvent(e: any) {
+    const foundDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
+    if (foundDetails) {
+        this.selectedVendorBankDetails = foundDetails;
+        console.log(this.selectedVendorBankDetails);
+    } else {
+        console.error("No bank details found for the selected vendor.");
+        // Optionally reset to default or handle the absence of details
+    }
+}
 
 }

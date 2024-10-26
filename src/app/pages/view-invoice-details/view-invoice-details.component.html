@@ -88,7 +88,8 @@
                                         <p>{{ invoiceCreateFormGroup.get('billTo')?.value }}</p>
                                     </ng-container>
                                     <ng-container *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH' ">
-                                        <select formControlName="billTo" class="small-input">
+                                        <select formControlName="billTo" class="small-input"
+                                            (change)="onVendorChangeEvent($event)">
                                             <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
                                                 {{vendor.vendorName}}
                                             </option>
@@ -110,8 +111,30 @@
                             </tr>
                             <tr>
                                 <th>Vendor Bank Details</th>
-                                <td>Dropdown</td>
+                                <td>
+                                    <ng-container *ngIf="selectedVendorBankDetails">
+                                        <div class="bank-detail-container">
+                                            <table class="table w-100"> <!-- Full width -->
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Bank Name</th>
+                                                        <td>{{ selectedVendorBankDetails.bankName }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>IBAN</th>
+                                                        <td>{{ selectedVendorBankDetails.ibanNumber }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>ADDRESS</th>
+                                                        <td>{{ selectedVendorBankDetails.bankAddress }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>

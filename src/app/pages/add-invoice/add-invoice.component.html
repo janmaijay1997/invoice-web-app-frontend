@@ -90,16 +90,28 @@
                                 <th>Vendor Bank Details</th>
                                 <td>
                                     <ng-container *ngIf="selectedVendorBankDetails">
-                                        <div class="bank-detail-container mt-3">
-                                            <label class="bank-name">{{ selectedVendorBankDetails.bankName }}</label>
-                                            <label class="bank-detail">{{ selectedVendorBankDetails.ibanNumber
-                                                }}</label>
-                                            <label class="bank-detail">{{ selectedVendorBankDetails.bankAddress
-                                                }}</label>
+                                        <div class="bank-detail-container">
+                                            <table class="table w-100">
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Bank Name</th>
+                                                        <td>{{ selectedVendorBankDetails.bankName }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>IBAN</th>
+                                                        <td>{{ selectedVendorBankDetails.ibanNumber }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>ADDRESS</th>
+                                                        <td>{{ selectedVendorBankDetails.bankAddress }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </ng-container>
                                 </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>

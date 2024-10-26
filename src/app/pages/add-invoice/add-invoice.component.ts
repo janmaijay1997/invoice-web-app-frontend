@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonDetailsService } from 'src/app/services/common-details.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { ToastrService } from 'ngx-toastr';
@@ -79,9 +79,16 @@ export class AddInvoiceComponent implements OnInit {
   departmentList: Department[] = [];
   paymentTypeList: string[] = [];
   invoiceStatus: string[] = [];
-  subTotalAmount: number = 0; // Variable to keep track of the total amount
+  subTotalAmount: number = 0;
   invoiceCreateFormGroup: FormGroup;
-  selectedVendorBankDetails: any;
+
+  defaultBankDetails: BankDetails = {
+    bankName: '', 
+    ibanNumber: '',
+    bankAddress: ''
+  };
+
+  selectedVendorBankDetails: BankDetails = this.defaultBankDetails;
 
   expenseTypeCategories: string[] = []; // List of categories
   expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map(); // Category-ExpenseType Map
@@ -108,6 +115,8 @@ export class AddInvoiceComponent implements OnInit {
 
     });
   }
+
+  
 
   ngOnInit(): void {
     this.getCommonDetailsData();
@@ -148,6 +157,10 @@ export class AddInvoiceComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('department');
   }
 
+  get vendorBankDetails() {
+    return this.invoiceCreateFormGroup.get('vendorBankDetails');
+  }
+
   get billTo() {
     return this.invoiceCreateFormGroup.get('billTo');
   }
@@ -176,6 +189,15 @@ export class AddInvoiceComponent implements OnInit {
   get items(): FormArray {
     return this.invoiceCreateFormGroup.get('items') as FormArray;
   }
+
+  bankDetailsFormGroup(): FormGroup {
+    return this.fb.group({
+      bankName: ['', Validators.required],
+      ibanNumber: ['', Validators.required],
+      bankAddress: ['', Validators.required],
+    })
+  };
+
 
   // Method to create a new FormGroup for an item
   itemFormGroup(): FormGroup {
@@ -327,7 +349,7 @@ export class AddInvoiceComponent implements OnInit {
       vendorDetails: {
         billTo: this.billTo?.value,
         paymentDue: this.paymentDueDate?.value,
-        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+        vendorBankDetails: this.selectedVendorBankDetails,
       },
 
       invoiceStatus: this.invoiceStatus[0],
@@ -382,11 +404,22 @@ export class AddInvoiceComponent implements OnInit {
     );
   }
 
-  onVendorChangeEvent(e: any) {
-    this.selectedVendorBankDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
-    console.log(this.selectedVendorBankDetails);
+  // onVendorChangeEvent(e: any) {
+  //   this.selectedVendorBankDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
+  //   this.vendorBankDetails?.setValue(this.selectedVendorBankDetails);
+  //   console.log(this.selectedVendorBankDetails);
+  // }
 
-  }
+  onVendorChangeEvent(e: any) {
+    const foundDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
+    if (foundDetails) {
+        this.selectedVendorBankDetails = foundDetails;
+        console.log(this.selectedVendorBankDetails);
+    } else {
+        console.error("No bank details found for the selected vendor.");
+        // Optionally reset to default or handle the absence of details
+    }
+}
 
   selectSubmitter(e: any) {
     const data = this.departmentList.find(data => data.submitter === e.target.value)?.departmentName;

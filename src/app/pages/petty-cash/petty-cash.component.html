@@ -39,25 +39,25 @@
                                 <td>
                                     <select formControlName="submitter" class="small-input"
                                         (change)="selectSubmitter($event)">
-                                        <option *ngFor="let submitter of submitterList" [value]="submitter.name">
-                                            {{submitter.name}}
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.submitter">
+                                            {{department.submitter}}
                                         </option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Department</th>
-                                <td>
-                                    <label
+                                <td> <label
                                         class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
-                                    <!-- <select formControlName="department" class="small-input">
-                                        <option *ngFor="let department of departmentList"
-                                            [value]="department.departmentName">
+                                    <!-- <select formControlName="department" class="small-input" [disabled]=true>
+                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
                                             {{department.departmentName}}
                                         </option>
                                     </select> -->
                                 </td>
                             </tr>
+
                         </tbody>
                     </table>
                 </div>

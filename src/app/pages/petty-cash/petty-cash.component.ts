@@ -154,6 +154,10 @@ export class PettyCashComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('billTo');
   }
 
+   get vendorBankDetails() {
+    return this.invoiceCreateFormGroup.get('vendorBankDetails');
+  }
+
   get paymentDueDate() {
     return this.invoiceCreateFormGroup.get('paymentDueDate');
   }
@@ -334,6 +338,13 @@ export class PettyCashComponent implements OnInit {
   }
 
 
+    selectedVendorBankDetails: BankDetails = {
+    bankName: '', 
+    ibanNumber: '',
+    bankAddress: ''
+  };
+
+
   // Method to submit the invoice form
   saveInvoice() {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
@@ -357,7 +368,7 @@ export class PettyCashComponent implements OnInit {
       vendorDetails: {
         billTo: 'PETTY CASH',
         paymentDue: this.paymentDueDate?.value,
-        vendorBankDetails: this.departmentName?.value || 'Refer Invoice',
+        vendorBankDetails: this.selectedVendorBankDetails,
       },
 
       invoiceStatus: this.invoiceStatus[0],
@@ -408,7 +419,7 @@ export class PettyCashComponent implements OnInit {
     this.departmentName?.setValue(data)
   }
 
-  
+
   isVendorInvoiceRefAlreadyExistMessage = "";
   isVendorInvoiceRefAlreadyExist(e: any) {
     let vendorInvoiceRef = e.target.value;
