@@ -540,14 +540,18 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
   // Method to submit the invoice form
   saveInvoice() {
-    const totalInvoiceAmount = this.getTotalInvoiceAmount();
-
+    var totalInvoiceAmount;
+    if (this.billTo?.value === "PETTY CASH") {
+      totalInvoiceAmount = this.getTotalInvoiceAmountPettyCash();
+    } else {
+      totalInvoiceAmount = this.getTotalInvoiceAmount();
+    }
     const requestData = {
       invoiceNumber: this.invoiceNumber?.value,
       total: {
         subTotal: totalInvoiceAmount.toString(),
         adjustments: this.adjustments?.value | 0,
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+        grandTotal: totalInvoiceAmount + Number(this.adjustments?.value || 0),
       },
       accountDetails: {
         accountType: this.accountType?.value || 'Private Account',
@@ -565,12 +569,12 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       },
 
       invoiceStatus: this.invoiceStatus[0],
-      createdBy: getLoginUserEmail(),  // TODO pass value from session name
+      updatedBy: getLoginUserEmail(), 
       items: this.prepareItemsData(),
     };
 
     this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-      this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
+      this.toastr.success('Invoice Saved successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 5000, // Optional - already set in forRoot
       });
       this.invoiceCreateFormGroup.reset();
@@ -609,17 +613,21 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: confirmButtonText,
-      cancelButtonText:  'No, cancel!',
+      cancelButtonText: 'No, cancel!',
     }).then((result) => {
       if (result.isConfirmed) {
-        const totalInvoiceAmount = this.getTotalInvoiceAmount();
-
+        var totalInvoiceAmount;
+        if (this.billTo?.value === "PETTY CASH") {
+          totalInvoiceAmount = this.getTotalInvoiceAmountPettyCash();
+        } else {
+          totalInvoiceAmount = this.getTotalInvoiceAmount();
+        }
         const requestData = {
           invoiceNumber: this.invoiceNumber?.value,
           total: {
             subTotal: totalInvoiceAmount.toString(),
             adjustments: this.adjustments?.value,
-            grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+            grandTotal: totalInvoiceAmount + Number(this.adjustments?.value || 0),
           },
           accountDetails: {
             accountType: this.accountType?.value || '',
@@ -637,12 +645,12 @@ export class ViewInvoiceDetailsComponent implements OnInit {
           },
 
           invoiceStatus: type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2],
-          updatedBy: getLoginUserEmail(),  // TODO
+          updatedBy: getLoginUserEmail(), 
           items: this.prepareItemsData(),
         };
 
         this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-          this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
+          this.toastr.success(`Invoice ${ type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2]} successFully with  invoice id ` + response.invoiceNumber, 'Success', {
             timeOut: 5000, // Optional - already set in forRoot
           });
           this.invoiceCreateFormGroup.reset();
