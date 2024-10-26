@@ -8,6 +8,7 @@ import { ViewInvoiceComponent } from './view-invoice/view-invoice.component';
 import { PagesComponent } from './pages.component';
 import { ViewInvoiceDetailsComponent } from './view-invoice-details/view-invoice-details.component';
 import { PettyCashComponent } from './petty-cash/petty-cash.component';
+import { UpdateUserDetailsComponent } from './update-user-details/update-user-details.component';
 const routes: Routes = [
 
   {
@@ -26,6 +27,8 @@ const routes: Routes = [
       { path: 'pettyCash', component: PettyCashComponent },
       { path: 'InvoiceView', component: ViewInvoiceComponent },
       { path: 'viewInvoiceDetail', component: ViewInvoiceDetailsComponent },
+      { path: 'updateUserDetails', component: UpdateUserDetailsComponent },
+
     ]
   }
 

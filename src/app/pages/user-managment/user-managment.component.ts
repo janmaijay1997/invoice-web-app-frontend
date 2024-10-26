@@ -4,6 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
 import { UpdateUserPasswordComponent } from '../update-user-password/update-user-password.component';
+import { UserDataService } from 'src/app/services/userdetailsservice';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-managment',
@@ -19,7 +21,8 @@ export class UserManagmentComponent implements OnInit {
   page: number = 0;
   rows: number = 10; // Number of rows per page
 
-  constructor(private sidebarService: SidebarService,private userService:UserService,private toastr:ToastrService,private dialog: MatDialog) { }
+  constructor(private sidebarService: SidebarService,private userService:UserService,
+  private toastr:ToastrService,private dialog: MatDialog, private userDataService: UserDataService, private router: Router,) { }
 
   sidebarActive: boolean = false;
   ngOnInit() {
@@ -65,10 +68,22 @@ export class UserManagmentComponent implements OnInit {
   }
 
   // Placeholder method for editing a user
-  editUser(userId: string) {
-    this.toastr.info(`Edit user with ID: ${userId}`);
-    // Logic for editing user
+  editUser(email: string) {
+    this.userService.getUserDetails(email).subscribe(
+      (response: any) => {
+        const userDetails = response;
+
+        // Navigate to the add update user page and pass the email as state
+        this.userDataService.setUser(userDetails.data.userDetails);
+        this.router.navigate(['/updateUserDetails'], { queryParams: { email: userDetails.data.userDetails.email } });
+      },
+      (error: any) => {
+        console.error('Error fetching details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
   }
+
 
   // Method to handle page changes (pagination)
   onPageChange(event: any) {

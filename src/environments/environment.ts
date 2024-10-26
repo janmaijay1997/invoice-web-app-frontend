@@ -35,6 +35,10 @@ export const environment = {
   deleteDepartmentsUrl: baseUrl + '/invoice/delete-department',
   deleteVendorUrl: baseUrl + '/invoice/delete-vendor',
   addUser: baseUrl + '/admin/user',
+  updateUser: baseUrl + '/admin/user',
+  getUserDetails: baseUrl + '/user',
+
+
   getUsersList: baseUrl + '/admin/users',
   changePassword: baseUrl + '/user/change-password',
   changePasswordAdmin: baseUrl + '/admin/change-password'

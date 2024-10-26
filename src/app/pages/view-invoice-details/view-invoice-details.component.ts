@@ -130,7 +130,6 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     });
 
     const invoice = this.invoiceDataService.getInvoice();
-    console.log("Received Invoice:", invoice);
 
     if (invoice) {
       this.invoiceCreateFormGroup.get("invoiceNumber")?.setValue(invoice.invoiceNumber);

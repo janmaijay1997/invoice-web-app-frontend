@@ -15,27 +15,36 @@ export class UserService {
       observe: 'response',
     });
   }
-  createUser(request:any): any{
-    return this.httpClient.post(environment.addUser,request);
+  createUser(request: any): any {
+    return this.httpClient.post(environment.addUser, request);
   }
   getUsers(page: number, size: number): Observable<any> {
     let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
+      .set('page', page)
+      .set('size', size);
 
     return this.httpClient.get<any>(environment.getUsersList, { params });
   }
+
+  getUserDetails(email: any): Observable<any> {
+    return this.httpClient.get<any>(environment.getUserDetails + '?email=' + email);
+  }
+
+  updateUser(email: any, requestBody: any): Observable<any> {
+    return this.httpClient.put<any>(environment.updateUser + '/' + email, requestBody);
+  }
+
   changePassword(changePasswordRequest: any): Observable<any> {
     return this.httpClient.put(environment.changePassword, changePasswordRequest, {
       observe: 'response',
     });
   }
-    adminChangePassword(changePasswordRequest: any){
-      const email = changePasswordRequest.email;  // Extract email from request body
+  adminChangePassword(changePasswordRequest: any) {
+    const email = changePasswordRequest.email;  // Extract email from request body
     const url = `${environment.changePassword}/${email}`;  // Construct URL with email as path variable
     return this.httpClient.put(url, changePasswordRequest, {
       observe: 'response'
     });
   }
-    
+
 } 
