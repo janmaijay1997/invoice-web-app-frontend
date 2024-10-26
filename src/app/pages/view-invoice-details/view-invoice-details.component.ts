@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
 import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import Swal from 'sweetalert2';
 
 interface Accounts {
   id: string;
@@ -581,54 +582,80 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     })
   }
 
-  // Method to submit the invoice form
-  submitInvoice(type: any) {
-
-    const confirmed = window.confirm(`Are you sure you want to ${type === 'SUBMITTED' ? 'submit' : 'reject'} this invoice?`);
-
-    if (confirmed) {
-      const totalInvoiceAmount = this.getTotalInvoiceAmount();
-
-      const requestData = {
-        invoiceNumber: this.invoiceNumber?.value,
-        total: {
-          subTotal: totalInvoiceAmount.toString(),
-          adjustments: this.adjustments?.value,
-          grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
-        },
-        accountDetails: {
-          accountType: this.accountType?.value || '',
-          paymentType: this.paymentType?.value || '',
-        },
-        submitter: {
-          submitterName: this.submitterName?.value,
-          department: this.departmentName?.value,
-        },
-
-        vendorDetails: {
-          billTo: this.billTo?.value,
-          paymentDue: this.paymentDueDate?.value,
-          vendorBankDetails: this.selectedVendorBankDetails,
-        },
-
-        invoiceStatus: type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2],
-        updatedBy: getLoginUserEmail(),  // TODO
-        items: this.prepareItemsData(),
+  private getInvoiceAlertDetails(type: any) {
+    if (type === "REJECTED") {
+      return {
+        title: 'Do you want to Reject Invoice?',
+        text: "Rejected Invoice needs to be resolved by the creator of the Invoice.",
+        confirmButtonText: 'Yes, Reject it!',
       };
-
-      this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
-        this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
-          timeOut: 5000, // Optional - already set in forRoot
-        });
-        this.invoiceCreateFormGroup.reset();
-      }, (error: any) => {
-        console.error('Error fetching details:', error);
-        this.toastr.error(error.error, 'VALIDATION', {
-          timeOut: 5000,
-        });
-      })
+    } else {
+      return {
+        title: 'Do you want to Submit Invoice?',
+        text: "You won't be able to change once submitted!",
+        confirmButtonText: 'Yes, Submit it!',
+      };
     }
   }
+
+  submitInvoice(type: any) {
+    const { title, text, confirmButtonText } = this.getInvoiceAlertDetails(type);
+
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: confirmButtonText,
+      cancelButtonText:  'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const totalInvoiceAmount = this.getTotalInvoiceAmount();
+
+        const requestData = {
+          invoiceNumber: this.invoiceNumber?.value,
+          total: {
+            subTotal: totalInvoiceAmount.toString(),
+            adjustments: this.adjustments?.value,
+            grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+          },
+          accountDetails: {
+            accountType: this.accountType?.value || '',
+            paymentType: this.paymentType?.value || '',
+          },
+          submitter: {
+            submitterName: this.submitterName?.value,
+            department: this.departmentName?.value,
+          },
+
+          vendorDetails: {
+            billTo: this.billTo?.value,
+            paymentDue: this.paymentDueDate?.value,
+            vendorBankDetails: this.selectedVendorBankDetails,
+          },
+
+          invoiceStatus: type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2],
+          updatedBy: getLoginUserEmail(),  // TODO
+          items: this.prepareItemsData(),
+        };
+
+        this.invoiceService.createInvoice(requestData).subscribe((response: any) => {
+          this.toastr.success('Invoice Submitted successFully with  invoice id ' + response.invoiceNumber, 'Success', {
+            timeOut: 5000, // Optional - already set in forRoot
+          });
+          this.invoiceCreateFormGroup.reset();
+        }, (error: any) => {
+          console.error('Error fetching details:', error);
+          this.toastr.error(error.error, 'VALIDATION', {
+            timeOut: 5000,
+          });
+        })
+      }
+    });
+  }
+
 
   getCommonDetailsData() {
     this.commonService.getAllOtherDetails().subscribe(
@@ -675,22 +702,22 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   defaultBankDetails: BankDetails = {
-    bankName: '', 
+    bankName: '',
     ibanNumber: '',
     bankAddress: ''
   };
 
   selectedVendorBankDetails: BankDetails = this.defaultBankDetails;
 
- onVendorChangeEvent(e: any) {
+  onVendorChangeEvent(e: any) {
     const foundDetails = this.vendorList.find(data => data.vendorName === e.target.value)?.bankDetails;
     if (foundDetails) {
-        this.selectedVendorBankDetails = foundDetails;
-        console.log(this.selectedVendorBankDetails);
+      this.selectedVendorBankDetails = foundDetails;
+      console.log(this.selectedVendorBankDetails);
     } else {
-        console.error("No bank details found for the selected vendor.");
-        // Optionally reset to default or handle the absence of details
+      console.error("No bank details found for the selected vendor.");
+      // Optionally reset to default or handle the absence of details
     }
-}
+  }
 
 }
