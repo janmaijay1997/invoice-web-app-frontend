@@ -17,6 +17,7 @@ export interface ChangePasswordDialogData {
 export class UpdateUserPasswordComponent  {
   changePasswordForm: FormGroup;
   isAdmin: boolean;
+  email: string;
 
   constructor(
     private fb: FormBuilder,
@@ -25,12 +26,13 @@ export class UpdateUserPasswordComponent  {
     private dialogRef: MatDialogRef<UpdateUserPasswordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ChangePasswordDialogData // Injecting the data passed to the dialog
   ) {
+    this.email = data.email;
     this.isAdmin = data.isAdmin;
 
     // Initialize the form and conditionally set the email field
     this.changePasswordForm = this.fb.group({
-      email: [{ value: data.email || '', disabled: this.isAdmin }, [Validators.required, Validators.email]],
-      oldPassword: ['', [Validators.required]],
+      email: [{ value: this.email || '', disabled: this.isAdmin }, [Validators.required, Validators.email]],
+      oldPassword: [''],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -43,36 +45,40 @@ export class UpdateUserPasswordComponent  {
   // Submit the form and close the dialog
   onSubmit(): void {
     if (this.changePasswordForm.valid) {
-      const changePasswordRequest = {
-        email:this.changePasswordForm.value.email,
-        oldPassword: this.changePasswordForm.value.oldPassword,
-        newPassword: this.changePasswordForm.value.newPassword
-      };
-if(this.isAdmin){
-  this.userService.adminChangePassword(changePasswordRequest).subscribe(
-    (response) => {
-      console.log('Password changed successfully', response);
-      this.toastr.success('Password changed successfully');
+      if (this.isAdmin) {
+        const changePasswordRequestAdmin = {
+          email: this.email,
+          newPassword: this.changePasswordForm.value.newPassword
+        };
+        this.userService.adminChangePassword(changePasswordRequestAdmin).subscribe(
+          (response) => {
+            console.log('Password changed successfully', response);
+            this.toastr.success('Password changed successfully');
 
-      this.dialogRef.close();
-    },
-    (error) => {
-      console.error('Error changing password', error);
-    }
-  );
-}else{
-      this.userService.changePassword(changePasswordRequest).subscribe(
-        (response) => {
-          console.log('Password changed successfully', response);
-          this.toastr.success('Password changed successfully');
+            this.dialogRef.close();
+          },
+          (error) => {
+            console.error('Error changing password', error);
+          }
+        );
+      } else {
+        const changePasswordRequest = {
+          email: this.changePasswordForm.value.email,
+          oldPassword: this.changePasswordForm.value.oldPassword,
+          newPassword: this.changePasswordForm.value.newPassword
+        };
+        this.userService.changePassword(changePasswordRequest).subscribe(
+          (response) => {
+            console.log('Password changed successfully', response);
+            this.toastr.success('Password changed successfully');
 
-          this.dialogRef.close();
-        },
-        (error) => {
-          console.error('Error changing password', error);
-        }
-      );
+            this.dialogRef.close();
+          },
+          (error) => {
+            console.error('Error changing password', error);
+          }
+        );
+      }
     }
-  }
   }
 }

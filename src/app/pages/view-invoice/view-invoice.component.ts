@@ -50,11 +50,13 @@ export class ViewInvoiceComponent implements OnInit {
     private invoiceDataService: InvoiceDataService) { }
 
   invoiceList: Invoice[] = [];
-  isAdmin: any;
+  userRole: any;
   sidebarActive: boolean = true;
   filterValue: string = "";
   ngOnInit() {
     // Subscribe to the sidebar active state
+    this.userRole = extractRolesFromToken()[0];
+
     console.log(localStorage.getItem("lastname"));
     let flage = localStorage.getItem("lastname");
 
@@ -70,7 +72,6 @@ export class ViewInvoiceComponent implements OnInit {
 
 
   viewInvoice(invoiceId: string) {
-    const userRoles = extractRolesFromToken();
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
       (response: any) => {
         const invoice = response;
@@ -89,32 +90,32 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
 
- deleteInvoice(invoiceId: string) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, cancel!',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // If the user confirms, call the delete API
-      this.invoiceService.deleteInvoice(invoiceId).subscribe(
-        (response: any) => {
-          this.toastr.success('Invoice Deleted successfully', 'Success');
-          this.getInvoiceList();
-        },
-        (error: any) => {
-          console.error('Error Deleting Invoice:', error.error);
-          this.toastr.warning(error.error, 'Error');
-        }
-      );
-    }
-  });
-}
+  deleteInvoice(invoiceId: string) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If the user confirms, call the delete API
+        this.invoiceService.deleteInvoice(invoiceId).subscribe(
+          (response: any) => {
+            this.toastr.success('Invoice Deleted successfully', 'Success');
+            this.getInvoiceList();
+          },
+          (error: any) => {
+            console.error('Error Deleting Invoice:', error.error);
+            this.toastr.warning(error.error, 'Error');
+          }
+        );
+      }
+    });
+  }
 
 
 

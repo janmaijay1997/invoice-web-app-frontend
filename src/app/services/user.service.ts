@@ -41,7 +41,7 @@ export class UserService {
   }
   adminChangePassword(changePasswordRequest: any) {
     const email = changePasswordRequest.email;  // Extract email from request body
-    const url = `${environment.changePassword}/${email}`;  // Construct URL with email as path variable
+    const url = `${environment.changePasswordAdmin}/${email}`;  // Construct URL with email as path variable
     return this.httpClient.put(url, changePasswordRequest, {
       observe: 'response'
     });

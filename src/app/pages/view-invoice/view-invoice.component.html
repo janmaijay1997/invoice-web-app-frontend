@@ -67,7 +67,7 @@
                                 class="me-2 action-btn" (click)="downloadPdf(invoice.invoiceNumber)">
                                 <i class="fa fa-newspaper" aria-hidden="true"></i>
                             </button>
-                            <button id="delete" type="button" class="delete-btn action-btn" title="Delete"
+                            <button id="delete" type="button"  *ngIf="userRole !== 'USER'" class="delete-btn action-btn" title="Delete"
                                 (click)="deleteInvoice(invoice.invoiceNumber)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
