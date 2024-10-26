@@ -7,6 +7,10 @@
                     [(ngModel)]="filter.invoiceNumber" aria-label="Search by invoice number" (input)="filterInvoice()">
             </div>
             <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="Search by VendorName"
+                    [(ngModel)]="filter.vendorName" aria-label="Search by VendorName" (input)="filterInvoice()">
+            </div>
+            <div class="col-md-3">
                 <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterInvoice()">
                     <option value="" disabled selected>Select Status</option>
                     <option value="All">ALL</option> <!-- Added All option -->

@@ -353,7 +353,7 @@ export class AddInvoiceComponent implements OnInit {
       },
 
       invoiceStatus: this.invoiceStatus[0],
-      createdBy: getLoginUserEmail(),  // TODO pass value from session name
+      createdBy: getLoginUserEmail(),
       items: this.prepareItemsData(),
     };
 

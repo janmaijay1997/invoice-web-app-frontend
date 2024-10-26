@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 
 
 interface Accounts {
@@ -154,7 +155,7 @@ export class PettyCashComponent implements OnInit {
     return this.invoiceCreateFormGroup.get('billTo');
   }
 
-   get vendorBankDetails() {
+  get vendorBankDetails() {
     return this.invoiceCreateFormGroup.get('vendorBankDetails');
   }
 
@@ -338,8 +339,8 @@ export class PettyCashComponent implements OnInit {
   }
 
 
-    selectedVendorBankDetails: BankDetails = {
-    bankName: '', 
+  selectedVendorBankDetails: BankDetails = {
+    bankName: '',
     ibanNumber: '',
     bankAddress: ''
   };
@@ -372,7 +373,7 @@ export class PettyCashComponent implements OnInit {
       },
 
       invoiceStatus: this.invoiceStatus[0],
-      createdBy: "ADMIN",  // TODO pass value from session name
+      createdBy: getLoginUserEmail(),
       items: this.prepareItemsData(),
     };
 
