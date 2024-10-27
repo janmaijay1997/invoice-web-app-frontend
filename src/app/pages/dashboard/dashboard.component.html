@@ -41,105 +41,98 @@
         </div>
       </div>
     </div>
-    <div class="w-100 border border-secondary rounded p-3">
+    <div class="w-100  p-5">
 
       <!-- Cost center tabel -->
-      <div  *ngIf="activeTable === 'costCenter'" class="card-body">
-        <form [formGroup]="costCenterForm">
-          <!-- Scrollable container for the table -->
-          <div class="table-container table-responsive">
-            <!-- Add Button (Right Side) -->
-            <button id="AddCostCenter" class="btn btn-success text-white accordian-btn-postion me-3 mb-3 shadow"
-              (click)="openAddCostCenterModal($event)">
-              Add
-            </button>
-            <table id="costCenterTable" >
-              <thead class="thead-dark">
-                <tr>
-                  <th style="min-width: 170px">Cost Center Name</th>
-                  <th style="min-width: 170px">Cost Center Code</th>
-                  <th style="min-width: 170px">Description</th>
-                  <th style="min-width: 100px">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let costCenter of costCenterList; let i = index">
-                  <td>{{ costCenter.name }}</td>
-                  <td>{{ costCenter.code }}</td>
-                  <td>{{ costCenter.description }}</td>
-                  <td>
-                    <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
-                      (click)="editCostCenter(costCenter)">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                    <button id="delete" type="button" class="btn btn-sm btn-danger ml-5"
-                      (click)="deleteCostCenter(costCenter)">
-                      <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </form>
+      <div *ngIf="activeTable === 'costCenter'" class="card-body">
+        <button id="AddCostCenter" class="btn btn-success text-white accordian-btn-postion me-3 mb-3 shadow"
+          (click)="openAddCostCenterModal($event)">
+          Add
+        </button>
+        <div class="table-container">
+          <table id="costCenterTable">
+            <thead>
+              <tr>
+                <th style="min-width: 170px">Cost Center Name</th>
+                <th style="min-width: 170px">Cost Center Code</th>
+                <th style="min-width: 170px">Description</th>
+                <th style="min-width: 100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let costCenter of costCenterList; let i = index">
+                <td>{{ costCenter.name }}</td>
+                <td>{{ costCenter.code }}</td>
+                <td>{{ costCenter.description }}</td>
+                <td>
+                  <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                    (click)="editCostCenter(costCenter)">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button id="delete" type="button" class="btn btn-sm btn-danger ml-5"
+                    (click)="deleteCostCenter(costCenter)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ExpenseType -->
       <div *ngIf="activeTable === 'expenseType'" class="card-body">
-       <!-- Add Button (Right Side) -->
-          <button id="AddCostCenter" class="btn btn-success text-white accordian-btn-postion me-3 mb-3 shadow"
-            (click)="openAddExpenseTypeModal($event)">
-            Add
-          </button>
-        <form [formGroup]="expenseTypeForm">
-          <!-- Scrollable container for the table -->
-          <div class="table-container">
-            <table id="expenseTypeTable" class="table table-bordered">
-              <thead class="table-header">
+        <!-- Add Button (Right Side) -->
+        <button id="AddCostCenter" class="btn btn-success text-white accordian-btn-postion me-3 mb-3 shadow"
+          (click)="openAddExpenseTypeModal($event)">
+          Add
+        </button>
+        <div class="table-container">
+          <table id="expenseTypeTable" class="table table-bordered">
+            <thead class="table-header">
+              <tr>
+                <th style="min-width: 170px">Category</th>
+                <th style="min-width: 170px">Expense Type</th>
+                <th style="min-width: 170px">Code (6-8 digits only)</th>
+                <th style="min-width: 100px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop through categories -->
+              <ng-container *ngFor="let category of expenseTypeCategories">
+                <!-- Category Row (Full-width collapsible button) -->
                 <tr>
-                  <th style="min-width: 170px">Category</th>
-                  <th style="min-width: 170px">Expense Type</th>
-                  <th style="min-width: 170px">Code (6-8 digits only)</th>
-                  <th style="min-width: 100px">Actions</th>
+                  <td colspan="100%">
+                    <button class="btn btn-link w-100 text-start" type="button" data-bs-toggle="collapse"
+                      [attr.data-bs-target]="'#category_' + category" aria-expanded="false"
+                      [attr.aria-controls]="'category_' + category">
+                      <strong>{{ category }}</strong> <i class="fa fa-chevron-down float-end"></i>
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                <!-- Loop through categories -->
-                <ng-container *ngFor="let category of expenseTypeCategories">
-                  <!-- Category Row (Full-width collapsible button) -->
-                  <tr>
-                    <td colspan="100%">
-                      <button class="btn btn-link w-100 text-start" type="button" data-bs-toggle="collapse"
-                        [attr.data-bs-target]="'#category_' + category" aria-expanded="false"
-                        [attr.aria-controls]="'category_' + category">
-                        <strong>{{ category }}</strong> <i class="fa fa-chevron-down float-end"></i>
+
+                <!-- Expense Types in Category (collapsible rows) -->
+                <ng-container *ngFor="let expenseType of expenseTypeByCategory.get(category)">
+                  <tr id="{{ 'category_' + category }}" class="collapse">
+                    <td></td> <!-- Empty to offset for category -->
+                    <td>{{ expenseType.expenseName }}</td>
+                    <td>{{ expenseType.expenseCode }}</td>
+                    <td>
+                      <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
+                        (click)="editExpenseCenter(expenseType)">
+                        <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
+                      </button>
+                      <button id="delete" type="button" class="btn btn-sm btn-danger ml-5"
+                        (click)="deleteExpenseType(expenseType)">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>
                     </td>
                   </tr>
-
-                  <!-- Expense Types in Category (collapsible rows) -->
-                  <ng-container *ngFor="let expenseType of expenseTypeByCategory.get(category)">
-                    <tr id="{{ 'category_' + category }}" class="collapse">
-                      <td></td> <!-- Empty to offset for category -->
-                      <td>{{ expenseType.expenseName }}</td>
-                      <td>{{ expenseType.expenseCode }}</td>
-                      <td>
-                        <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
-                          (click)="editExpenseCenter(expenseType)">
-                          <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
-                        </button>
-                        <button id="delete" type="button" class="delete-btn ml-5"
-                          (click)="deleteExpenseType(expenseType)">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </ng-container>
                 </ng-container>
-              </tbody>
-            </table>
-          </div>
-        </form>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Department -->
@@ -168,7 +161,7 @@
                     (click)="editDepartment(department)">
                     <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
                   </button>
-                  <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteDepartment(department)">
+                  <button id="delete" type="button" class="btn btn-sm btn-danger ml-5" (click)="deleteDepartment(department)">
                     <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                   </button>
                 </td>
@@ -189,33 +182,31 @@
           <table id="vendorTable">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Vendor ID</th>
                 <th>Vendor Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
                 <th>Bank Name</th>
                 <th>IBAN Number</th>
                 <th>Bank Address</th>
-                <th>Address</th>
-                <th>Phone Number</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let vendor of vendorList">
-                <td>{{ vendor.id }}</td>
                 <td>{{ vendor.vendorId }}</td>
                 <td>{{ vendor.vendorName }}</td>
+                <td>{{ vendor.address }}</td>
+                <td>{{ vendor.phoneNumber }}</td>
                 <td>{{ vendor.bankDetails.bankName }}</td>
                 <td>{{ vendor.bankDetails.ibanNumber }}</td>
                 <td>{{ vendor.bankDetails.bankAddress }}</td>
-                <td>{{ vendor.address }}</td>
-                <td>{{ vendor.phoneNumber }}</td>
                 <td>
                   <button id="edit" type="button" class="btn btn-sm btn-warning edit-cust-btn"
                     (click)="editVendor(vendor)">
                     <i class="fa fa-edit"></i> <!-- Font Awesome edit icon -->
                   </button>
-                  <button id="delete" type="button" class="delete-btn ml-5" (click)="deleteVendor(vendor)">
+                  <button id="delete" type="button" class="btn btn-sm btn-danger ml-5" (click)="deleteVendor(vendor)">
                     <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
                   </button>
                 </td>
@@ -234,115 +225,195 @@
 <!-- All model codes-->
 
 <!-- Modal Popup for Adding New Cost Center -->
-<div *ngIf="showAddCostCenterModel" class="modal">
-  <div class="modal-content">
-    <h3>{{ editCostCenterModel ?'Edit Cost Center' : "Add New Cost Center" }}</h3>
-    <form [formGroup]="newCostCenterForm">
-      <div>
-        <label for="newName">Name:</label>
-        <input id="newName" formControlName="name" type="text" placeholder="Cost Center Name">
+<div *ngIf="showAddCostCenterModel" class="modal d-block" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h3 class="modal-title mb-0">{{ editCostCenterModel ? 'Edit Cost Center' : 'Add New Cost Center' }}</h3>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+          (click)="closeAddCostCenterModel()"></button>
       </div>
-      <div>
-        <label for="newCode">Code:</label>
-        <input id="newCode" formControlName="code" type="text" placeholder="Cost Center Code">
+      <div class="modal-body">
+        <form [formGroup]="newCostCenterForm" class="px-3">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="newName" class="form-label fw-bold">Name:</label>
+              <input id="newName" formControlName="name" type="text" class="form-control"
+                placeholder="Cost Center Name">
+            </div>
+            <div class="col-md-6">
+              <label for="newCode" class="form-label fw-bold">Code:</label>
+              <input id="newCode" formControlName="code" type="text" class="form-control"
+                placeholder="Cost Center Code">
+            </div>
+            <div class="col-12">
+              <label for="newDescription" class="form-label fw-bold">Description:</label>
+              <input id="newDescription" formControlName="description" type="text" class="form-control"
+                placeholder="Cost Center Description">
+            </div>
+          </div>
+        </form>
       </div>
-      <div>
-        <label for="newDescription">Description:</label>
-        <input id="newDescription" formControlName="description" type="text" placeholder="Cost Center Decription">
+      <div class="modal-footer border-top-0 d-flex justify-content-end">
+        <button type="button" class="btn btn-primary me-2" (click)="createNewCostCenter()">
+          {{ editCostCenterModel ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="closeAddCostCenterModel()">Cancel</button>
       </div>
-      <button type="button" (click)="createNewCostCenter()">{{ editCostCenterModel ?'Update' : "Create" }}</button>
-      <button type="button" (click)="closeAddCostCenterModel()">Cancel</button>
-    </form>
+    </div>
   </div>
 </div>
 
+
+
 <!-- Modal Popup for Adding New Expense Type -->
-<div *ngIf="showAddExpenseTypeModal" class="modal">
-  <div class="modal-content">
-    <h3> {{editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }} </h3>
-    <form [formGroup]="newExpenseTypeForm">
-      <div>
-        <select formControlName="category" class="small-input">
-          <option *ngFor="let category of expenseTypeCategories" [value]="category">
-            {{category}}
-          </option>
-        </select>
+<div *ngIf="showAddExpenseTypeModal" class="modal d-block" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h3 class="modal-title mb-0">{{ editExpenseTypeModel ? 'Edit Expense Type' : 'Add Expense Type' }}</h3>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+          (click)="closeExpenseTypeModal()"></button>
       </div>
-      <div>
-        <label for="expenseName">Type:</label>
-        <input id="expenseName" formControlName="expenseName" type="text" placeholder="ExpenseType Name">
+      <div class="modal-body">
+        <form [formGroup]="newExpenseTypeForm" class="px-3">
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="expenseCategory" class="form-label fw-bold">Category:</label>
+              <select id="expenseCategory" formControlName="category" class="form-select">
+                <option *ngFor="let category of expenseTypeCategories" [value]="category">
+                  {{ category }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="expenseName" class="form-label fw-bold">Type:</label>
+              <input id="expenseName" formControlName="expenseName" type="text" class="form-control"
+                placeholder="Expense Type Name">
+            </div>
+            <div class="col-md-6">
+              <label for="expenseCode" class="form-label fw-bold">Code:</label>
+              <input id="expenseCode" formControlName="expenseCode" type="text" class="form-control"
+                placeholder="Expense Type Code">
+            </div>
+          </div>
+        </form>
       </div>
-      <div>
-        <label for="expenseCode">Code:</label>
-        <input id="expenseCode" formControlName="expenseCode" type="text" placeholder="ExpenseType Code">
+      <div class="modal-footer border-top-0 d-flex justify-content-end">
+        <button type="button" class="btn btn-primary me-2" (click)="createExpenseType()">
+          {{ editExpenseTypeModel ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="closeExpenseTypeModal()">Cancel</button>
       </div>
-      <button type="button" (click)="createExpenseType()"> {{ editExpenseTypeModel ? 'Update' : 'Create' }}</button>
-      <button type="button" (click)="closeExpenseTypeModal()">Cancel</button>
-    </form>
+    </div>
   </div>
 </div>
+
 
 
 <!-- Modal Popup for Adding New Department -->
-<div *ngIf="showAddDepartmenteModal" class="modal">
-  <div class="modal-content">
-    <h3>{{editDepartmenteModal ? 'Edit Departments' : 'Add Departments'}}</h3>
-    <form [formGroup]="newDepartmentForm">
-      <div>
-        <label for="departmentName">Name:</label>
-        <input id="departmentName" formControlName="departmentName" type="text" placeholder="Name">
+<div *ngIf="showAddDepartmenteModal" class="modal d-block" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h3 class="modal-title mb-0">{{ editDepartmenteModal ? 'Edit Department' : 'Add Department' }}</h3>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+          (click)="closeDepartmentsModal()"></button>
       </div>
-      <div>
-        <label for="departmentManager">Code:</label>
-        <input id="departmentManager" formControlName="departmentManager" type="text" placeholder="Manager">
+      <div class="modal-body">
+        <form [formGroup]="newDepartmentForm" class="px-3">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="departmentName" class="form-label fw-bold">Name:</label>
+              <input id="departmentName" formControlName="departmentName" type="text" class="form-control"
+                placeholder="Department Name">
+            </div>
+            <div class="col-md-6">
+              <label for="departmentManager" class="form-label fw-bold">Manager:</label>
+              <input id="departmentManager" formControlName="departmentManager" type="text" class="form-control"
+                placeholder="Manager Name">
+            </div>
+            <div class="col-12">
+              <label for="submitter" class="form-label fw-bold">Submitter:</label>
+              <input id="submitter" formControlName="submitter" type="text" class="form-control"
+                placeholder="Submitter Name">
+            </div>
+          </div>
+        </form>
       </div>
-      <div>
-        <label for="submitter">Submitter:</label>
-        <input id="submitter" formControlName="submitter" type="text" placeholder="Submitter">
+      <div class="modal-footer border-top-0 d-flex justify-content-end">
+        <button type="button" class="btn btn-primary me-2" (click)="createDepartments()">
+          {{ editDepartmenteModal ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="closeDepartmentsModal()">Cancel</button>
       </div>
-      <button type="button" (click)="createDepartments()">{{editDepartmenteModal ? 'Update' : 'Create'}}</button>
-      <button type="button" (click)="closeDepartmentsModal()">Cancel</button>
-    </form>
+    </div>
   </div>
 </div>
 
+
 <!-- Modal Popup for Adding New vendor -->
-<div *ngIf="showAddVendorModal" class="modal">
-  <div class="modal-content">
-    <h3>{{ editVendorModal ? 'Edit Vendor' : 'Add Vendor' }}</h3>
-    <form [formGroup]="newVendorForm">
-      <div>
-        <label for="vendorName">Vendor Name:</label>
-        <input id="vendorName" formControlName="vendorName" type="text" placeholder="Vendor Name">
+<div *ngIf="showAddVendorModal" class="modal d-block" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white py-2">
+        <h3 class="modal-title mb-0 fs-5">{{ editVendorModal ? 'Edit Vendor' : 'Add Vendor' }}</h3>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+          (click)="closeVendorModal()"></button>
       </div>
-      <div>
-        <label for="vendorName">Vendor Id:</label>
-        <input id="vendorName" formControlName="vendorId" type="text" placeholder="Vendor Id">
+      <div class="modal-body py-2">
+        <form [formGroup]="newVendorForm" class="px-3">
+          <div class="row gy-2">
+            <div class="col-md-6">
+              <label for="vendorName" class="form-label fw-bold mb-1">Vendor Name:</label>
+              <input id="vendorName" formControlName="vendorName" type="text" class="form-control form-control-sm"
+                placeholder="Vendor Name">
+            </div>
+            <div class="col-md-6">
+              <label for="vendorId" class="form-label fw-bold mb-1">Vendor Id:</label>
+              <input id="vendorId" formControlName="vendorId" type="text" class="form-control form-control-sm"
+                placeholder="Vendor Id">
+            </div>
+            <div class="col-12">
+              <label for="address" class="form-label fw-bold mb-1">Address:</label>
+              <input id="address" formControlName="address" type="text" class="form-control form-control-sm"
+                placeholder="Address">
+            </div>
+            <div class="col-12">
+              <label for="phoneNumber" class="form-label fw-bold mb-1">Phone Number:</label>
+              <input id="phoneNumber" formControlName="phoneNumber" type="text" class="form-control form-control-sm"
+                placeholder="Phone Number">
+            </div>
+          </div>
+
+          <fieldset formGroupName="bankDetails" class="mt-3">
+            <legend class="fw-bold fs-6">Bank Details</legend>
+            <div class="row gy-2">
+              <div class="col-md-6">
+                <label for="bankName" class="form-label fw-bold mb-1">Bank Name:</label>
+                <input id="bankName" formControlName="bankName" type="text" class="form-control form-control-sm"
+                  placeholder="Bank Name">
+              </div>
+              <div class="col-md-6">
+                <label for="ibanNumber" class="form-label fw-bold mb-1">IBAN Number:</label>
+                <input id="ibanNumber" formControlName="ibanNumber" type="text" class="form-control form-control-sm"
+                  placeholder="IBAN Number">
+              </div>
+              <div class="col-12">
+                <label for="bankAddress" class="form-label fw-bold mb-1">Bank Address:</label>
+                <input id="bankAddress" formControlName="bankAddress" type="text" class="form-control form-control-sm"
+                  placeholder="Bank Address">
+              </div>
+            </div>
+          </fieldset>
+        </form>
       </div>
-      <div>
-        <label for="address">Address:</label>
-        <input id="address" formControlName="address" type="text" placeholder="Address">
+      <div class="modal-footer border-top-0 d-flex justify-content-end py-2">
+        <button type="button" class="btn btn-primary btn-sm me-2" (click)="createVendor()">
+          {{ editVendorModal ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeVendorModal()">Cancel</button>
       </div>
-      <div>
-        <label for="phoneNumber">Phone Number:</label>
-        <input id="phoneNumber" formControlName="phoneNumber" type="text" placeholder="Phone Number">
-      </div>
-      <div formGroupName="bankDetails">
-        <div>
-          <label for="bankName">Bank Name:</label>
-          <input id="bankName" formControlName="bankName" type="text" placeholder="Bank Name">
-        </div>
-        <div>
-          <label for="ibanNumber">IBAN Number:</label>
-          <input id="ibanNumber" formControlName="ibanNumber" type="text" placeholder="IBAN Number">
-        </div>
-        <div>
-          <label for="bankAddress">Bank Address:</label>
-          <input id="bankAddress" formControlName="bankAddress" type="text" placeholder="Bank Address">
-        </div>
-      </div>
-      <button type="button" (click)="createVendor()">{{ editVendorModal ? 'Update' : 'Create' }}</button>
-      <button type="button" (click)="closeVendorModal()">Cancel</button>
-    </form>
+    </div>
   </div>
 </div>
