@@ -86,11 +86,14 @@ export class UserManagmentComponent implements OnInit {
 
 
   // Method to handle page changes (pagination)
-  onPageChange(event: any) {
-    this.page = event.page;
-    this.rows = event.rows;
-    this.loadUsers(this.page, this.rows); // Fetch users for the new page
-  }
+ // Method to handle page changes (pagination)
+onPageChange(event: any) {
+  console.log('Pagination Event:', event); 
+  this.page = event.first / event.rows; 
+  this.rows = event.rows; 
+  this.loadUsers(this.page, this.rows); 
+}
+
   changePassword(userEmailId: string): void {
     // Fetch the user email based on the userId (you can adjust this according to your logic)
     const userEmail = userEmailId
