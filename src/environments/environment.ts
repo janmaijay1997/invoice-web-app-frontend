@@ -16,6 +16,8 @@ export const environment = {
   vendorInvoiceRefAlreadyExistUrl: baseUrl + '/invoice/is-vendor-invoiceRef-exists/',
   deleteInvoiceUrl: baseUrl + '/invoice/delete-invoice',
   getInvoicePdfUrl: baseUrl + '/invoice/generateinvoice',
+  filteredInvoiceListUrl: baseUrl + '/invoice/filtered-invoices',
+
 
 
   createCostCenterUrl: baseUrl + '/invoice/create-costcenter',

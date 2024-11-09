@@ -179,6 +179,24 @@ export class ViewInvoiceComponent implements OnInit {
     });
   }
 
+  filterValues(invoiceNumber:any, vendorName:any, status:any) {
+
+    const selectedStatus = status === 'All' ? '' : status;
+
+    this.invoiceService.getInvoiceByFilterList(invoiceNumber,vendorName,selectedStatus).subscribe(
+      (response: any) => {
+        this.invoiceList = response || [];
+        this.filteredInvoices = [...this.invoiceList];
+      },
+      (error: any) => {
+        console.error('Error fetching details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
+
+
+
 
   downloadPdf(invoiceId: any) {
     this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: any) => {

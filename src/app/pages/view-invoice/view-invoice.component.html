@@ -4,14 +4,14 @@
         <div class="invoice_form mb-3">
             <div class="col-md-3">
                 <input type="text" class="form-control" placeholder="Search by invoice number"
-                    [(ngModel)]="filter.invoiceNumber" aria-label="Search by invoice number" (input)="filterInvoice()">
+                    [(ngModel)]="filter.invoiceNumber" aria-label="Search by invoice number" (input)="filterValues(filter.invoiceNumber, filter.vendorName, selectedStatus)">
             </div>
             <div class="col-md-3">
                 <input type="text" class="form-control" placeholder="Search by VendorName"
-                    [(ngModel)]="filter.vendorName" aria-label="Search by VendorName" (input)="filterInvoice()">
+                    [(ngModel)]="filter.vendorName" aria-label="Search by VendorName" (input)="filterValues(filter.invoiceNumber, filter.vendorName, selectedStatus)">
             </div>
             <div class="col-md-3">
-                <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterInvoice()">
+                <select class="form-control" [(ngModel)]="selectedStatus" (change)="filterValues(filter.invoiceNumber, filter.vendorName, selectedStatus)">
                     <option value="" disabled selected>Select Status</option>
                     <option value="All">ALL</option> <!-- Added All option -->
                     <option *ngFor="let value of dropdownValues" [value]="value">{{ value }}</option>
