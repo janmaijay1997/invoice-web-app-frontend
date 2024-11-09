@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -17,17 +17,39 @@ export class InvoiceService {
     return this.httpClient.get(environment.vendorInvoiceRefAlreadyExistUrl + vendorInvoiceRef);
   }
 
-  getInvoiceList(): any {
-    return this.httpClient.get(environment.invoiceListUrl);
+  getInvoiceList(page: number, size: number): any {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.httpClient.get(environment.invoiceListUrl, { params });
   }
-
-  getInvoiceByFilterList(invoiceNumber: any, vendorName: any, status: any): any {
-    return this.httpClient.get(environment.filteredInvoiceListUrl + '?invoiceNumber=' + invoiceNumber + '&vendorName=' + vendorName + '&status=' + status);
+  
+  getInvoiceByFilterList(invoiceNumber: any, vendorName: any, status: any, page: number, size: number): any {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+  
+    if (invoiceNumber) {
+      params = params.set('invoiceNumber', invoiceNumber);
+    }
+    if (vendorName) {
+      params = params.set('vendorName', vendorName);
+    }
+    if (status) {
+      params = params.set('status', status);
+    }
+  
+    return this.httpClient.get(environment.filteredInvoiceListUrl, { params });
   }
-
-  getInvoiceListOfParticularUser(createdBy: string): any {
-    return this.httpClient.get(environment.invoiceListForCreatedUserUrl + '?createdBy=' + createdBy);
+  
+  getInvoiceListOfParticularUser(createdBy: string, page: number, size: number): any {
+    const params = new HttpParams()
+      .set('createdBy', createdBy)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.httpClient.get(environment.invoiceListForCreatedUserUrl, { params });
   }
+  
 
   getInvoiceDetails(invoiceId: string): any {
     return this.httpClient.get(environment.invoiceDetailsUrl + invoiceId);

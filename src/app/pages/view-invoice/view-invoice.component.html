@@ -19,8 +19,17 @@
             </div>
         </div>
         <div class="table_view">
-            <p-table [value]="filteredInvoices" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
+            <p-table
+            [value]="filteredInvoices"
+            [paginator]="true"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [loading]="loading"
+            [lazy]="true"
+            (onLazyLoad)="onPageChange($event)"
+            [tableStyle]="{ 'min-width': '50rem' }"
+          >
+                          <ng-template pTemplate="header">
                     <tr class="custom-header">
                         <th style="min-width:150px">Invoice Number</th>
                         <th style="min-width:150px">Date</th>
