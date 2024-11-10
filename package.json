@@ -5,7 +5,7 @@
     "ng": "set NODE_OPTIONS=--openssl-legacy-provider && ng",
     "conventional-changelog": "conventional-changelog",
     "start": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve",
-    "build": "ng build",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && ng build --configuration=production --base-href /invoiceWeb/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
