@@ -74,8 +74,13 @@ export class ViewInvoiceComponent implements OnInit {
     const { invoiceNumber, vendorName } = this.filter;
     const selectedStatus = this.selectedStatus === 'All' ? '' : this.selectedStatus;
 
+    let createdBy = getLoginUserEmail();
+    if (this.userRole !== 'USER') {
+      createdBy = '';
+    }
+
     if (invoiceNumber || vendorName || selectedStatus) {
-      this.invoiceService.getInvoiceByFilterList(invoiceNumber, vendorName, selectedStatus, this.page, this.rows).subscribe(
+      this.invoiceService.getInvoiceByFilterList(invoiceNumber, vendorName, selectedStatus,createdBy, this.page, this.rows).subscribe(
         (response: any) => this.handleApiResponse(response),
         (error: any) => this.handleApiError(error)
       );
@@ -164,6 +169,7 @@ export class ViewInvoiceComponent implements OnInit {
   }
 
   downloadPdf(invoiceId: string) {
+    console.log("...... ",invoiceId)
     this.invoiceService.generatePdf(invoiceId).subscribe((base64Pdf: any) => {
       const pdfDataUrl = 'data:application/pdf;base64,' + base64Pdf.pdfData;
       const link = document.createElement('a');

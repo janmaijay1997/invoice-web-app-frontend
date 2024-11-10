@@ -24,7 +24,7 @@ export class InvoiceService {
     return this.httpClient.get(environment.invoiceListUrl, { params });
   }
   
-  getInvoiceByFilterList(invoiceNumber: any, vendorName: any, status: any, page: number, size: number): any {
+  getInvoiceByFilterList(invoiceNumber: any, vendorName: any, status: any, createdBy:any, page: number, size: number): any {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -38,6 +38,9 @@ export class InvoiceService {
     if (status) {
       params = params.set('status', status);
     }
+    
+    params = params.set('createdBy', createdBy);
+    
   
     return this.httpClient.get(environment.filteredInvoiceListUrl, { params });
   }
