@@ -1,0 +1,20 @@
+<div class="page_body_main">
+    <div class="header">
+        <app-header></app-header>
+    </div>
+    <div class="body">
+        <div class="content">
+            <div class="sidebar_body" [ngClass]="{hide : sidebarclose}">
+                <app-sidebar></app-sidebar>
+            </div>
+            <div class="main_content" [ngClass]="{show : sidebarclose}">  
+                    <button class="toggle-btn" (click)="toggleSidebar()">
+                            <img src="assets/images/menu.png">
+                          </button> 
+                          <div class="router_body">
+                              <router-outlet></router-outlet>
+                        </div> 
+            </div>
+        </div>
+    </div>
+</div>

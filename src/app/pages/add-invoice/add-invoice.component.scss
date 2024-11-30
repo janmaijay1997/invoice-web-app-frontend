@@ -1,0 +1,145 @@
+.table-row-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px; /* Optional spacing between the tables */
+}
+
+.table-container {
+    // flex: 1; /* Ensures equal width for all tables */
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    width: calc(50% - 10px);
+    @media (max-width:1000px) {
+        width: 100%;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;  // Allows horizontal scrolling if the table overflows the container
+}
+
+.addItem {
+    display: inline-block;  /* Aligns the button to the left */
+    font-size: 14px;        /* Smaller font size */
+    padding: 5px 10px;      /* Small padding for compact appearance */
+    background-color: #007bff;  /* Button background color */
+    color: white;           /* Button text color */
+    border: none;           /* Remove borders */
+    border-radius: 4px;     /* Rounded corners */
+    cursor: pointer;        /* Show pointer on hover */
+    margin-bottom: 10px;    /* Space between button and items table */
+}
+
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.addItem:hover {
+    background-color: #0056b3; /* Darken color on hover */
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.small-input {
+    width: 100%;
+    // max-width: 100px;  // Limit the input width
+}
+
+input, select {
+    padding: 0.3rem;
+    font-size: 0.9rem;
+    width: 100%;  // Ensures the input takes up the full column width
+    box-sizing: border-box;
+}
+form {
+    width: 400px;
+    margin: auto;
+  }
+  
+  
+  
+  
+  label {
+    display: block;
+    margin : 10px 0;
+    font-weight: 600;
+    font-size: 23px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 5px;
+  }
+  
+  button {
+    margin : 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  form{
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px gray;
+    width: 100%;
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+
+  }
+  
+  .bank-detail-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .bank-name {
+    font-size: 18px;
+    color: #2a6acb;
+    font-weight: bold;
+  }
+  
+  .bank-detail {
+    color: #000;
+    font-size: 16px;
+    text-transform: capitalize;
+    font-weight: 500;
+  }
+
+  

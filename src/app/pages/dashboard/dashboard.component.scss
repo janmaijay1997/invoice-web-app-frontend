@@ -1,0 +1,90 @@
+//VVV
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1140px; /* You can adjust based on your design */
+}
+
+/* Row */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* Column */
+.col {
+    flex: 1;
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.ml-5{
+  margin-left: 5px;
+}
+
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.accordian-btn-postion{
+  position: relative;
+}
+
+.dashboard-accordian{
+  margin: 0 25px !important;
+}
+
+.accordion-button {
+  background-color: transparent !important; /* Remove background color */
+  color: inherit !important;                /* Keep the text color same */
+  box-shadow: none !important;              /* Remove any shadow effects */
+}
+
+.custom-padding{
+  padding: 5px !important;
+}
+
+.accordian-btn-postion {
+  margin-right: 10px; /* Adjust margin to position button */
+}
+
+.custom-padding {
+  padding-right: 0.75rem; /* Adjust if needed */
+}
+
+
+.table-container {
+  overflow-y: auto; /* Allows vertical scrolling */
+  max-height: 400px; /* You can adjust this value as needed */
+}
+
+.table-header th {
+  position: sticky;
+  top: 0;
+  background-color: rgb(0, 123, 255); /* Bootstrap primary color */
+  z-index: 10;
+  border-bottom: 2px solid #dee2e6;
+  color: white; /* Change text color to white */
+  font-size: 1.1rem; /* Slightly bigger font size */
+  padding: 12px; /* Optional: Adjust padding for better spacing */
+  text-align: center; /* Center-align text */
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+}
+
+

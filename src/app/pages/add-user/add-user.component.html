@@ -1,0 +1,79 @@
+<div class="component_body">
+    <h1 class="component_title">Add User</h1>
+    <div class="inner_body">
+      <div class="addUser_content">
+        <form [formGroup]="addUserFormGroup">
+          <div class="three_column">
+            <div class="form_control">
+              <label for="">First Name</label>
+              <input type="text" placeholder="First name" formControlName="name">
+              <div *ngIf="name?.invalid && name?.touched" class="error">
+                First name is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Last Name</label>
+              <input type="text" placeholder="Last name" formControlName="surname">
+              <div *ngIf="surname?.invalid && surname?.touched" class="error">
+                Last name is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Email</label>
+              <input type="email" placeholder="Email" formControlName="email">
+              <div *ngIf="email?.invalid && email?.touched" class="error">
+                A valid email is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Password</label>
+              <input type="password" placeholder="Password" formControlName="password">
+              <div *ngIf="password?.invalid && password?.touched" class="error">
+                Password is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Mobile No.</label>
+              <input type="text" placeholder="Mobile no." formControlName="phone">
+              <div *ngIf="phone?.invalid && phone?.touched" class="error">
+                Mobile number is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">User Role</label>
+              <p-dropdown 
+                [options]="userRollList" 
+                formControlName="roles"
+                optionLabel="name" 
+                optionValue="code"  
+                [multiple]="true"
+                placeholder="Select user roles">
+                >
+              </p-dropdown>
+              <div *ngIf="roles?.invalid && roles?.touched" class="error">
+                User role is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Country</label>
+              <input type="text" formControlName="country" placeholder="Country">
+              <div *ngIf="country?.invalid && country?.touched" class="error">
+                Country is required
+              </div>
+            </div>
+            <div class="form_control">
+              <label for="">Department</label>
+              <input type="text" formControlName="department" placeholder="Department">
+              <div *ngIf="department?.invalid && department?.touched" class="error">
+                Department is required
+              </div>
+            </div>
+          </div>
+          <div class="button_group">
+            <button type="button" (click)="createUser()" [disabled]="addUserFormGroup.invalid">Add User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

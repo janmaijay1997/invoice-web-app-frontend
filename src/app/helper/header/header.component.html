@@ -1,0 +1,10 @@
+<header class="sidebar-header">
+  <span>Invoice</span>
+  <!-- Icon for user profile -->
+  <i class="fa fa-user-circle user-icon" (click)="togglePopup()"></i>
+  
+  <!-- Popup for the logout button -->
+  <div class="popup" *ngIf="isPopupVisible">
+    <button (click)="logout()"> <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
+  </div>
+</header>

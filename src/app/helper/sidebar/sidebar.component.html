@@ -1,0 +1,8 @@
+<div class="sidebar">
+  <ul>
+      <li *ngFor="let item of menuItems" (click)="setActiveMenuItem(item)" [ngClass]="{'active': item.active}">
+          <i class="fa {{ item.icon }}"></i> <!-- Icon for the menu item -->
+          {{item.label}}
+      </li>
+  </ul>
+</div>

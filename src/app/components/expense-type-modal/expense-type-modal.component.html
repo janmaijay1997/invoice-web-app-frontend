@@ -1,0 +1,33 @@
+<div class="custom-modal">
+  <div class="modal-header border-bottom-0">
+    <h2 class="modal-title">Select Expense Type</h2>
+  </div>
+
+  <div class="modal-body">
+    <!-- Category Dropdown -->
+    <div class="mb-4">
+      <label for="category" class="form-label fw-bold">Category</label>
+      <select id="category" [(ngModel)]="selectedCategory" class="form-select form-select-lg" (change)="onCategoryChange(selectedCategory)">
+        <option *ngFor="let category of data.categories" [value]="category">{{ category }}</option>
+      </select>
+    </div>
+
+    <!-- Expense Code List with Scrollable Feature -->
+    <div *ngIf="selectedCategory">
+      <label for="expenseCode" class="form-label fw-bold">Expense Code</label>
+      <div class="expense-code-list overflow-auto" style="max-height: 200px;">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let expense of data.expenseTypeByCategory.get(selectedCategory)">
+            <button class="btn btn-light w-100 text-start" (click)="onSelectExpenseCode(expense.expenseCode)">
+              {{ expense.expenseName }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer border-top-0">
+    <button type="button" class="btn btn-primary" (click)="closeDialog()">Close</button>
+  </div>
+</div>

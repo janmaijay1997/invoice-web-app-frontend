@@ -1,0 +1,248 @@
+<div class="component_body">
+    <h1 class="component_title">Petty Cash</h1>
+    <div class="inner_body">
+        <div [formGroup]="invoiceCreateFormGroup">
+            <!-- <label for="client">Client Name</label>
+             <input formControlName="clientName" type="text" id="client" placeholder="Enter client name" required>-->
+
+
+            <!-- Flexbox container for horizontal alignment -->
+            <div class="table-row-container">
+
+                <!-- Account table -->
+                <div class="table-container">
+                    <table>
+
+                        <tbody>
+                            <tr>
+                                <th>Account Type</th>
+                                <td>
+                                    <select formControlName="accountType" class="small-input">
+                                        <option *ngFor="let accountType of accountsList" [value]="accountType.name">
+                                            {{accountType.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Payment Type</th>
+                                <td>
+                                    <select formControlName="paymentType" class="small-input">
+                                        <option *ngFor="let paymentType of paymentTypeList" [value]="paymentType">
+                                            {{paymentType}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Submitter</th>
+                                <td>
+                                    <select formControlName="submitter" class="small-input"
+                                        (change)="selectSubmitter($event)">
+                                        <option *ngFor="let department of departmentList"
+                                            [value]="department.submitter">
+                                            {{department.submitter}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Department</th>
+                                <td> <label
+                                        class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
+                                    <!-- <select formControlName="department" class="small-input" [disabled]=true>
+                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
+                                            {{department.departmentName}}
+                                        </option>
+                                    </select> -->
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bill to table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Bill To</th>
+                                <td>
+                                    {{ invoiceCreateFormGroup.get('billTo')?.value }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Payment Due date</th>
+                                <td>
+                                    <input type="date" formControlName="paymentDueDate" class="small-input"
+                                        (change)="paymentDueDateType($event)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Vendor Bank Details</th>
+                                <td>NONE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="item-section">
+                <label>Items</label>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="min-width: 50px">SR.No</th>
+                                <th style="min-width: 170px">Vendor Invoice Ref</th>
+                                <th style="min-width: 150px">Vendor</th>
+                                <th style="min-width: 150px">InvoiceDate</th>
+                                <th style="min-width: 170px">Cost Code</th>
+                                <th style="min-width: 170px">Expense Type</th>
+                                <th style="min-width: 170px">Rate of SAR</th>
+                                <th style="min-width: 170px">Currency</th>
+                                <th style="min-width: 200px">Description</th>
+                                <th style="min-width: 200px">Submitter</th>
+                                <th style="min-width: 200px">ItemAmount</th>
+                                <th style="min-width: 200px">Quantity</th>
+                                <th style="min-width: 200px">SubTotal</th>
+                                <th style="min-width: 200px">PtcAdvance</th>
+                                <th style="min-width: 200px">Total</th>
+                                <th style="min-width: 170px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody formArrayName="items">
+                            <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                                <td style="min-width: 50px">
+                                    <span>{{i+1}}</span>
+                                </td>
+
+                                <td style="min-width: 170px">
+                                    <input type="text" formControlName="vendorInvoiceRef" placeholder="vendorInvoiceRef"
+                                        class="small-input" (input)="isVendorInvoiceRefAlreadyExist($event)">
+                                </td>
+
+                                <!-- Vendor Name Dropdown -->
+                                <td>
+                                    <select formControlName="vendorName" class="small-input">
+                                        <option *ngFor="let vendor of vendorList" [value]="vendor.vendorName">
+                                            {{vendor.vendorName}}
+                                        </option>
+                                    </select>
+                                </td>
+
+
+                                <td>
+                                    <input type="date" formControlName="vendorInvoiceDate" class="small-input"
+                                        (change)="onDateChange($event, item)">
+                                </td>
+
+                                <!-- Cost Code Dropdown -->
+                                <td>
+                                    <select formControlName="costCode" class="small-input">
+                                        <option *ngFor="let costCenter of costCenterList" [ngValue]="costCenter.code">
+                                            {{costCenter.code}}
+                                        </option>
+                                    </select>
+                                </td>
+
+                                <!-- Expense Code Dropdown -->
+                                <td>
+                                    <input type="text" formControlName="expenseType" class="small-input"
+                                        placeholder="Select Expense Type" readonly
+                                        (click)="openExpenseTypeDialog(item)">
+                                </td>
+                                <td>
+                                    <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                <td>
+                                    <select formControlName="currency" class="small-input">
+                                        <option *ngFor="let currencyValue of currenciesList"
+                                            [ngValue]="currencyValue.currencyName">
+                                            {{ currencyValue.currencyName}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" formControlName="description" placeholder="Description">
+                                </td>
+
+                                <td>
+                                    <input type="text" formControlName="submitterName" placeholder="Submitter">
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="itemAmount" placeholder="total"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="quantity" placeholder="Quantity"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="subTotal" placeholder="subTotal"
+                                        class="small-input" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="ptcAdvance" placeholder="ptcAdvance"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+
+                                <td>
+                                    <input type="number" formControlName="total" placeholder="Total" class="small-input"
+                                        readonly>
+                                </td>
+
+                                <td>
+                                    <!-- <button type="button" (click)="removeItem(i)">Remove</button> -->
+                                    <button id="delete" type="button" class="delete-btn ml-5" (click)="removeItem(i)">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> <!-- Font Awesome trash icon -->
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3 class="text-danger">{{isVendorInvoiceRefAlreadyExistMessage}}</h3>
+                </div>
+
+                <button id="addItem" type="button" (click)="addItem()">Add Item</button>
+            </div>
+
+            <!-- Sub Total -->
+            <div class="table-container">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Subtotal</th>
+                            <td>
+                                <input type="text" formControlName="subTotalAmount" placeholder="Total"
+                                    class="small-input text-center" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Adjustment</th>
+                            <input type="number" formControlName="adjustments" placeholder="adjustments"
+                                class="small-input text-center">
+                        </tr>
+                        <tr>
+                            <th>Grand Total</th>
+                            <td class="text-primary fw-bold">{{ (getTotalAmountWithAdjustment()) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="saveInvoice" type="button" (click)="saveInvoice()">Save Invoice</button>
+        </div>
+    </div>
+</div>
