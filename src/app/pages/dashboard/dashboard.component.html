@@ -281,8 +281,8 @@
             <div class="col-12">
               <label for="expenseCategory" class="form-label fw-bold">Category:</label>
               <select id="expenseCategory" formControlName="category" class="form-select">
-                <option *ngFor="let category of expenseTypeCategories" [value]="category">
-                  {{ category }}
+                <option *ngFor="let category of categoryList" [value]="category.categoryName">
+                  {{ category.categoryName }}
                 </option>
               </select>
             </div>

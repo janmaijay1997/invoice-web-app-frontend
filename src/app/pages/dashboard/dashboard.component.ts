@@ -42,6 +42,10 @@ interface BankDetails {
   bankAddress: string;
 }
 
+interface Category {
+  categoryName: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -78,6 +82,7 @@ export class DashboardComponent implements OnInit {
   expenseTypeList: ExpenseType[] = [];
   departmentList: Department[] = [];
   vendorList: Vendor[] = [];
+  categoryList: Category[] =[];
 
   expenseTypeByCategory: Map<string, ExpenseType[]> = new Map();
   expenseTypeCategories: string[] = [];
@@ -154,6 +159,7 @@ export class DashboardComponent implements OnInit {
     this.getDepartmentsList();
     this.getVendorList();
     this.getExpenseTypeListByCategory();
+    this.getCommonDetailsData();
 
   }
 
@@ -172,6 +178,19 @@ export class DashboardComponent implements OnInit {
   get vendors(): FormArray {
     return this.departmentForm.get('vendors') as FormArray;
   }
+
+   getCommonDetailsData() {
+    this.commonDetailsService.getAllOtherDetails().subscribe(
+      (response: any) => {
+        console.log("ppppp : ",response)
+        this.categoryList = response.categories;
+      },
+      (error: any) => {
+        console.error('Error fetching details:', error);
+      }
+    );
+  }
+
 
   openAddCostCenterModal(event: Event) {
     event.stopPropagation(); // Prevent the accordion toggle
