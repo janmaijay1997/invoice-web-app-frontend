@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:8080/InvoiceWebApp/webportal/v1'
+const baseUrl = 'http://host.iteckstar.net:8082/InvoiceWebApp/webportal/v1'
 export const environment = {
   production: true,
   loginUser: baseUrl + '/login',
