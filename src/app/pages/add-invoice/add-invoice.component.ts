@@ -7,6 +7,7 @@ import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 
 interface Accounts {
@@ -96,6 +97,7 @@ export class AddInvoiceComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
+    private userService: UserService,
     private toastr: ToastrService,
     private router: Router,
     public dialog: MatDialog) {
@@ -122,6 +124,7 @@ export class AddInvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+    this.getUserDetails();
   }
 
   openExpenseTypeDialog(item: any): void {
@@ -227,6 +230,21 @@ export class AddInvoiceComponent implements OnInit {
     if (vendor) {
       item.get('vendorId')?.setValue(vendor.vendorId);
     }
+  }
+
+  userDetails: any;
+
+  getUserDetails() {
+    let loggedInEmail = getLoginUserEmail();
+    this.userService.getUserDetails(loggedInEmail).subscribe(
+      (response: any) => {
+        this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
   }
 
 

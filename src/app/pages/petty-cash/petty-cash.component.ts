@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { getLoginUserEmail } from 'src/app/utils/jwt-util';
+import { UserService } from 'src/app/services/user.service';
 
 
 interface Accounts {
@@ -84,6 +85,7 @@ export class PettyCashComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
 
+
   expenseTypeCategories: string[] = [];
   expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map();
 
@@ -91,6 +93,7 @@ export class PettyCashComponent implements OnInit {
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
     private router: Router,
+    private userService: UserService,
     private toastr: ToastrService,
     public dialog: MatDialog) {
     this.invoiceCreateFormGroup = this.fb.group({
@@ -114,8 +117,8 @@ export class PettyCashComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+    this.getUserDetails();
   }
-
 
   openExpenseTypeDialog(item: any): void {
     const dialogRef = this.dialog.open(ExpenseTypeModalComponent, {
@@ -423,6 +426,20 @@ export class PettyCashComponent implements OnInit {
     this.departmentName?.setValue(data)
   }
 
+  userDetails: any;
+
+  getUserDetails() {
+    let loggedInEmail = getLoginUserEmail();
+    this.userService.getUserDetails(loggedInEmail).subscribe(
+      (response: any) => {
+        this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
 
   isVendorInvoiceRefAlreadyExistMessage = "";
   isVendorInvoiceRefAlreadyExist(e: any) {
