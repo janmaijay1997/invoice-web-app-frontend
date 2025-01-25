@@ -1,4 +1,4 @@
-const baseUrl = 'http://host.iteckstar.net:8082/InvoiceWebApp/webportal/v1'
+const baseUrl = 'https://hr.iteckstar.net/InvoiceWebApp/webportal/v1'
 export const environment = {
   production: true,
   loginUser: baseUrl + '/login',
@@ -35,7 +35,7 @@ export const environment = {
   updateUser: baseUrl + '/admin/user',
   getUserDetails: baseUrl + '/user',
 
-
+  getUsersListWithoutPagination: baseUrl + '/admin/usersList',
   getUsersList: baseUrl + '/admin/users',
   changePassword: baseUrl + '/user/change-password',
   changePasswordAdmin: baseUrl + '/admin/change-password'
