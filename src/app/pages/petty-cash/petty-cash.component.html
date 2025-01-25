@@ -176,8 +176,16 @@
                                     <input type="text" formControlName="description" placeholder="Description">
                                 </td>
 
-                                <td>
+                                <!-- <td>
                                     <input type="text" formControlName="submitterName" placeholder="Purchaser">
+                                </td> -->
+
+                                <td>
+                                    <select placeholder="Purchaser" formControlName="submitterName" class="small-input">
+                                            <option *ngFor="let user of userDetailsList" [ngValue]="user.name + ' ' + user.surname">
+                                            {{ user.name }} {{ user.surname }}
+                                        </option>
+                                    </select>
                                 </td>
 
                                 <td>

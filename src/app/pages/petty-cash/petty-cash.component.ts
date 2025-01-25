@@ -85,7 +85,6 @@ export class PettyCashComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
 
-
   expenseTypeCategories: string[] = [];
   expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map();
 
@@ -117,6 +116,7 @@ export class PettyCashComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+    this.getAllUsers();
     this.getUserDetails();
   }
 
@@ -356,6 +356,8 @@ export class PettyCashComponent implements OnInit {
   // Method to submit the invoice form
   saveInvoice() {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
 
     const requestData = {
       invoiceNumber: '',
@@ -368,9 +370,10 @@ export class PettyCashComponent implements OnInit {
         accountType: this.accountType?.value || 'Private Account',
         paymentType: this.paymentType?.value || 'Bank',
       },
+
       submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
+        submitterName: submitterValue,
+        department: department,
       },
 
       vendorDetails: {
@@ -427,12 +430,26 @@ export class PettyCashComponent implements OnInit {
   }
 
   userDetails: any;
+  userDetailsList: any;
+
 
   getUserDetails() {
     let loggedInEmail = getLoginUserEmail();
     this.userService.getUserDetails(loggedInEmail).subscribe(
       (response: any) => {
         this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
+
+  getAllUsers() {
+    this.userService.getAllUserList().subscribe(
+      (response: any) => {
+        this.userDetailsList = response.data;
       },
       (error: any) => {
         console.error('Error fetching user details:', error);

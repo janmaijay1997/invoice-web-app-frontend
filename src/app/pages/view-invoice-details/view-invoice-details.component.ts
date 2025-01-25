@@ -12,6 +12,7 @@ import { extractRolesFromToken, getLoginUserEmail } from 'src/app/utils/jwt-util
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { UserService } from 'src/app/services/user.service';
 
 interface Accounts {
   id: string;
@@ -64,6 +65,13 @@ interface BankDetails {
   bankAddress: string;
 }
 
+interface UserDetails {
+  name: string;
+  surname: string;
+  email: string;
+  department: string;
+}
+
 @Component({
   selector: 'app-view-invoice-details',
   templateUrl: './view-invoice-details.component.html',
@@ -90,6 +98,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   subTotalAmount: number = 0; // Variable to keep track of the total amount
   invoiceCreateFormGroup: FormGroup;
   userRole: any;
+  userDetails: any;
+  userDetailsList: UserDetails[] =[];
 
   expenseTypeCategories: string[] = [];
   expenseTypeByCategory: Map<string, ExpenseCode[]> = new Map();
@@ -100,6 +110,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     private invoiceService: InvoiceService,
     private toastr: ToastrService,
     public dialog: MatDialog,
+    public userService: UserService,
     public router:Router,
     private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
@@ -121,6 +132,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserDetails();
+    this.getAllUsers();
     this.userRole = extractRolesFromToken()[0];
     this.getCommonDetailsData();
     this.route.queryParams.subscribe(params => {
@@ -142,8 +155,35 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     } else {
       this.addItem();
     }
-
   }
+
+
+  getUserDetails() {
+    let loggedInEmail = getLoginUserEmail();
+    this.userService.getUserDetails(loggedInEmail).subscribe(
+      (response: any) => {
+        this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
+
+  getAllUsers() {
+    this.userService.getAllUserList().subscribe(
+      (response: any) => {
+        this.userDetailsList = response.data;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
+
+
   viewInvoice(invoiceId: string) {
     this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
       (response: any) => {
@@ -184,6 +224,12 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   isExpenseTypeCustom(index: number): boolean {
     const item = this.items.at(index).value;
     return !this.expenseTypeList.some(center => center.expenseCode === item.expenseType);
+  }
+
+
+  isSubmitterTypeCustom(index: number): boolean {
+    const item = this.items.at(index).value;
+    return !this.userDetailsList.some(center => center.name +' '+ center.surname === item.name);
   }
 
   isVendorCustom(index: number): boolean {
@@ -541,6 +587,9 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   // Method to submit the invoice form
   saveInvoice() {
     var totalInvoiceAmount;
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
+
     if (this.billTo?.value === "PETTY CASH") {
       totalInvoiceAmount = this.getTotalInvoiceAmountPettyCash();
     } else {
@@ -558,8 +607,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
         paymentType: this.paymentType?.value || 'Bank',
       },
       submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
+        submitterName: submitterValue,
+        department: department,
       },
 
       vendorDetails: {
@@ -604,6 +653,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
 
   submitInvoice(type: any) {
     const { title, text, confirmButtonText } = this.getInvoiceAlertDetails(type);
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
 
     Swal.fire({
       title: title,
@@ -634,8 +685,8 @@ export class ViewInvoiceDetailsComponent implements OnInit {
             paymentType: this.paymentType?.value || '',
           },
           submitter: {
-            submitterName: this.submitterName?.value,
-            department: this.departmentName?.value,
+            submitterName: submitterValue,
+            department: department,
           },
 
           vendorDetails: {

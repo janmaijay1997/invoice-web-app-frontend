@@ -44,30 +44,15 @@
                             <tr>
                                 <th>Submitter</th>
                                 <td>
-                                    <select formControlName="submitter" class="small-input"
-                                        (change)="onSubmitterChangeEvent($event)">
-                                        <option *ngFor="let department of departmentList"
-                                            [value]="department.submitter">
-                                            {{department.submitter}}
-                                        </option>
-
-                                        <option *ngIf="isSubmitterCustom()"
-                                            [ngValue]="invoiceCreateFormGroup.get('submitter')?.value || ''">
-                                            {{ invoiceCreateFormGroup.get('submitter')?.value }}
-                                        </option>
-
-                                    </select>
+                                    {{ invoiceCreateFormGroup.get('submitter')?.value }}
                                 </td>
+
                             </tr>
                             <tr>
                                 <th>Department</th>
-                                <td> <label
-                                        class="department-lable">{{invoiceCreateFormGroup.get('department')?.value}}</label>
-                                    <!-- <select formControlName="department" class="small-input" [disabled]=true>
-                                        <option *ngFor="let department of departmentList" [value]="department.departmentName">
-                                            {{department.departmentName}}
-                                        </option>
-                                    </select> -->
+                                <td>
+                                    {{ invoiceCreateFormGroup.get('department')?.value }}
+
                                 </td>
                             </tr>
                         </tbody>
@@ -164,7 +149,7 @@
                                     *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">invoiceTotal
                                 </th>
                                 <th style="min-width: 200px"
-                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Submitter</th>
+                                    *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">Purchaser</th>
                                 <th style="min-width: 200px"
                                     *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">ItemAmount</th>
                                 <th style="min-width: 200px"
@@ -276,12 +261,21 @@
                                         class="small-input" readonly>
                                 </td>
 
-
-
-
+                                <!-- <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value == 'PETTY CASH'">
+                                    <input type="text" formControlName="submitterName" placeholder="submitterName">
+                                </td> -->
 
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value == 'PETTY CASH'">
-                                    <input type="text" formControlName="submitterName" placeholder="submitterName">
+                                    <select formControlName="submitterName" class="small-input">
+                                        <option *ngFor="let user of userDetailsList" [ngValue]="user.name">
+                                            {{ user.name}} {{ user.surname}}
+                                        </option>
+
+                                        <option *ngIf="isSubmitterTypeCustom(i)"
+                                            [ngValue]="items.at(i)?.get('submitterName')?.value || ''">
+                                            {{ items.at(i)?.get('submitterName')?.value || 'Custom' }}
+                                        </option>
+                                    </select>
                                 </td>
 
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value === 'PETTY CASH'">
