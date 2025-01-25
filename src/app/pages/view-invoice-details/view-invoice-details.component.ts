@@ -100,6 +100,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     private invoiceService: InvoiceService,
     private toastr: ToastrService,
     public dialog: MatDialog,
+    public router:Router,
     private invoiceDataService: InvoiceDataService,) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
@@ -576,7 +577,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       this.toastr.success('Invoice Saved successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 5000, // Optional - already set in forRoot
       });
-      this.invoiceCreateFormGroup.reset();
+      this.router.navigate(['/InvoiceView']);
     }, (error: any) => {
       console.error('Error fetching details:', error);
       this.toastr.error(error.error, 'VALIDATION', {
@@ -652,7 +653,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
           this.toastr.success(`Invoice ${ type === 'SUBMITTED' ? this.invoiceStatus[1] : this.invoiceStatus[2]} successFully with  invoice id ` + response.invoiceNumber, 'Success', {
             timeOut: 5000, // Optional - already set in forRoot
           });
-          this.invoiceCreateFormGroup.reset();
+          this.router.navigate(['/InvoiceView']);
         }, (error: any) => {
           console.error('Error fetching details:', error);
           this.toastr.error(error.error, 'VALIDATION', {

@@ -385,7 +385,6 @@ export class PettyCashComponent implements OnInit {
       this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 5000, // Optional - already set in forRoot
       });
-      this.invoiceCreateFormGroup.reset();
       this.router.navigate(['/InvoiceView'])
     }, (error: any) => {
       console.error('Error fetching details:', error);
