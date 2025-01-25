@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { SidebarService } from 'src/app/services/sidebar.service';
@@ -16,7 +17,8 @@ export class AddUserComponent implements OnInit {
     private sidebarService: SidebarService,
     private userService: UserService,
     private toastr: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     // Initialize the form group with controls
     this.addUserFormGroup = this.fb.group({
@@ -58,6 +60,10 @@ export class AddUserComponent implements OnInit {
   deactivateUser(val: any) {}
 
   editUser(val: any) {}
+
+   navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
 
   createUser() {
     if (this.addUserFormGroup.invalid) {

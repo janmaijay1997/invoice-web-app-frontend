@@ -250,7 +250,13 @@
                 </table>
             </div>
 
-            <button id="saveInvoice" type="button" (click)="saveInvoice()">Save Invoice</button>
+            <div style="display: flex; gap: 10px;">
+                <button id="saveInvoice" class="btn btn-primary ml-2 px-3 py-2 rounded text-white" type="button"
+                    (click)="saveInvoice()">Save Invoice</button>
+                <button class="btn btn-danger ml-2 px-3 py-2 rounded text-white" type="button"
+                    (click)="navigateToDashboard()">Cancel</button>
+            </div>
+
         </div>
     </div>
 </div>

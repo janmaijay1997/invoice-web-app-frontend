@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 
 interface Accounts {
@@ -96,6 +97,7 @@ export class AddInvoiceComponent implements OnInit {
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
     private toastr: ToastrService,
+    private router: Router,
     public dialog: MatDialog) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
@@ -294,6 +296,10 @@ export class AddInvoiceComponent implements OnInit {
     }
 
     this.items.removeAt(index); // Remove the item at the specified index
+  }
+
+  navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
 
