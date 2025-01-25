@@ -234,7 +234,7 @@
                                 <td>
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)"
-                                        (change)="getTotalInvoiceAmountForRowPettyCash(item)">
+                                        (change)="getTotalInvoiceAmountForRowPettyCash(item)" readonly>
                                 </td>
 
 
@@ -243,9 +243,13 @@
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td>
 
-
                                 <td>
-                                    <select formControlName="currency" class="small-input">
+                                    <input type="text" formControlName="currency" placeholder="currency" readonly>
+                                </td>
+
+
+                                <!-- <td>
+                                    <select  formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencyName">
                                             {{ currencyValue.currencyName}}
@@ -255,7 +259,7 @@
                                             {{ items.at(i)?.get('currency')?.value }}
                                         </option>
                                     </select>
-                                </td>
+                                </td> -->
 
                                 <td *ngIf="invoiceCreateFormGroup.get('billTo')?.value !== 'PETTY CASH'">
                                     <select formControlName="recurring" class="small-input">

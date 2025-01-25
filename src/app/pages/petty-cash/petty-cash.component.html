@@ -107,7 +107,7 @@
                                 <th style="min-width: 170px">Rate of SAR</th>
                                 <th style="min-width: 170px">Currency</th>
                                 <th style="min-width: 200px">Description</th>
-                                <th style="min-width: 200px">Submitter</th>
+                                <th style="min-width: 200px">Purchaser</th>
                                 <th style="min-width: 200px">ItemAmount</th>
                                 <th style="min-width: 200px">Quantity</th>
                                 <th style="min-width: 200px">SubTotal</th>
@@ -157,25 +157,37 @@
                                         placeholder="Select Expense Type" readonly
                                         (click)="openExpenseTypeDialog(item)">
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
-                                </td>
+                                </td> -->
 
                                 <td>
+                                    <input type="number" formControlName="rateOfSAR" placeholder="1" class="small-input"
+                                        value="1" readonly>
+                                </td>
+
+
+                                <!-- <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencyName">
                                             {{ currencyValue.currencyName}}
                                         </option>
                                     </select>
+                                </td> -->
+
+                                <td>
+                                    <input type="text" formControlName="currency" placeholder="SAR" class="small-input"
+                                        value="SAR" readonly>
                                 </td>
+
                                 <td>
                                     <input type="text" formControlName="description" placeholder="Description">
                                 </td>
 
                                 <td>
-                                    <input type="text" formControlName="submitterName" placeholder="Submitter">
+                                    <input type="text" formControlName="submitterName" placeholder="Purchaser">
                                 </td>
 
                                 <td>

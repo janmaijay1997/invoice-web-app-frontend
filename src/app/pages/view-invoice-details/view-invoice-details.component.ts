@@ -324,7 +324,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
       rateOfSAR: ['', Validators.required],
-      currency: ['', Validators.required],
+      currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],

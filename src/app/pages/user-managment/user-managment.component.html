@@ -8,9 +8,9 @@
         <!-- Table header -->
         <ng-template pTemplate="header">
           <tr>
-            <th style="min-width:100px">User ID</th>
             <th style="min-width:150px">Name</th>
             <th style="min-width:200px; word-wrap: break-word;">Email</th>
+            <th style="min-width:100px">Mo. Number</th>
             <th style="min-width:120px">Role</th>
             <th style="min-width:100px">Status</th>
             <th style="min-width:150px">Actions</th>
@@ -20,9 +20,9 @@
         <!-- Table body -->
         <ng-template pTemplate="body" let-user>
           <tr>
-            <td style="min-width:100px">{{ user.id }}</td>
             <td style="min-width:150px">{{ user.name }}</td>
             <td style="min-width:200px; word-wrap: break-word;">{{ user.email }}</td>
+            <td style="min-width:100px">{{ user.id }}</td>
             <td style="min-width:120px">{{ user.role }}</td>
             <td style="min-width:100px">{{ user.status }}</td>
             <td style="min-width:150px">

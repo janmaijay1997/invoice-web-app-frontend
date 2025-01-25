@@ -194,8 +194,8 @@ export class PettyCashComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['', Validators.required],
-      currency: ['', Validators.required],
+      rateOfSAR: ['1', Validators.required],
+      currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
 
