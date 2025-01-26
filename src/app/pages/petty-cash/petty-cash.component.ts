@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { getLoginUserEmail } from 'src/app/utils/jwt-util';
+import { UserService } from 'src/app/services/user.service';
 
 
 interface Accounts {
@@ -91,6 +92,7 @@ export class PettyCashComponent implements OnInit {
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
     private router: Router,
+    private userService: UserService,
     private toastr: ToastrService,
     public dialog: MatDialog) {
     this.invoiceCreateFormGroup = this.fb.group({
@@ -114,8 +116,9 @@ export class PettyCashComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+    this.getAllUsers();
+    this.getUserDetails();
   }
-
 
   openExpenseTypeDialog(item: any): void {
     const dialogRef = this.dialog.open(ExpenseTypeModalComponent, {
@@ -194,8 +197,8 @@ export class PettyCashComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['', Validators.required],
-      currency: ['', Validators.required],
+      rateOfSAR: ['1', Validators.required],
+      currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
 
@@ -230,6 +233,11 @@ export class PettyCashComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const selectedDate = input.value; // This will be in YYYY-MM-DD format
     this.paymentDueDate?.setValue(selectedDate);
+  }
+
+ 
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/InvoiceView']);
   }
 
   getTotalInvoiceAmount(): number {
@@ -349,6 +357,8 @@ export class PettyCashComponent implements OnInit {
   // Method to submit the invoice form
   saveInvoice() {
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
 
     const requestData = {
       invoiceNumber: '',
@@ -361,9 +371,10 @@ export class PettyCashComponent implements OnInit {
         accountType: this.accountType?.value || 'Private Account',
         paymentType: this.paymentType?.value || 'Bank',
       },
+
       submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
+        submitterName: submitterValue,
+        department: department,
       },
 
       vendorDetails: {
@@ -381,7 +392,6 @@ export class PettyCashComponent implements OnInit {
       this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 5000, // Optional - already set in forRoot
       });
-      this.invoiceCreateFormGroup.reset();
       this.router.navigate(['/InvoiceView'])
     }, (error: any) => {
       console.error('Error fetching details:', error);
@@ -420,6 +430,34 @@ export class PettyCashComponent implements OnInit {
     this.departmentName?.setValue(data)
   }
 
+  userDetails: any;
+  userDetailsList: any;
+
+
+  getUserDetails() {
+    let loggedInEmail = getLoginUserEmail();
+    this.userService.getUserDetails(loggedInEmail).subscribe(
+      (response: any) => {
+        this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
+
+  getAllUsers() {
+    this.userService.getAllUserList().subscribe(
+      (response: any) => {
+        this.userDetailsList = response.data;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
+  }
 
   isVendorInvoiceRefAlreadyExistMessage = "";
   isVendorInvoiceRefAlreadyExist(e: any) {

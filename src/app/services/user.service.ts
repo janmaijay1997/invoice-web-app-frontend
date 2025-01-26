@@ -30,6 +30,10 @@ export class UserService {
     return this.httpClient.get<any>(environment.getUserDetails + '?email=' + email);
   }
 
+  getAllUserList(): Observable<any> {
+    return this.httpClient.get<any>(environment.getUsersListWithoutPagination);
+  }
+
   updateUser(email: any, requestBody: any): Observable<any> {
     return this.httpClient.put<any>(environment.updateUser + '/' + email, requestBody);
   }

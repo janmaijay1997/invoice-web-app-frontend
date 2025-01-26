@@ -41,6 +41,7 @@ export const environment = {
   getUserDetails: baseUrl + '/user',
 
 
+  getUsersListWithoutPagination: baseUrl + '/usersList',
   getUsersList: baseUrl + '/admin/users',
   changePassword: baseUrl + '/user/change-password',
   changePasswordAdmin: baseUrl + '/admin/change-password'

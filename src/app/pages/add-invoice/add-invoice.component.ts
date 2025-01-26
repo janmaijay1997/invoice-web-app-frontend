@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { getLoginUserEmail } from 'src/app/utils/jwt-util';
 import { ExpenseTypeModalComponent } from 'src/app/components/expense-type-modal/expense-type-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 
 interface Accounts {
@@ -95,7 +97,9 @@ export class AddInvoiceComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private commonService: CommonDetailsService,
     private invoiceService: InvoiceService,
+    private userService: UserService,
     private toastr: ToastrService,
+    private router: Router,
     public dialog: MatDialog) {
     this.invoiceCreateFormGroup = this.fb.group({
       invoiceNumber: [''],
@@ -120,6 +124,7 @@ export class AddInvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommonDetailsData();
+    this.getUserDetails();
   }
 
   openExpenseTypeDialog(item: any): void {
@@ -209,8 +214,8 @@ export class AddInvoiceComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['', Validators.required],
-      currency: ['', Validators.required],
+      rateOfSAR: ['1', Validators.required],
+      currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
@@ -225,6 +230,21 @@ export class AddInvoiceComponent implements OnInit {
     if (vendor) {
       item.get('vendorId')?.setValue(vendor.vendorId);
     }
+  }
+
+  userDetails: any;
+
+  getUserDetails() {
+    let loggedInEmail = getLoginUserEmail();
+    this.userService.getUserDetails(loggedInEmail).subscribe(
+      (response: any) => {
+        this.userDetails = response.data.userDetails;
+      },
+      (error: any) => {
+        console.error('Error fetching user details:', error);
+        this.toastr.error('Something went wrong.', 'Error');
+      }
+    );
   }
 
 
@@ -296,6 +316,10 @@ export class AddInvoiceComponent implements OnInit {
     this.items.removeAt(index); // Remove the item at the specified index
   }
 
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/InvoiceView']);
+  }
+
 
   prepareItemsData(): any[] {
     return this.items.controls.map((item: AbstractControl) => {
@@ -326,8 +350,8 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   saveInvoice() {
-
-
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
@@ -342,8 +366,8 @@ export class AddInvoiceComponent implements OnInit {
         paymentType: this.paymentType?.value || 'Bank',
       },
       submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
+        submitterName: submitterValue,
+        department: department,
       },
 
       vendorDetails: {
@@ -361,7 +385,7 @@ export class AddInvoiceComponent implements OnInit {
       this.toastr.success('Invoice Created successFully with  invoice id ' + response.invoiceNumber, 'Success', {
         timeOut: 5000, // Optional - already set in forRoot
       });
-      this.invoiceCreateFormGroup.reset();
+      this.router.navigate(['/InvoiceView']);
     }, (error: any) => {
       console.error('Error fetching details:', error);
       this.toastr.error(error.error, 'VALIDATION', {
