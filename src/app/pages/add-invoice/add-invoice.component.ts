@@ -214,8 +214,8 @@ export class AddInvoiceComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['', Validators.required],
-      currency: ['', Validators.required],
+      rateOfSAR: ['1', Validators.required],
+      currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
@@ -316,8 +316,8 @@ export class AddInvoiceComponent implements OnInit {
     this.items.removeAt(index); // Remove the item at the specified index
   }
 
-  navigateToDashboard(): void {
-    this.router.navigate(['/dashboard']);
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/InvoiceView']);
   }
 
 
@@ -350,8 +350,8 @@ export class AddInvoiceComponent implements OnInit {
 
   // Method to submit the invoice form
   saveInvoice() {
-
-
+    const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;
+    const department = this.userDetails.department;
     const totalInvoiceAmount = this.getTotalInvoiceAmount();
 
     const requestData = {
@@ -366,8 +366,8 @@ export class AddInvoiceComponent implements OnInit {
         paymentType: this.paymentType?.value || 'Bank',
       },
       submitter: {
-        submitterName: this.submitterName?.value,
-        department: this.departmentName?.value,
+        submitterName: submitterValue,
+        department: department,
       },
 
       vendorDetails: {

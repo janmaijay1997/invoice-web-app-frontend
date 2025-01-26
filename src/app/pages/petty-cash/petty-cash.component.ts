@@ -235,8 +235,9 @@ export class PettyCashComponent implements OnInit {
     this.paymentDueDate?.setValue(selectedDate);
   }
 
-  navigateToDashboard(): void {
-    this.router.navigate(['/dashboard']);
+ 
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/InvoiceView']);
   }
 
   getTotalInvoiceAmount(): number {

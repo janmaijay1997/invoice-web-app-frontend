@@ -120,8 +120,8 @@
                                 <th style="min-width: 170px">Cost Code</th>
                                 <th style="min-width: 170px">Expense Type</th>
                                 <th style="min-width: 170px">Rate of SAR</th>
-                                <th style="min-width: 170px">Total</th>
                                 <th style="min-width: 170px">Currency</th>
+                                <th style="min-width: 170px">Total</th>
                                 <th style="min-width: 170px">Reccuring</th>
                                 <th style="min-width: 200px">Description</th>
                                 <th style="min-width: 200px">invoiceTotal</th>
@@ -170,22 +170,31 @@
                                         placeholder="Select Expense Type" readonly
                                         (click)="openExpenseTypeDialog(item)">
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <input type="number" formControlName="rateOfSAR" placeholder="rateOfSAR"
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
-                                </td>
+                                </td> -->
                                 <td>
-                                    <input type="number" formControlName="invoiceAmount" placeholder="total"
-                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                    <input type="number" formControlName="rateOfSAR" placeholder="1" class="small-input"
+                                        value="1" readonly>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <select formControlName="currency" class="small-input">
                                         <option *ngFor="let currencyValue of currenciesList"
                                             [ngValue]="currencyValue.currencyName">
                                             {{ currencyValue.currencyName}}
                                         </option>
                                     </select>
+                                </td> -->
+                                <td>
+                                    <input type="text" formControlName="currency" placeholder="SAR" class="small-input"
+                                        value="SAR" readonly>
                                 </td>
+                                <td>
+                                    <input type="number" formControlName="invoiceAmount" placeholder="total"
+                                        class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
+                                </td>
+                                
                                 <td>
                                     <select formControlName="recurring" class="small-input">
                                         <option *ngFor="let recurring of recurrings" [ngValue]="recurring">{{recurring}}
@@ -243,7 +252,7 @@
                 <button id="saveInvoice" class="btn btn-primary ml-2 px-3 py-2 rounded text-white" type="button"
                     (click)="saveInvoice()">Save Invoice</button>
                 <button class="btn btn-danger ml-2 px-3 py-2 rounded text-white" type="button"
-                    (click)="navigateToDashboard()">Cancel</button>
+                    (click)="navigateToInvoiceView()">Cancel</button>
             </div>
 
         </div>
