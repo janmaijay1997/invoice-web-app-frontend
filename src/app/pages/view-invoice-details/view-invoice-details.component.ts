@@ -651,6 +651,10 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     }
   }
 
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/InvoiceView']);
+  }
+
   submitInvoice(type: any) {
     const { title, text, confirmButtonText } = this.getInvoiceAlertDetails(type);
     const submitterValue = `${this.userDetails.name} ${this.userDetails.surname}`;

@@ -369,6 +369,8 @@
                     Invoice</button>
                 <button id="rejectedInvoice" class="ml-2 btn btn-danger" type="button"
                     (click)="submitInvoice('REJECTED')" *ngIf="userRole !== 'USER'">Rejected Invoice</button>
+                  <button class="btn btn-danger ml-2 px-3 py-2 rounded text-white" type="button"
+                    (click)="navigateToInvoiceView()">Cancel</button>    
             </ng-container>
         </div>
     </div>
