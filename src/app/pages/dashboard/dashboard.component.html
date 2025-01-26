@@ -182,7 +182,6 @@
           <table id="vendorTable">
             <thead>
               <tr>
-                <th>Vendor ID</th>
                 <th>Vendor Name</th>
                 <th>Address</th>
                 <th>Phone Number</th>
@@ -194,7 +193,6 @@
             </thead>
             <tbody>
               <tr *ngFor="let vendor of vendorList">
-                <td>{{ vendor.vendorId }}</td>
                 <td>{{ vendor.vendorName }}</td>
                 <td>{{ vendor.address }}</td>
                 <td>{{ vendor.phoneNumber }}</td>
@@ -369,11 +367,7 @@
               <input id="vendorName" formControlName="vendorName" type="text" class="form-control form-control-sm"
                 placeholder="Vendor Name">
             </div>
-            <div class="col-md-6">
-              <label for="vendorId" class="form-label fw-bold mb-1">Vendor Id:</label>
-              <input id="vendorId" formControlName="vendorId" type="text" class="form-control form-control-sm"
-                placeholder="Vendor Id">
-            </div>
+        
             <div class="col-12">
               <label for="address" class="form-label fw-bold mb-1">Address:</label>
               <input id="address" formControlName="address" type="text" class="form-control form-control-sm"

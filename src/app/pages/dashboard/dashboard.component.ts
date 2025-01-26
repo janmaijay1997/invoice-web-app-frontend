@@ -29,7 +29,6 @@ interface Department {
 
 interface Vendor {
   id: string;
-  vendorId: string;
   vendorName: string;
   address: string;
   phoneNumber: string;
@@ -134,7 +133,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.newVendorForm = this.fb.group({
-      vendorId: new FormControl(''),
+      id: new FormControl(''),
       address: new FormControl(''),
       vendorName: new FormControl(''),
       phoneNumber: new FormControl(''),
@@ -635,7 +634,7 @@ export class DashboardComponent implements OnInit {
     this.editVendorModal = true;
 
     this.newVendorForm.setValue({
-      vendorId: index.id,
+      id: index.id,
       vendorName: index.vendorName,
       address: index.address,
       phoneNumber: index.phoneNumber,
