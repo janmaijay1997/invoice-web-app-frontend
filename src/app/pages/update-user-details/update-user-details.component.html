@@ -64,6 +64,8 @@
           </div>
           <div class="button_group">
             <button type="button" (click)="updateUser(addUserFormGroup.get('email')?.value)">Update User</button>
+            <button class="btn btn-danger ml-2 px-3 py-2 rounded text-white" type="button"
+                    (click)="navigateToInvoiceView()">Cancel</button> 
           </div>
         </form>
       </div>

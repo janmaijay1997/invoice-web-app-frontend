@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SidebarService } from 'src/app/services/sidebar.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,6 +20,7 @@ export class UpdateUserDetailsComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
+    private router: Router,
     private userDataService: UserDataService,
     private fb: FormBuilder
   ) {
@@ -59,6 +60,11 @@ export class UpdateUserDetailsComponent implements OnInit {
 
       });
     });
+  }
+
+  
+  navigateToInvoiceView(): void {
+    this.router.navigate(['/userView']);
   }
 
   populateForm(user: any): void {
@@ -101,7 +107,8 @@ export class UpdateUserDetailsComponent implements OnInit {
     this.userService.updateUser(email, userPayload).subscribe({
       next: () => {
         this.toastr.success('User Updated successfully');
-        this.addUserFormGroup.reset();
+        this.router.navigate(['/userView']);
+        // this.addUserFormGroup.reset();
       },
       error: (error: any) => {
         this.toastr.error('Failed to Update user');
