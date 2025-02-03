@@ -175,8 +175,8 @@
                                         class="small-input" (change)="getTotalInvoiceAmountForRow(item)">
                                 </td> -->
                                 <td>
-                                    <input type="number" formControlName="rateOfSAR" placeholder="1" class="small-input"
-                                        value="1" readonly>
+                                    <input type="number" formControlName="rateOfSAR" placeholder="1.00" class="small-input"
+                                        value="1.00" readonly>
                                 </td>
                                 <!-- <td>
                                     <select formControlName="currency" class="small-input">
@@ -242,7 +242,7 @@
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td class="text-primary fw-bold">{{ (getTotalInvoiceAmount() + (adjustments?.value)) }}</td>
+                            <td class="text-primary fw-bold">{{ (getTotalInvoiceAmount() + (adjustments?.value || 0) ).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>

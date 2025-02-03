@@ -197,7 +197,7 @@ export class PettyCashComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['1', Validators.required],
+      rateOfSAR: ['1.00', Validators.required],
       currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceTotal: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
@@ -251,7 +251,8 @@ export class PettyCashComponent implements OnInit {
     });
 
     const adjustments = parseFloat(this.adjustments?.value) || 0; // Get adjustments
-    const grandTotal = total + adjustments; // Calculate grand total
+    const grandTotal = (total + adjustments).toFixed(2); // Calculate grand total
+    total = parseFloat(total.toFixed(2));
 
     this.subTotalAmount = total;
     this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
@@ -275,14 +276,15 @@ export class PettyCashComponent implements OnInit {
   getTotalInvoiceAmountForRow(item: AbstractControl): void {
     const invoiceAmount = parseFloat(item.get('itemAmount')?.value) || 0;
     const quantity = parseFloat(item.get('quantity')?.value) || 0;
-    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1;
+    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1.00;
 
     // Calculate subTotal
-    this.subTotal = invoiceAmount * quantity * rateOfSAR;
-    item.get('subTotal')?.setValue(this.subTotal);
+    this.subTotal = (invoiceAmount * quantity * rateOfSAR);
+    const subTotalWith2DigitPresison =parseFloat(this.subTotal.toFixed(2)); // Ensure 2 decimal places
+    item.get('subTotal')?.setValue(subTotalWith2DigitPresison);
 
-    const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0;
-    const total = this.subTotal + ptcAdvance;
+    const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0.00;
+    const total = (subTotalWith2DigitPresison + ptcAdvance).toFixed(2);
     item.get('total')?.setValue(total);
 
     // Update overall total whenever an item's total changes
@@ -363,9 +365,9 @@ export class PettyCashComponent implements OnInit {
     const requestData = {
       invoiceNumber: '',
       total: {
-        subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value || 0,
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+        subTotal: parseFloat(totalInvoiceAmount.toString()).toFixed(2),
+        adjustments: parseFloat(this.adjustments?.value || 0.00).toFixed(2), 
+        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toFixed(2).toString(),
       },
       accountDetails: {
         accountType: this.accountType?.value || 'Private Account',
