@@ -476,7 +476,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1;
 
     // Calculate subTotal
-    this.subTotal = invoiceAmount * quantity * rateOfSAR;
+    this.subTotal = parseFloat((invoiceAmount * quantity * rateOfSAR).toFixed(2));
     item.get('subTotal')?.setValue(this.subTotal);
 
     const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0;

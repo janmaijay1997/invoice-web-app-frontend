@@ -367,7 +367,7 @@ export class PettyCashComponent implements OnInit {
       total: {
         subTotal: parseFloat(totalInvoiceAmount.toString()).toFixed(2),
         adjustments: parseFloat(this.adjustments?.value || 0.00).toFixed(2), 
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toFixed(2).toString(),
+        grandTotal: totalInvoiceAmount + this.adjustments?.value,
       },
       accountDetails: {
         accountType: this.accountType?.value || 'Private Account',
