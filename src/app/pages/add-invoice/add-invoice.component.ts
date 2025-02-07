@@ -214,7 +214,7 @@ export class AddInvoiceComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['1', Validators.required],
+      rateOfSAR: ['1.00', Validators.required],
       currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
@@ -273,8 +273,10 @@ export class AddInvoiceComponent implements OnInit {
       }
     });
 
+    total = parseFloat(total.toFixed(2));
     this.subTotalAmount = total;
-    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
+    this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total.toFixed(2)); // Store as a string to retain ".00"
+
     return total;
   }
 
@@ -282,10 +284,11 @@ export class AddInvoiceComponent implements OnInit {
   // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
   getTotalInvoiceAmountForRow(item: AbstractControl): void {
     const invoiceAmount = parseFloat(item.get('invoiceAmount')?.value) || 0; // Fallback to 0
-    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 0; // Fallback to 0
+    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1.00; // Fallback to 0
 
     if (!isNaN(invoiceAmount) && !isNaN(rateOfSAR)) {
-      const total = invoiceAmount * rateOfSAR;
+      // const total = invoiceAmount * rateOfSAR;
+      const total = (invoiceAmount * rateOfSAR).toFixed(2); // Ensure 2 decimal places
       item.get('invoiceTotal')?.setValue(total);
     } else {
       console.warn("Invalid values for invoiceAmount or rateOfSAR in row:", item.value);
@@ -357,9 +360,9 @@ export class AddInvoiceComponent implements OnInit {
     const requestData = {
       invoiceNumber: '',
       total: {
-        subTotal: totalInvoiceAmount.toString(),
-        adjustments: this.adjustments?.value | 0,
-        grandTotal: (totalInvoiceAmount + this.adjustments?.value).toString(),
+        subTotal: totalInvoiceAmount.toFixed(2).toString(),
+        adjustments: parseFloat(this.adjustments?.value || 0.00).toFixed(2), 
+        grandTotal: (totalInvoiceAmount + parseFloat(this.adjustments?.value || 0)).toFixed(2),
       },
       accountDetails: {
         accountType: this.accountType?.value || 'Private Account',

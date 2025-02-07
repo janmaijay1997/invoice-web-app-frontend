@@ -370,7 +370,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
       costCode: ['', Validators.required],
       expenseType: ['', Validators.required],
       description: ['', Validators.required],
-      rateOfSAR: ['', Validators.required],
+      rateOfSAR: ['1.00', Validators.required],
       currency: ['SAR', Validators.required],
       recurring: ['', Validators.required],
       invoiceAmount: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],  // Pattern for numeric values
@@ -454,10 +454,11 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   // Method to calculate the total invoice amount for the current row (recurring * rateofSAR)
   getTotalInvoiceAmountForRow(item: AbstractControl): void {
     const invoiceAmount = parseFloat(item.get('invoiceAmount')?.value) || 0; // Fallback to 0
-    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 0; // Fallback to 0
+    const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1.00; // Fallback to 0
 
     if (!isNaN(invoiceAmount) && !isNaN(rateOfSAR)) {
-      const total = invoiceAmount * rateOfSAR;
+      // const total = invoiceAmount * rateOfSAR;
+      const total = (invoiceAmount * rateOfSAR).toFixed(2); // Ensure 2 decimal places
       item.get('invoiceTotal')?.setValue(total);
     } else {
       console.warn("Invalid values for invoiceAmount or rateOfSAR in row:", item.value);
@@ -475,7 +476,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     const rateOfSAR = parseFloat(item.get('rateOfSAR')?.value) || 1;
 
     // Calculate subTotal
-    this.subTotal = invoiceAmount * quantity * rateOfSAR;
+    this.subTotal = parseFloat((invoiceAmount * quantity * rateOfSAR).toFixed(2));
     item.get('subTotal')?.setValue(this.subTotal);
 
     const ptcAdvance = parseFloat(item.get('ptcAdvance')?.value) || 0;
@@ -499,8 +500,10 @@ export class ViewInvoiceDetailsComponent implements OnInit {
     });
 
     const adjustments = parseFloat(this.adjustments?.value) || 0; // Get adjustments
-    const grandTotal = total + adjustments; // Calculate grand total
+    let grandTotal = total + adjustments; // Calculate grand total
 
+    grandTotal = parseFloat(grandTotal.toFixed(2));
+    total = parseFloat(total.toFixed(2));
     this.subTotalAmount = total;
     this.invoiceCreateFormGroup.get('subTotalAmount')?.setValue(total);
     this.invoiceCreateFormGroup.get('grandTotal')?.setValue(grandTotal); // Set grand total
@@ -508,7 +511,7 @@ export class ViewInvoiceDetailsComponent implements OnInit {
   }
 
   getTotalAmountWithOutPettyCash(): number {
-    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0;
+    const adjustments = this.invoiceCreateFormGroup.get('adjustments')?.value || 0.00;
     const subTotal = this.getTotalInvoiceAmount();
 
     // Ensure both values are numbers

@@ -53,6 +53,11 @@ export class LoginComponent implements OnInit {
         },
         error: (e: any) => {
           console.error(e);
+          if(e.status==401){
+            this.toastService.showError(e.error.responseMessage);
+            this.otpInput = false;
+          }
+          
         },
         complete() {
           console.log("is completed");

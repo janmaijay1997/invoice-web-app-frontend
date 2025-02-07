@@ -153,8 +153,8 @@
                                 </td> -->
 
                                 <td>
-                                    <input type="number" formControlName="rateOfSAR" placeholder="1" class="small-input"
-                                        value="1" readonly>
+                                    <input type="number" formControlName="rateOfSAR" placeholder="1.00" class="small-input"
+                                        value="1.00" readonly>
                                 </td>
 
 
@@ -246,7 +246,7 @@
                         </tr>
                         <tr>
                             <th>Grand Total</th>
-                            <td class="text-primary fw-bold">{{ (getTotalAmountWithAdjustment()) }}</td>
+                            <td class="text-primary fw-bold">{{ (getTotalAmountWithAdjustment() || 0.00).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>

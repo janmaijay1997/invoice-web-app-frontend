@@ -82,7 +82,8 @@ export class AddUserComponent implements OnInit {
     this.userService.createUser(userPayload).subscribe({
       next: () => {
         this.toastr.success('User created successfully');
-        this.addUserFormGroup.reset();
+        // this.addUserFormGroup.reset();
+        this.router.navigate(['/userView']);
       },
       error: (error: any) => {
         this.toastr.error('Failed to create user');
